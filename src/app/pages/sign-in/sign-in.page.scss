@@ -1,0 +1,30 @@
+@import "../../../theme/variables.scss";
+
+#sign-in-content {
+  text-align: center;
+
+  #logo {
+    width: 80%;
+    margin: 40px auto;
+  }
+
+  #submit-wrapper {
+    text-align: right;
+    a {
+      font-size: 4vw;
+      color: var(--ion-color-secondary);
+      font-style: italic;
+      text-decoration: none;
+      margin: 0 20px 0 0;
+
+      @media screen and (min-width: 750px) {
+        font-size: 30px;
+      }
+    }
+  }
+}
+footer {
+  background: var(--ion-color-secondary);
+  color: white;
+  padding: 1em 2em;
+}

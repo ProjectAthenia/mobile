@@ -1,0 +1,39 @@
+<app-logged-out-header></app-logged-out-header>
+
+<ion-content padding>
+
+    <div id="sign-in-content">
+
+        <img id="logo" src="/assets/logo.svg">
+
+        <form [formGroup]="form" padding>
+            <ion-item>
+                <ion-label position="stacked">Email Address</ion-label>
+                <ion-input type="email" ngDefaultControl formControlName="email" [formControl]="form.controls.email"></ion-input>
+            </ion-item>
+
+            <div color="alert" *ngIf="submitted && !form.controls.email.valid" class="validator-error">
+                Please enter a valid email address.
+            </div>
+
+            <ion-item>
+                <ion-label position="stacked">Password <small>(at least 6 characters)</small></ion-label>
+                <ion-input type="password" ngDefaultControl formControlName="password" [formControl]="form.controls.password"></ion-input>
+            </ion-item>
+
+            <div *ngIf="submitted && !form.controls.password.valid" class="validator-error">
+                Please enter a valid 6 digit password.
+            </div>
+
+            <div id="submit-wrapper">
+                <a href="https://www.sgcinternational.org/request-password-reset/">I forgot my password</a>
+                <button ion-button large (click)="submit()" class="btn">Sign In</button>
+            </div>
+        </form>
+    </div>
+
+</ion-content>
+
+<footer>
+    Copyright 2019, SGC International
+</footer>

@@ -35,21 +35,15 @@ export default class Auth {
      * Runs the request to load initial information needed during the auth flow
      */
     async loadInitialInformation(): Promise<User> {
-        return this.requestHandler.get('users/me', true, true, [
-            'registrations',
-            'registrations.assets',
-            'registrations.eventParticipants',
-            'registrations.eventParticipants.assets',
-            'registrations.eventParticipants.completedSurvey',
-            'registrations.registrationOption',
-            'subscriptions',
-            'subscriptions.membershipPlan',
-        ]).then((response) => {
-            const user = new User(response);
-            return new Promise<User> (resolve => {
-                resolve(user);
-            });
-        });
+        return this.requestHandler
+            .get('users/me', true, true, [])
+            .then((response) => {
+                const user = new User(response);
+                return new Promise<User> (resolve => {
+                    resolve(user);
+                });
+            }
+        );
     }
 
     /**
