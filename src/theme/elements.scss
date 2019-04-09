@@ -4,3 +4,7 @@ ion-header {
     --background: var(--ion-color-secondary);
   }
 }
+
+.validator-error {
+  color: var(--ion-color-danger-shade);
+}
