@@ -1,21 +1,33 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, async } from '@angular/core/testing';
 
-import { Platform } from '@ionic/angular';
+import { Events, MenuController, NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
+import { StorageProvider } from './providers/storage/storage';
+import { EventsMock } from '../../test-config/mocks-ionic';
+import { NativeStorageMock } from '../../test-config/mocks/plugins';
 
 describe('AppComponent', () => {
 
     let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
+    let resolveSpy;
+    let storageProvider;
+    let menuController;
+    let navController;
 
     beforeEach(async(() => {
         statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
         splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
         platformReadySpy = Promise.resolve();
+        resolveSpy = Promise.resolve();
+        platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
+        storageProvider = new StorageProvider(new NativeStorageMock());
+        menuController = jasmine.createSpyObj('MenuController', ['close']);
+        navController = jasmine.createSpyObj('NavController', {navigateRoot: resolveSpy});
         platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
 
         TestBed.configureTestingModule({
@@ -25,6 +37,10 @@ describe('AppComponent', () => {
                 { provide: StatusBar, useValue: statusBarSpy },
                 { provide: SplashScreen, useValue: splashScreenSpy },
                 { provide: Platform, useValue: platformSpy },
+                { provide: Events, useValue: new EventsMock()},
+                { provide: StorageProvider, useValue: storageProvider},
+                { provide: MenuController, useValue: menuController },
+                { provide: NavController, useValue: navController },
             ],
             imports: [ RouterTestingModule.withRoutes([])],
         }).compileComponents();

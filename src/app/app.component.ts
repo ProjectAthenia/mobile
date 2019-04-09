@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import {Events, MenuController, NavController, Platform} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {StorageProvider} from './providers/storage/storage';
 
 /**
  * Main entry of the app
@@ -12,6 +13,15 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
     templateUrl: 'app.component.html'
 })
 export class AppComponent {
+
+    /**
+     * Whether or not the user is currently logged in
+     */
+    static LOGGED_IN = false;
+
+    /**
+     * The app pages available
+     */
     public appPages = [
         {
             title: 'Home',
@@ -26,11 +36,19 @@ export class AppComponent {
      * @param platform
      * @param splashScreen
      * @param statusBar
+     * @param events
+     * @param navCtl
+     * @param menuCtl
+     * @param storage
      */
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,
-        private statusBar: StatusBar
+        private statusBar: StatusBar,
+        private events: Events,
+        private navCtl: NavController,
+        private menuCtl: MenuController,
+        private storage: StorageProvider,
     ) {
         this.initializeApp();
     }
@@ -42,6 +60,32 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
+            this.events.subscribe('logout', this.handleLogout.bind(this));
+            this.storage.loadAuthToken()
+                .then(token => {
+                    this.navCtl.navigateRoot('/home').catch(console.error);
+                    AppComponent.LOGGED_IN = true;
+                }).catch(error => {
+                this.navCtl.navigateRoot('/sign-in').catch(console.error);
+            });
         });
+    }
+
+    /**
+     * Whether or not the user is logged in
+     * This is used for component binding
+     */
+    isLoggedIn() {
+        return AppComponent.LOGGED_IN;
+    }
+
+    /**
+     * Handles the logout properly
+     */
+    handleLogout() {
+        AppComponent.LOGGED_IN = false;
+        this.menuCtl.close('side-menu').catch(console.error);
+        this.storage.logOut().catch(console.error);
+        this.navCtl.navigateRoot('/sign-in').catch(console.error);
     }
 }
