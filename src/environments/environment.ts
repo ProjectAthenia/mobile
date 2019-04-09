@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api_url: 'http://dev-api.projectathenia.com',
+  app_name: 'Project Athenia',
+  stripe_publishable_key: 'pk_test_xHnP657roth55lBchLpLg6Af00vfCLYpDk',
 };
 
 /*
