@@ -7,13 +7,15 @@ import {RequestsProvider} from "../../providers/requests/requests";
 import {User} from "../../models/user/user";
 import {UserService} from '../../services/user.service';
 import {AppComponent} from '../../app.component';
+import {BasePage} from '../base.page';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-sign-in',
     templateUrl: './sign-in.page.html',
     styleUrls: ['./sign-in.page.scss'],
 })
-export class SignInPage implements OnInit {
+export class SignInPage extends BasePage implements OnInit {
 
     /**
      * The form object that helps us validate the sign in form
@@ -41,7 +43,9 @@ export class SignInPage implements OnInit {
                 private toastController: ToastController,
                 private alertController: AlertController,
                 private userService: UserService,
-                private navController: NavController) {
+                private navController: NavController,
+    ) {
+        super();
     }
 
     /**
@@ -114,9 +118,8 @@ export class SignInPage implements OnInit {
      */
     saveUserData(user: User) {
         this.userService.storeMe(user);
-        Promise.all([
-            this.storageProvider.saveLoggedInUserId(user.id),
-        ]).then((result) => {
+        this.storageProvider.saveLoggedInUserId(user.id)
+        .then((result) => {
             AppComponent.LOGGED_IN = true;
             this.navController.navigateRoot('/home');
         }).catch(error => {
@@ -128,5 +131,12 @@ export class SignInPage implements OnInit {
                 toast.present();
             });
         });
+    }
+
+    /**
+     * Returns the app forgot password url properly
+     */
+    getForgotPasswordUrl(): string {
+        return environment.forgot_password_url;
     }
 }

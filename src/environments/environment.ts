@@ -7,6 +7,8 @@ export const environment = {
     api_url: 'http://dev-api.projectathenia.com',
     app_name: 'Project Athenia',
     stripe_publishable_key: 'pk_test_xHnP657roth55lBchLpLg6Af00vfCLYpDk',
+    branding_image_url: null,
+    forgot_password_url: null,
 };
 
 /*
