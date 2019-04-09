@@ -4,6 +4,7 @@ import {Events, MenuController, NavController, Platform} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {StorageProvider} from './providers/storage/storage';
+import {environment} from '../environments/environment';
 
 /**
  * Main entry of the app
@@ -50,11 +51,15 @@ export class AppComponent {
             this.splashScreen.hide();
             this.events.subscribe('logout', this.handleLogout.bind(this));
             this.storage.loadAuthToken()
-                .then(token => {
-                    this.navCtl.navigateRoot('/home').catch(console.error);
-                    AppComponent.LOGGED_IN = true;
-                }).catch(error => {
-                this.navCtl.navigateRoot('/sign-in').catch(console.error);
+            .then(token => {
+                this.navCtl.navigateRoot('/home').catch(console.error);
+                AppComponent.LOGGED_IN = true;
+            }).catch(error => {
+                if (environment.sign_up_enabled) {
+                    this.navCtl.navigateRoot('/sign-up').catch(console.error);
+                } else {
+                    this.navCtl.navigateRoot('/sign-in').catch(console.error);
+                }
             });
         });
     }

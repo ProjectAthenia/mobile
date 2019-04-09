@@ -15,6 +15,10 @@ const routes: Routes = [
         path: 'sign-in',
         loadChildren: './pages/sign-in/sign-in.module#SignInPageModule'
     },
+    {
+        path: 'sign-up',
+        loadChildren: './pages/sign-up/sign-up.module#SignUpPageModule'
+    },
     // Add more pages below
 ];
 

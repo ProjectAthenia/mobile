@@ -4,7 +4,11 @@ ion-header {
     --background: var(--ion-color-secondary);
   }
 }
-
+footer {
+  background: var(--ion-color-secondary);
+  color: white;
+  padding: 1em 2em;
+}
 .validator-error {
   color: var(--ion-color-danger-shade);
 }

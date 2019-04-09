@@ -9,6 +9,7 @@ export const environment = {
     stripe_publishable_key: 'pk_test_xHnP657roth55lBchLpLg6Af00vfCLYpDk',
     branding_image_url: null,
     forgot_password_url: null,
+    sign_up_enabled: true,
 };
 
 /*

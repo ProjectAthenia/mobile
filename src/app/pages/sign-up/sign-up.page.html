@@ -2,11 +2,22 @@
 
 <ion-content padding>
 
-    <div id="sign-in-content">
+    <div id="sign-up-content">
+
+        <h2>Welcome to {{getBrandingName()}}!</h2>
 
         <img *ngIf="getBrandingImageUrl()" id="logo" [src]="getBrandingImageUrl()">
 
         <form [formGroup]="form" padding>
+            <ion-item>
+                <ion-label position="stacked">Name</ion-label>
+                <ion-input type="text" ngDefaultControl formControlName="name" [formControl]="form.controls.name"></ion-input>
+            </ion-item>
+
+            <div color="alert" *ngIf="submitted && !form.controls.name.valid" class="validator-error">
+                Please enter your name.
+            </div>
+
             <ion-item>
                 <ion-label position="stacked">Email Address</ion-label>
                 <ion-input type="email" ngDefaultControl formControlName="email" [formControl]="form.controls.email"></ion-input>
@@ -26,12 +37,11 @@
             </div>
 
             <div id="submit-wrapper">
-                <a *ngIf="getForgotPasswordUrl()" [href]="getForgotPasswordUrl()">I forgot my password</a>
-                <ion-button large (click)="submit()">Sign In</ion-button>
+                <ion-button large (click)="submit()">Sign Up</ion-button>
             </div>
         </form>
 
-        <p *ngIf="signUpEnabled()">Don't have an account?<br/><a href="#" (click)="goToSignUp()">Click here to sign up.</a></p>
+        <p>Already have an account?<br/><a href="#" (click)="goToSignIn()">Click here to sign in.</a></p>
     </div>
 
 </ion-content>

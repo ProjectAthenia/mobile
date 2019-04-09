@@ -11,11 +11,11 @@ import {BasePage} from '../base.page';
 import {environment} from '../../../environments/environment';
 
 @Component({
-    selector: 'app-sign-in',
-    templateUrl: './sign-in.page.html',
-    styleUrls: ['./sign-in.page.scss'],
+    selector: 'app-sign-up',
+    templateUrl: './sign-up.page.html',
+    styleUrls: ['./sign-up.page.scss'],
 })
-export class SignInPage extends BasePage implements OnInit {
+export class SignUpPage extends BasePage implements OnInit {
 
     /**
      * The form object that helps us validate the sign in form
@@ -55,13 +55,19 @@ export class SignInPage extends BasePage implements OnInit {
 
         this.form = this.formBuilder.group({
 
+            name: ['', Validators.compose([
+                Validators.maxLength(120),
+                Validators.required,
+            ])],
             email: ['', Validators.compose([
                 Validators.pattern(regexValidators.email),
-                Validators.required
+                Validators.maxLength(120),
+                Validators.required,
             ])],
             password: ['',  Validators.compose([
                 Validators.minLength(6),
-                Validators.required
+                Validators.maxLength(256),
+                Validators.required,
             ])]
         });
     }
@@ -74,11 +80,13 @@ export class SignInPage extends BasePage implements OnInit {
 
         if (this.form.valid) {
 
-            this.requestsProvider.auth.signIn(
-                this.form.controls['email'].value,
-                this.form.controls['password'].value,
-                this.handleIncorrectPassword.bind(this)
-            ).then(this.handleLoginCompletion.bind(this));
+            const data = {
+                name: this.form.controls['name'].value,
+                email: this.form.controls['email'].value,
+                password: this.form.controls['password'].value,
+            };
+            this.requestsProvider.auth.signUp(data, this.handleExistingUser.bind(this))
+                .then(this.handleLoginCompletion.bind(this));
         }
     }
 
@@ -100,29 +108,31 @@ export class SignInPage extends BasePage implements OnInit {
      * Handles displaying the incorrect credentials toast to the user
      * @param error
      */
-    handleIncorrectPassword(error) {
+    handleExistingUser(error) {
 
-        this.toastController.create({
-            message: 'Email Address or password incorrect.',
-            duration: 1000,
-            position: 'bottom'
-        }).then(toast => {
-            toast.present();
+        this.alertController.create({
+            header: 'Hmm...',
+            message: 'There already seems to be an account with this email address. Do you have an existing account?',
+            buttons: [
+                {
+                    text: 'Nope',
+                    role: 'cancel',
+                },
+                {
+                    text: 'Login',
+                    handler: this.goToSignIn.bind(this)
+                },
+            ]
+        }).then(alert => {
+            alert.present();
         });
-    }
-
-    /**
-     * Whether or not the sign up enabled feature flag is turned on
-     */
-    signUpEnabled() {
-        return environment.sign_up_enabled;
     }
 
     /**
      * Takes the user to the login page
      */
-    goToSignUp() {
-        this.navController.navigateRoot('/sign-up').catch(console.error);
+    goToSignIn() {
+        this.navController.navigateRoot('/sign-in').catch(console.error);
     }
 
     /**
@@ -145,12 +155,5 @@ export class SignInPage extends BasePage implements OnInit {
                 toast.present();
             });
         });
-    }
-
-    /**
-     * Returns the app forgot password url properly
-     */
-    getForgotPasswordUrl(): string {
-        return environment.forgot_password_url;
     }
 }
