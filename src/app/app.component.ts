@@ -20,18 +20,6 @@ export class AppComponent {
     static LOGGED_IN = false;
 
     /**
-     * The app pages available
-     */
-    public appPages = [
-        {
-            title: 'Home',
-            url: '/home',
-            icon: 'home'
-        },
-        // Add more routes below
-    ];
-
-    /**
      * Default Constructor
      * @param platform
      * @param splashScreen
@@ -69,6 +57,15 @@ export class AppComponent {
                 this.navCtl.navigateRoot('/sign-in').catch(console.error);
             });
         });
+    }
+
+    /**
+     * Takes the user to a page that is passed in properl
+     * @param page
+     */
+    goTo(page: string) {
+        this.menuCtl.close('side-menu').catch(console.error);
+        this.navCtl.navigateBack(page).catch(console.error);
     }
 
     /**
