@@ -32,12 +32,25 @@ export default class Auth {
     }
 
     /**
+     * Runs the sign in request
+     *
+     * @param userData
+     * @param emailInUseHandler
+     */
+    signUp(userData: any, emailInUseHandler: (error) => void): Promise<any> {
+        return this.requestHandler.post('auth/sign-up', false, true, userData, {
+            400 : emailInUseHandler
+        });
+    }
+
+    /**
      * Runs the request to load initial information needed during the auth flow
      */
     async loadInitialInformation(): Promise<User> {
         return this.requestHandler
-            .get('users/me', true, true, [])
-            .then((response) => {
+            .get('users/me', true, true, [
+                // Add any expands needed here
+            ]).then((response) => {
                 const user = new User(response);
                 return new Promise<User> (resolve => {
                     resolve(user);

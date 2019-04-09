@@ -29,6 +29,26 @@ describe('Test the auth requests', () => {
         );
     });
 
+    it("Creates a sign up request properly", async () => {
+        const data = {
+            name : 'A Person',
+            email : "test@test.com",
+            password : "password",
+        };
+
+        const handler = () => {};
+
+        spyOn(requestHandler, "post");
+        await auth.signUp(data, handler);
+        expect(requestHandler.post).toHaveBeenCalledWith(
+            "auth/sign-up",
+            false,
+            true,
+            data,
+            {400: handler}
+        );
+    });
+
     it('Creates a request for loading a users initial information properly', async () => {
 
         spyOn(requestHandler, 'get').and.returnValue(Promise.resolve({
