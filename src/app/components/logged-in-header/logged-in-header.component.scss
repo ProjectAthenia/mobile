@@ -1,0 +1,38 @@
+ion-back-button {
+  --color: white;
+}
+
+ion-title {
+  text-align: center;
+  padding: 0 55px 0 65px;
+  height: 40px;
+
+  ion-input {
+    display: inline-block;
+    width: 50vw;
+    caret-color: white;
+  }
+  #home {
+    background-size: 100%;
+    width: 40px;
+    height: 36px;
+    float: left;
+    background: url("/assets/icon.svg") no-repeat center;
+  }
+}
+
+.branding {
+  ion-title {
+    padding: 0 55px 0 20px;
+
+    ion-input {
+      margin-left: 5px;
+    }
+  }
+}
+
+.android {
+  ion-title {
+    padding: 0 20px;
+  }
+}
