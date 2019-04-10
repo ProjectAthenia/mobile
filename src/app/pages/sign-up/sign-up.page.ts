@@ -68,7 +68,7 @@ export class SignUpPage extends BasePage implements OnInit {
                 Validators.minLength(6),
                 Validators.maxLength(256),
                 Validators.required,
-            ])]
+            ])],
         });
     }
 

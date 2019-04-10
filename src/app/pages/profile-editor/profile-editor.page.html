@@ -1,0 +1,33 @@
+<app-logged-in-header></app-logged-in-header>
+
+<ion-content padding>
+
+    <form [formGroup]="form" padding>
+        <ion-item>
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input type="text" ngDefaultControl formControlName="name" [formControl]="form.controls.name"></ion-input>
+        </ion-item>
+
+        <div color="alert" *ngIf="submitted && !form.controls.name.valid" class="validator-error">
+            Please enter your name.
+        </div>
+
+        <ion-item>
+            <ion-label position="stacked">
+                Password <small>(at least 6 characters)</small>
+                <br>
+                <i><small>Leave blank in order to keep current password.</small></i>
+            </ion-label>
+            <ion-input type="password" ngDefaultControl formControlName="password" [formControl]="form.controls.password"></ion-input>
+        </ion-item>
+
+        <div *ngIf="submitted && !form.controls.password.valid" class="validator-error">
+            Please enter a valid 6 digit password.
+        </div>
+
+        <div id="submit-wrapper">
+            <ion-button large (click)="save()" class="btn">Save</ion-button>
+        </div>
+    </form>
+
+</ion-content>

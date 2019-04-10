@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {BasePage} from '../base.page';
 
 /**
  * Main home page of the app
@@ -8,6 +9,6 @@ import { Component } from '@angular/core';
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage extends BasePage {
 
 }

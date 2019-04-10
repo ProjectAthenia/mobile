@@ -135,7 +135,7 @@ export class SignInPage extends BasePage implements OnInit {
         this.storageProvider.saveLoggedInUserId(user.id)
         .then((result) => {
             AppComponent.LOGGED_IN = true;
-            this.navController.navigateRoot('/home');
+            this.navController.navigateRoot('/home').catch(console.error);
         }).catch(error => {
             this.toastController.create({
                 message: 'Error saving user information.',
