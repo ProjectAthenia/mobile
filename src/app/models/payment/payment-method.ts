@@ -1,5 +1,4 @@
 import {BaseModel} from '../base-model';
-import {Relation} from '../relation';
 
 /**
  * Used as a data wrapper for our payment method model

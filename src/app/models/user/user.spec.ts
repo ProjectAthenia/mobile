@@ -1,5 +1,6 @@
 ///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {User} from './user';
+import {PaymentMethod} from '../payment/payment-method';
 
 describe('Test User Model', () => {
 
@@ -27,5 +28,6 @@ describe('Test User Model', () => {
         });
 
         expect(model).toBeTruthy();
+        expect(model.payment_methods[0].constructor).toBe(PaymentMethod);
     });
 });
