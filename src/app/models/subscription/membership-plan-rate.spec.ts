@@ -13,7 +13,7 @@ describe('Test Membership Plan Rate Model', () => {
         expect(model).toBeTruthy();
     });
 
-    it('Make sure that the membership plan rate method model is being built properly with a membership plan connected', () => {
+    it('Make sure that the membership plan rate model is being built properly with a membership plan connected', () => {
         const model = new MembershipPlanRate( {
             active: false,
             cost: 3.99,
