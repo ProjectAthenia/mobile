@@ -3,7 +3,7 @@ import {MembershipPlan} from './membership-plan';
 
 describe('Test Membership Plan Model', () => {
 
-    it('Make sure that the payment method model is being built properly', () => {
+    it('Make sure that the membership plan model is being built properly', () => {
         const model = new MembershipPlan({
             id: 4,
             name: 'A Plan',
