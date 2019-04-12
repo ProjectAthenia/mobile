@@ -1,6 +1,7 @@
 import {RequestHandlerProvider} from '../request-handler/request-handler';
 import Auth from './auth/auth';
 import {Injectable} from '@angular/core';
+import Subscriptions from './subscriptions/subscriptions';
 
 /**
  * Provider for interacting with all app wide requests
@@ -14,10 +15,16 @@ export class RequestsProvider {
     auth: Auth;
 
     /**
+     * The requests related to our subscriptions
+     */
+    subscriptions: Subscriptions;
+
+    /**
      * Default constructor
      * @param requestHandler
      */
     constructor(private requestHandler: RequestHandlerProvider) {
         this.auth = new Auth(requestHandler);
+        this.subscriptions = new Subscriptions(this.requestHandler);
     }
 }

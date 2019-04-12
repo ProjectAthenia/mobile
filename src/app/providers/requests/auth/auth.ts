@@ -1,5 +1,6 @@
 import {RequestHandlerProvider} from '../../request-handler/request-handler';
 import {User} from '../../../models/user/user';
+import {PaymentMethod} from '../../../models/payment/payment-method';
 
 /**
  * All requests needed for handling authentication within the app
@@ -20,7 +21,7 @@ export default class Auth {
      * @param password
      * @param invalidCredentialsHandler
      */
-    signIn(email: string, password: string, invalidCredentialsHandler: (error) => void): Promise<any> {
+    async signIn(email: string, password: string, invalidCredentialsHandler: (error) => void): Promise<any> {
         const data = {
             email: email,
             password: password,
@@ -37,7 +38,7 @@ export default class Auth {
      * @param userData
      * @param emailInUseHandler
      */
-    signUp(userData: any, emailInUseHandler: (error) => void): Promise<any> {
+    async signUp(userData: any, emailInUseHandler: (error) => void): Promise<any> {
         return this.requestHandler.post('auth/sign-up', false, true, userData, {
             400 : emailInUseHandler
         });
@@ -75,6 +76,19 @@ export default class Auth {
                     resolve(userResponse);
                 }
             );
+        });
+    }
+
+    /**
+     * Creates a payment method for a user
+     * @param user
+     * @param stripeToken
+     */
+    async createPaymentMethod(user: User, stripeToken: string): Promise<PaymentMethod> {
+        return this.requestHandler.post('users/' + user.id + '/payment-methods', true, true, {
+            token: stripeToken,
+        }).then (result => {
+            return Promise.resolve(new PaymentMethod(result));
         });
     }
 }
