@@ -1,7 +1,17 @@
 import DateHelpers from './date-helpers';
 
 describe('Test the date helpers', () => {
-    it('Makes sure that the suffixing works properly', async () => {
+    it('Makes sure that the get month name works properly', () => {
+        let month = new Date();
+        month.setMonth(0);
+        expect(DateHelpers.getMonthName(month)).toBe('January');
+        month.setMonth(2);
+        expect(DateHelpers.getMonthName(month)).toBe('March');
+        month.setMonth(10);
+        expect(DateHelpers.getMonthName(month)).toBe('November');
+    });
+
+    it('Makes sure that the suffixing works properly',  () => {
         expect(DateHelpers.suffixDay(1)).toBe('1st');
         expect(DateHelpers.suffixDay(2)).toBe('2nd');
         expect(DateHelpers.suffixDay(3)).toBe('3rd');
