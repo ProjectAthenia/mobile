@@ -52,4 +52,19 @@ export default class Subscriptions {
             }
         );
     }
+
+    /**
+     * Creates a subscription properly
+     * @param user
+     * @param subscription
+     * @param data
+     */
+    async updateSubscription(user: User, subscription: Subscription, data: any): Promise<Subscription> {
+        return this.requestHandler
+            .put('users/' + user.id + '/subscriptions/' + subscription.id, true, true, data)
+            .then(response => {
+                    return Promise.resolve(new Subscription(response));
+                }
+            );
+    }
 }

@@ -69,7 +69,7 @@
             </div>
 
             <div class="submit-wrapper">
-                <ion-button large (click)="submit()" class="btn">Save</ion-button>
+                <ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</ion-button>
             </div>
         </ng-container>
 

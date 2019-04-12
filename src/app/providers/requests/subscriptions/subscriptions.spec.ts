@@ -65,4 +65,32 @@ describe('Test the subscription requests', () => {
 
         expect(result.constructor).toBe(Subscription);
     });
+
+    it("Creates an update subscription request properly", async () => {
+        const user = new User({
+            id: 324,
+        });
+        const subscription = new Subscription({
+            id: 76,
+            recurring: false,
+        });
+
+        spyOn(requestHandler, "put").and.returnValue(Promise.resolve({
+            id: 76,
+            user_id: 324,
+            membership_plan_rate_id: 534,
+            payment_method_id: 76,
+        }));
+        const result = await subscriptions.updateSubscription(user, subscription, {recurring: true});
+        expect(requestHandler.put).toHaveBeenCalledWith(
+            "users/324/subscriptions/76",
+            true,
+            true,
+            {
+                recurring: true,
+            },
+        );
+
+        expect(result.constructor).toBe(Subscription);
+    });
 });
