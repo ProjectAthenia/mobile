@@ -7,6 +7,9 @@ import {BasePage} from '../base.page';
 import {Stripe, StripeCardTokenParams} from '@ionic-native/stripe/ngx';
 import {environment} from '../../../environments/environment';
 import {MembershipPlan} from '../../models/subscription/membership-plan';
+import {PaymentMethod} from '../../models/payment/payment-method';
+import {Subscription} from '../../models/subscription/subscription';
+import {NgStyle} from '@angular/common';
 
 declare function require(name:string);
 require('card');
@@ -21,7 +24,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * The available membership plans
      */
-    membershipPlans: MembershipPlan[] = [];
+    membershipPlans: MembershipPlan[];
 
     /**
      * The form object that helps us validate the sign in form
@@ -29,14 +32,34 @@ export class SubscriptionPage extends BasePage implements OnInit {
     user: User;
 
     /**
+     * The current subscription if there is one
+     */
+    currentSubscription: Subscription = null;
+
+    /**
      * Boolean switch for whether or not the form has been submitted
      */
     submitted = false;
 
     /**
+     * Any general errors with the process
+     */
+    error: string = null;
+
+    /**
      * Any card errors
      */
     cardError: string = null;
+
+    /**
+     * The payment method the user has selected. False if none, null if new.
+     */
+    selectedPaymentMethod: PaymentMethod|boolean = false;
+
+    /**
+     * The selected membership plan if one has been selected
+     */
+    selectedMembershipPlan: MembershipPlan = null;
 
     /**
      * The card number input
@@ -83,10 +106,40 @@ export class SubscriptionPage extends BasePage implements OnInit {
 
         this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
             this.membershipPlans = membershipPlans;
+            console.log(this.membershipPlans);
             this.requests.auth.loadInitialInformation().then(user => {
                 this.user = user;
-            });
-        });
+                console.log(this.user);
+                if (this.user.payment_methods.length == 0) {
+                    this.selectedPaymentMethod = null;
+                }
+            }).catch(console.error);
+        }).catch(console.error);
+    }
+
+    /**
+     * Gets the new card input display
+     */
+    getCardDisplay() {
+        return {
+            display: this.selectedPaymentMethod === null ? 'flex' : 'none',
+        };
+    }
+
+    /**
+     * Sets the current payment method the user has selected
+     * @param paymentMethod
+     */
+    setSelectedPaymentMethod(paymentMethod: PaymentMethod) {
+        this.selectedPaymentMethod = paymentMethod;
+    }
+
+    /**
+     * Sets the selected membership plan properly
+     * @param membershipPlan
+     */
+    setSelectedMembershipPlan(membershipPlan: MembershipPlan) {
+        this.selectedMembershipPlan = membershipPlan;
     }
 
     /**
@@ -95,18 +148,31 @@ export class SubscriptionPage extends BasePage implements OnInit {
     submit() {
 
         this.submitted = true;
+        this.error = null;
         this.cardError = null;
 
-        this.validateCard().then(card => {
+        if (!this.selectedMembershipPlan) {
+            this.error = 'Please select a membership plan.';
+        } else if (this.selectedPaymentMethod === false) {
+            this.error = 'Please select a payment method.';
+        } else if (this.selectedPaymentMethod === null) {
+            this.validateCard().then(card => {
 
-            this.stripe.createCardToken(card).then(token => {
-                console.log(token);
+                this.stripe.createCardToken(card).then(token => {
+                    this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
+                        this.selectedPaymentMethod = paymentMethod;
+                        this.user.payment_methods.push(paymentMethod);
+                        this.createSubscription();
+                    });
+                }).catch(error => {
+                    this.cardNumber = error.message;
+                });
             }).catch(error => {
-                this.cardNumber = error.message;
+                this.cardError = error.message;
             });
-        }).catch(error => {
-            this.cardError = error.message;
-        });
+        } else {
+            this.createSubscription();
+        }
     }
 
     /**
@@ -138,13 +204,11 @@ export class SubscriptionPage extends BasePage implements OnInit {
         if (explodedExpiration.length != 2) {
             throw new Error('Please enter a valid expiration date.');
         }
-        console.log(explodedExpiration);
 
         await this.stripe.validateCardNumber(cardNumber).catch( () => {
             throw new Error('Invalid Credit Card Number');
         });
-        await this.stripe.validateExpiryDate(explodedExpiration[0], explodedExpiration[1]).catch( error =>  {
-            console.log(error);
+        await this.stripe.validateExpiryDate(explodedExpiration[0], explodedExpiration[1]).catch( () =>  {
             throw new Error('Invalid Expiration Date');
         });
         await this.stripe.validateCVC(cvc).catch( () => {
@@ -158,5 +222,24 @@ export class SubscriptionPage extends BasePage implements OnInit {
             expYear: parseInt(explodedExpiration[1]),
             cvc: cvc
         });
+    }
+
+    /**
+     * creates a subscription properly
+     */
+    createSubscription() {
+        const paymentMethod = this.selectedPaymentMethod;
+        if (paymentMethod) {
+
+            this.requests.subscriptions.createSubscription(
+                this.user, paymentMethod as PaymentMethod,
+                this.selectedMembershipPlan
+            ).then(subscription => {
+                this.currentSubscription = subscription;
+                this.user.subscriptions.push(subscription);
+            }).catch(() => {
+                this.error = 'Error processing payment. Please try another payment source.';
+            });
+        }
     }
 }

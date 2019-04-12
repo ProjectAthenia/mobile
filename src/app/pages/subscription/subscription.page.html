@@ -2,9 +2,44 @@
 
 <ion-content padding>
 
-    <form card container=".card-container">
+    <form card container=".card-container" *ngIf="user && membershipPlans">
+        <div class="validator-error" *ngIf="error">{{error}}</div>
 
-        <div id="new_card_inputs">
+        <ion-radio-group id="membership-options" *ngIf="membershipPlans && membershipPlans.length > 1">
+            <ion-list-header>
+                <ion-label>Select Your Membership Plan</ion-label>
+            </ion-list-header>
+
+            <ion-item *ngFor="let membershipPlan of membershipPlans" (click)="setSelectedMembershipPlan(membershipPlan)">
+                <ion-label>{{membershipPlan.name}} ${{membershipPlan.current_cost}}</ion-label>
+                <ion-radio slot="start">
+                </ion-radio>
+            </ion-item>
+        </ion-radio-group>
+
+        <h3 *ngIf="membershipPlans.length == 1">
+            Subscribe to the {{membershipPlans[0].name}} for ${{membershipPlans[0].current_cost}}
+        </h3>
+
+        <ion-radio-group id="payment-options" *ngIf="user && user.payment_methods.length > 0">
+            <ion-list-header>
+                <ion-label>Select Your Payment Method</ion-label>
+            </ion-list-header>
+
+            <ion-item *ngFor="let paymentMethod of user.payment_methods" (click)="setSelectedPaymentMethod(paymentMethod)">
+                <ion-label>Card Ending In {{paymentMethod.identifier}}</ion-label>
+                <ion-radio slot="start">
+                </ion-radio>
+            </ion-item>
+
+            <ion-item (click)="setSelectedPaymentMethod(null)">
+                <ion-label>New Credit Card</ion-label>
+                <ion-radio slot="start"></ion-radio>
+            </ion-item>
+
+        </ion-radio-group>
+
+        <div id="new_card_inputs" [ngStyle]="getCardDisplay()">
             <div class="card-container"></div>
 
             <div class="validator-error" *ngIf="cardError">{{cardError}}</div>
