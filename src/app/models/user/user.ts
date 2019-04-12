@@ -36,6 +36,34 @@ export class User extends BaseModel {
         super(data, {
             payment_methods: new Relation('array', PaymentMethod),
             subscriptions: new Relation('array', Subscription),
-        })
+        });
+    }
+
+    /**
+     * Gets all currently active subscriptions for a user
+     */
+    getActiveSubscriptions(): Subscription[] {
+        return this.subscriptions.filter(subscription => {
+            console.log(subscription);
+            return subscription.expires_at == null || subscription.expires_at > new Date();
+        });
+    }
+
+    /**
+     * Gets the users current subscription if there is one
+     */
+    getCurrentSubscription(): Subscription {
+        const activeSubscriptions = this.getActiveSubscriptions();
+        const sortedSubscriptions = activeSubscriptions.sort((subscriptionA, subscriptionB) => {
+            if (!subscriptionA.expires_at) {
+                return -1;
+            }
+            if (!subscriptionB.expires_at) {
+                return 1;
+            }
+            return subscriptionA.expires_at.getTime() - subscriptionB.expires_at.getTime();
+        });
+
+        return sortedSubscriptions.length ? sortedSubscriptions[0] : null;
     }
 }

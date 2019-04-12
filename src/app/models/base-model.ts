@@ -31,17 +31,22 @@ export class BaseModel {
         for (const property in rawData) {
             if (this.dates.includes(property)) {
                 if (rawData[property]) {
-                    const rawDate = rawData[property].split(' ');
-                    let baseDate = new Date(rawDate[0]);
-                    baseDate = new Date(baseDate.getTime() + baseDate.getTimezoneOffset()*60*1000);
-                    if (rawDate[1]) {
-                        const time = rawDate[1].split(':');
-                        baseDate.setHours(time[0]);
-                        baseDate.setMinutes(time[1]);
-                        baseDate.setSeconds(time[2]);
+                    console.log(rawData[property]);
+                    if (rawData[property].indexOf(' ') !== -1) {
+                        const rawDate = rawData[property].split(' ');
+                        let baseDate = new Date(rawDate[0]);
+                        baseDate = new Date(baseDate.getTime() + baseDate.getTimezoneOffset()*60*1000);
+                        if (rawDate[1]) {
+                            const time = rawDate[1].split(':');
+                            baseDate.setHours(time[0]);
+                            baseDate.setMinutes(time[1]);
+                            baseDate.setSeconds(time[2]);
+                            this[property] = baseDate;
+                        }
                         this[property] = baseDate;
+                    } else {
+                        this[property] = new Date(rawData[property]);
                     }
-                    this[property] = baseDate;
                 }
             } else if (this.relations.hasOwnProperty(property)) {
                 this[property] = this.relations[property].transformData(rawData[property]);

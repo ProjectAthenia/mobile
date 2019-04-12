@@ -52,6 +52,8 @@ export default class Auth {
             .get('users/me', true, true, [
                 'paymentMethods',
                 'subscriptions',
+                'subscriptions.membershipPlanRate',
+                'subscriptions.membershipPlanRate.membershipPlan',
                 // Add any expands needed here
             ]).then((response) => {
                 const user = new User(response);
