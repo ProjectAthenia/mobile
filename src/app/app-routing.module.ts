@@ -23,6 +23,10 @@ const routes: Routes = [
         path: 'sign-up',
         loadChildren: './pages/sign-up/sign-up.module#SignUpPageModule'
     },
+    {
+        path: 'subscription',
+        loadChildren: './pages/subscription/subscription.module#SubscriptionPageModule'
+    },
     // Add more pages below
 ];
 

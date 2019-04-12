@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+import {CardModule} from 'ngx-card/ngx-card';
 
 import { IonicModule } from '@ionic/angular';
 
 import {ComponentsModule} from '../../components/components.module';
-import {ProfileEditorPage} from './profile-editor.page';
+import {SubscriptionPage} from './subscription.page';
 
 const routes: Routes = [
     {
         path: '',
-        component: ProfileEditorPage
+        component: SubscriptionPage
     }
 ];
 
@@ -22,8 +23,8 @@ const routes: Routes = [
         IonicModule,
         RouterModule.forChild(routes),
         ComponentsModule,
-        ReactiveFormsModule,
+        CardModule,
     ],
-    declarations: [ProfileEditorPage]
+    declarations: [SubscriptionPage]
 })
-export class ProfileEditorPageModule {}
+export class SubscriptionPageModule {}

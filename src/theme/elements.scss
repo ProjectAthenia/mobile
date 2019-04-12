@@ -12,3 +12,16 @@ footer {
 .validator-error {
   color: var(--ion-color-danger-shade);
 }
+
+.side-by-side {
+  display: flex;
+  width: 100%;
+  align-content: space-between;
+  input {
+    flex-grow: 1;
+    min-width: 46%;
+  }
+}
+#submit-wrapper {
+  text-align: center;
+}

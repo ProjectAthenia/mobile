@@ -7,6 +7,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Stripe } from '@ionic-native/stripe/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +32,7 @@ import { RequestsProvider } from './providers/requests/requests';
         // Plugin Providers
         HTTP,
         NativeStorage,
+        Stripe,
 
         // App providers
         RequestHandlerProvider,

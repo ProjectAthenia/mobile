@@ -1,0 +1,26 @@
+<app-logged-in-header></app-logged-in-header>
+
+<ion-content padding>
+
+    <form card container=".card-container">
+
+        <div id="new_card_inputs">
+            <div class="card-container"></div>
+
+            <input id="card_number" type="text" name="number" card-number placeholder="Card Number"/>
+            <input id="card_name" type="text" name="first-name" card-name placeholder="Full Name"/>
+
+            <div class="side-by-side">
+
+                <input id="card_expiry" type="text" name="expiry" card-expiry placeholder="MM/YY"/>
+                <input id="card_cvc" type="text" name="cvc" card-cvc placeholder="CVC"/>
+            </div>
+        </div>
+
+        <div id="submit-wrapper">
+            <ion-button large (click)="submit()" class="btn">Save</ion-button>
+        </div>
+
+    </form>
+
+</ion-content>

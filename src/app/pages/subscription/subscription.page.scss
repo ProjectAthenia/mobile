@@ -1,0 +1,12 @@
+#new_card_inputs {
+  display: flex;
+  flex-direction: column;
+
+  .card-container {
+    margin: 0 auto 10px;
+  }
+
+  input {
+    margin: 5px;
+  }
+}

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AlertController, NavController, ToastController} from '@ionic/angular';
+import {ToastController} from '@ionic/angular';
 import {User} from '../../models/user/user';
-import {ActivatedRoute} from '@angular/router';
 import {RequestsProvider} from '../../providers/requests/requests';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasePage} from '../base.page';
@@ -31,18 +30,12 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     /**
      * Default Constructor
      * @param formBuilder
-     * @param navController
      * @param requests
-     * @param alertController
-     * @param route
      * @param toastController
      */
     constructor(private formBuilder: FormBuilder,
-                private navController: NavController,
                 private requests: RequestsProvider,
-                private alertController: AlertController,
-                private route: ActivatedRoute,
-                private toastController: ToastController
+                private toastController: ToastController,
     ) {
         super();
     }

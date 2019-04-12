@@ -82,6 +82,13 @@ export class AppComponent {
     }
 
     /**
+     * Whether or not this app has subscriptions enabled
+     */
+    hasSubscriptions() {
+        return environment.subscriptions_enabled;
+    }
+
+    /**
      * Handles the logout properly
      */
     handleLogout() {

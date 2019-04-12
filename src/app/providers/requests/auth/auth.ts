@@ -49,6 +49,8 @@ export default class Auth {
     async loadInitialInformation(): Promise<User> {
         return this.requestHandler
             .get('users/me', true, true, [
+                'paymentMethods',
+                'subscriptions',
                 // Add any expands needed here
             ]).then((response) => {
                 const user = new User(response);
