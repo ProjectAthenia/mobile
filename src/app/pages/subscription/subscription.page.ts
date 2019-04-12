@@ -213,27 +213,43 @@ export class SubscriptionPage extends BasePage implements OnInit {
         this.error = null;
         this.cardError = null;
 
-        if (!this.selectedMembershipPlan) {
-            this.error = 'Please select a membership plan.';
-        } else if (this.selectedPaymentMethod === false) {
-            this.error = 'Please select a payment method.';
-        } else if (this.selectedPaymentMethod === null) {
-            this.validateCard().then(card => {
+        if (this.currentSubscription) {
+            if (this.selectedPaymentMethod === null) {
+                this.validateCard().then(card => {
+                    this.stripe.createCardToken(card).then(token => {
+                        this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
+                            this.user.payment_methods.push(paymentMethod);
+                            this.setSelectedPaymentMethod(paymentMethod);
+                            this.changePaymentMethod(paymentMethod);
+                        });
+                    })
+                })
+            } else {
+                this.changePaymentMethod(this.selectedPaymentMethod as PaymentMethod);
+            }
+        } else {
+            if (!this.selectedMembershipPlan) {
+                this.error = 'Please select a membership plan.';
+            } else if (this.selectedPaymentMethod === false) {
+                this.error = 'Please select a payment method.';
+            } else if (this.selectedPaymentMethod === null) {
+                this.validateCard().then(card => {
 
-                this.stripe.createCardToken(card).then(token => {
-                    this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
-                        this.selectedPaymentMethod = paymentMethod;
-                        this.user.payment_methods.push(paymentMethod);
-                        this.createSubscription();
+                    this.stripe.createCardToken(card).then(token => {
+                        this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
+                            this.selectedPaymentMethod = paymentMethod;
+                            this.user.payment_methods.push(paymentMethod);
+                            this.createSubscription();
+                        });
+                    }).catch(error => {
+                        this.cardNumber = error.message;
                     });
                 }).catch(error => {
-                    this.cardNumber = error.message;
+                    this.cardError = error.message;
                 });
-            }).catch(error => {
-                this.cardError = error.message;
-            });
-        } else {
-            this.createSubscription();
+            } else {
+                this.createSubscription();
+            }
         }
     }
 
@@ -309,5 +325,19 @@ export class SubscriptionPage extends BasePage implements OnInit {
                 this.error = 'Error processing payment. Please try another payment source.';
             });
         }
+    }
+
+    /**
+     * Changes the payment method properly
+     * @param paymentMethod
+     */
+    changePaymentMethod(paymentMethod: PaymentMethod) {
+        this.requests.subscriptions.updateSubscription(
+            this.user,
+            this.currentSubscription,
+            {payment_method_id: paymentMethod.id}
+        ).then(() => {
+            this.currentSubscription.payment_method_id = paymentMethod.id;
+        });
     }
 }
