@@ -6,6 +6,7 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import {BasePage} from '../base.page';
 import {Stripe, StripeCardTokenParams} from '@ionic-native/stripe/ngx';
 import {environment} from '../../../environments/environment';
+import {MembershipPlan} from '../../models/subscription/membership-plan';
 
 declare function require(name:string);
 require('card');
@@ -16,6 +17,11 @@ require('card');
     styleUrls: ['./subscription.page.scss'],
 })
 export class SubscriptionPage extends BasePage implements OnInit {
+
+    /**
+     * The available membership plans
+     */
+    membershipPlans: MembershipPlan[] = [];
 
     /**
      * The form object that helps us validate the sign in form
@@ -75,8 +81,11 @@ export class SubscriptionPage extends BasePage implements OnInit {
     ngOnInit() {
         this.stripe.setPublishableKey(environment.stripe_publishable_key).catch(console.error);
 
-        this.requests.auth.loadInitialInformation().then(user => {
-            this.user = user;
+        this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
+            this.membershipPlans = membershipPlans;
+            this.requests.auth.loadInitialInformation().then(user => {
+                this.user = user;
+            });
         });
     }
 
