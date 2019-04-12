@@ -9,6 +9,7 @@ import {environment} from '../../../environments/environment';
 import {MembershipPlan} from '../../models/subscription/membership-plan';
 import {PaymentMethod} from '../../models/payment/payment-method';
 import {Subscription} from '../../models/subscription/subscription';
+import DateHelpers from '../../providers/date-helpers/date-helpers';
 
 declare function require(name:string);
 require('card');
@@ -110,6 +111,12 @@ export class SubscriptionPage extends BasePage implements OnInit {
             }
             this.requests.auth.loadInitialInformation().then(user => {
                 this.user = user;
+                this.currentSubscription = this.user.getCurrentSubscription();
+                if (this.currentSubscription) {
+                    this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
+                        return paymentMethod.id == this.currentSubscription.payment_method_id;
+                    });
+                }
                 if (this.user.payment_methods.length == 0) {
                     this.selectedPaymentMethod = null;
                 }
@@ -127,6 +134,34 @@ export class SubscriptionPage extends BasePage implements OnInit {
     }
 
     /**
+     * Gets the user's current subscription status
+     */
+    getCurrentSubscriptionStatus(): string {
+        if (!this.currentSubscription.expires_at) {
+            return 'good for a lifetime!';
+        } else {
+            const now = new Date();
+            let formattedExpiration = DateHelpers.suffixDay(this.currentSubscription.expires_at.getDate());
+            if (this.currentSubscription.expires_at.getMonth() != now.getMonth()) {
+                formattedExpiration+= ' of ' + DateHelpers.getMonthName(this.currentSubscription.expires_at);
+            }
+            if (this.currentSubscription.recurring) {
+                return 'set to be auto-renewed on the ' + formattedExpiration + '.';
+            } else {
+                return 'set to expire on the ' + formattedExpiration + '.';
+            }
+        }
+    }
+
+    /**
+     * Sets the subscription to be recurring
+     * @param recurring
+     */
+    setRecurring(recurring: boolean) {
+        this.currentSubscription.recurring = recurring;
+    }
+
+    /**
      * Sets the current payment method the user has selected
      * @param paymentMethod
      */
@@ -140,6 +175,17 @@ export class SubscriptionPage extends BasePage implements OnInit {
      */
     setSelectedMembershipPlan(membershipPlan: MembershipPlan) {
         this.selectedMembershipPlan = membershipPlan;
+    }
+
+    /**
+     * Checks if the payment method is selected
+     * @param paymentMethod
+     */
+    isPaymentMethodSelected(paymentMethod: PaymentMethod) {
+        if (this.selectedPaymentMethod && this.selectedPaymentMethod !== true) {
+            return this.selectedPaymentMethod.id === paymentMethod.id;
+        }
+        return false;
     }
 
     /**

@@ -35,7 +35,7 @@ export class Subscription extends BaseModel {
     /**
      * The duration for the membership plan
      */
-    recurring: string;
+    recurring: boolean;
 
     /**
      * The membership plan rate
