@@ -31,7 +31,6 @@ export class BaseModel {
         for (const property in rawData) {
             if (this.dates.includes(property)) {
                 if (rawData[property]) {
-                    console.log(rawData[property]);
                     if (rawData[property].indexOf(' ') !== -1) {
                         const rawDate = rawData[property].split(' ');
                         let baseDate = new Date(rawDate[0]);

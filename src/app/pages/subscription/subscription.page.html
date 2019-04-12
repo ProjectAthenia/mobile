@@ -32,7 +32,7 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="!currentSubscription || (currentSubscription.expires_at && currentSubscription.recurring)">
+        <div [ngStyle]="getCardSelectorDisplay()">
 
             <ion-radio-group id="payment-options" *ngIf="user && user.payment_methods.length > 0">
                 <ion-list-header>
@@ -71,7 +71,7 @@
             <div class="submit-wrapper">
                 <ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</ion-button>
             </div>
-        </ng-container>
+        </div>
 
     </form>
 

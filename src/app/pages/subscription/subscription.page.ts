@@ -125,6 +125,16 @@ export class SubscriptionPage extends BasePage implements OnInit {
     }
 
     /**
+     * Gets the display style for the card selector
+     */
+    getCardSelectorDisplay() {
+        return {
+            display: !this.currentSubscription ||
+                (this.currentSubscription.expires_at && this.currentSubscription.recurring) ? 'block' : 'none',
+        }
+    }
+
+    /**
      * Gets the new card input display
      */
     getCardDisplay() {
@@ -158,7 +168,13 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * @param recurring
      */
     setRecurring(recurring: boolean) {
-        this.currentSubscription.recurring = recurring;
+        this.requests.subscriptions.updateSubscription(
+            this.user,
+            this.currentSubscription,
+            {recurring: recurring}
+        ).then(subscription => {
+            this.currentSubscription.recurring = recurring;
+        });
     }
 
     /**
