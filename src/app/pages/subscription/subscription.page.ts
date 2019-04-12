@@ -9,7 +9,6 @@ import {environment} from '../../../environments/environment';
 import {MembershipPlan} from '../../models/subscription/membership-plan';
 import {PaymentMethod} from '../../models/payment/payment-method';
 import {Subscription} from '../../models/subscription/subscription';
-import {NgStyle} from '@angular/common';
 
 declare function require(name:string);
 require('card');
@@ -106,10 +105,11 @@ export class SubscriptionPage extends BasePage implements OnInit {
 
         this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
             this.membershipPlans = membershipPlans;
-            console.log(this.membershipPlans);
+            if (this.membershipPlans.length == 1) {
+                this.setSelectedMembershipPlan(this.membershipPlans[0]);
+            }
             this.requests.auth.loadInitialInformation().then(user => {
                 this.user = user;
-                console.log(this.user);
                 if (this.user.payment_methods.length == 0) {
                     this.selectedPaymentMethod = null;
                 }
@@ -237,6 +237,12 @@ export class SubscriptionPage extends BasePage implements OnInit {
             ).then(subscription => {
                 this.currentSubscription = subscription;
                 this.user.subscriptions.push(subscription);
+                this.toastController.create({
+                    message: 'Subscription successfully created!',
+                    duration: 2000,
+                }).then(toast => {
+                    toast.present();
+                });
             }).catch(() => {
                 this.error = 'Error processing payment. Please try another payment source.';
             });

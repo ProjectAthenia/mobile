@@ -26,10 +26,11 @@
                 <ion-label>Select Your Payment Method</ion-label>
             </ion-list-header>
 
-            <ion-item *ngFor="let paymentMethod of user.payment_methods" (click)="setSelectedPaymentMethod(paymentMethod)">
+            <ion-item
+                    *ngFor="let paymentMethod of user.payment_methods"
+                    (click)="setSelectedPaymentMethod(paymentMethod)">
                 <ion-label>Card Ending In {{paymentMethod.identifier}}</ion-label>
-                <ion-radio slot="start">
-                </ion-radio>
+                <ion-radio slot="start"></ion-radio>
             </ion-item>
 
             <ion-item (click)="setSelectedPaymentMethod(null)">
