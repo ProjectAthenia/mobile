@@ -21,8 +21,8 @@ describe('Test Request Handler provider', () => {
     beforeEach(() => {
         http = new HTTPMock();
         storageProvider = new StorageProvider(new NativeStorage());
-        toast = new ToastController(window.document);
-        loadingController = new LoadingController(window.document);
+        toast = new ToastController();
+        loadingController = new LoadingController();
         events = new EventsMock();
         authManager = new AuthManagerProvider(new StorageProvider(new NativeStorageMock()));
 

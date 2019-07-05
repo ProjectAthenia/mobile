@@ -35,8 +35,8 @@ describe('SubscriptionPage', () => {
                 CardModule,
             ],
             providers: [
-                { provide: AlertController, useValue: new AlertController(window.document)},
-                { provide: ToastController, useValue: new ToastController(window.document)},
+                { provide: AlertController, useValue: new AlertController()},
+                { provide: ToastController, useValue: new ToastController()},
                 { provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
                 { provide: ActivatedRoute, useValue: activatedRoute},

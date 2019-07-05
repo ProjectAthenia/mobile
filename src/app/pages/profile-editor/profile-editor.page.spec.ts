@@ -24,7 +24,7 @@ describe('ProfileEditorPage', () => {
                 ComponentsModule,
             ],
             providers: [
-                { provide: ToastController, useValue: new ToastController(window.document)},
+                { provide: ToastController, useValue: new ToastController()},
                 { provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
             ],

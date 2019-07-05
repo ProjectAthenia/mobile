@@ -61,12 +61,12 @@ export class RequestHandlerProvider {
     async refreshToken(): Promise<any> {
 
         try {
-            this.authToken = await this.storageProvider.loadAuthToken();
             if (this.refreshRequest == null) {
-                this.refreshRequest = this.post('auth/refresh', false, false, {});
+                this.authToken = await this.storageProvider.loadAuthToken();
+                this.refreshRequest = this.post('auth/refresh', false, false, {}, {}, true);
             }
             const response = await this.refreshRequest;
-            const token = response.token;
+            const token = JSON.parse(response.data).token;
             this.authToken = token;
             await this.storageProvider.saveAuthToken(token);
             this.refreshRequest = null;

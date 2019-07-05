@@ -15,7 +15,7 @@ describe('LoggedInHeaderComponent', () => {
 
     beforeEach(async(() => {
         navController = jasmine.createSpyObj('NavController', ['goBack']);
-        alertController = new AlertController(window.document);
+        alertController = new AlertController();
         TestBed.configureTestingModule({
             imports: [
                 CommonModule,
