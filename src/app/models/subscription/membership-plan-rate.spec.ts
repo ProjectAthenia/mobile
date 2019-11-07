@@ -1,4 +1,3 @@
-///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {MembershipPlan} from './membership-plan';
 import {MembershipPlanRate} from './membership-plan-rate';
 

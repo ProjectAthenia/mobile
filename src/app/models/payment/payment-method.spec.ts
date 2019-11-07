@@ -1,4 +1,3 @@
-///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {PaymentMethod} from './payment-method';
 
 describe('Test Payment Method Model', () => {

@@ -1,4 +1,3 @@
-///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {User} from './user';
 import {PaymentMethod} from '../payment/payment-method';
 import {Subscription} from '../subscription/subscription';

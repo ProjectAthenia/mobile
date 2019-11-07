@@ -5,6 +5,7 @@ import {CommonModule} from "@angular/common";
 import {AlertController, IonicModule, NavController, Platform} from '@ionic/angular';
 import {RequestsProvider} from "../../providers/requests/requests";
 import RequestsProviderMock from "../../providers/requests/requests.mock";
+import {PlatformMock} from '../../../../test-config/mocks-ionic';
 
 describe('LoggedInHeaderComponent', () => {
     let component: LoggedInHeaderComponent;
@@ -25,7 +26,7 @@ describe('LoggedInHeaderComponent', () => {
                 {provide: AlertController, useValue: alertController},
                 {provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
-                { provide: Platform, useValue: new Platform(window.document)},
+                { provide: Platform, useValue: new PlatformMock()},
             ],
             declarations: [
                 LoggedInHeaderComponent,

@@ -54,12 +54,12 @@ describe('Test Storage provider helper', () => {
     it('should save the received at and token ', async () => {
         spyOn(nativeStorage, 'setItem').and.callThrough();
 
-        spyOn(Date, 'now').and.returnValue('a date');
+        spyOn(Date, 'now').and.returnValue(23154);
 
         await storageProvider.saveAuthToken('a token');
 
         expect(nativeStorage.setItem).toHaveBeenCalledWith('auth_token', 'a token');
-        expect(nativeStorage.setItem).toHaveBeenCalledWith('received_at', 'a date');
+        expect(nativeStorage.setItem).toHaveBeenCalledWith('received_at', 23154);
     });
 
     it('should save the logged in user id', async () => {

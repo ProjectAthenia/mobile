@@ -64,22 +64,22 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * The card number input
      */
-    @ViewChild('cardNumber') cardNumber: ElementRef;
+    @ViewChild('cardNumber', {static: false}) cardNumber: ElementRef;
 
     /**
      * The card name input
      */
-    @ViewChild('cardName') cardName: ElementRef;
+    @ViewChild('cardName', {static: false}) cardName: ElementRef;
 
     /**
      * The card expiry input
      */
-    @ViewChild('cardExpiry') cardExpiry: ElementRef;
+    @ViewChild('cardExpiry', {static: false}) cardExpiry: ElementRef;
 
     /**
      * The card CVC input
      */
-    @ViewChild('cardCVC') cardCVC: ElementRef;
+    @ViewChild('cardCVC', {static: false}) cardCVC: ElementRef;
 
     /**
      * Default Constructor

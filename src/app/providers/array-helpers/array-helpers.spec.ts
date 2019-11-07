@@ -1,4 +1,3 @@
-///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {ArrayHelpersProvider} from "./array-helpers";
 
 describe('Test Array Helpers Provider', () => {

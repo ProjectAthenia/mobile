@@ -12,7 +12,7 @@ export class LoggedInHeaderComponent implements OnInit {
     /**
      * The header for this page
      */
-    @ViewChild('header')
+    @ViewChild('header', {static: false})
     header: any;
 
     /**

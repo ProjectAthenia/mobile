@@ -1,4 +1,3 @@
-///<reference path="../../../../node_modules/@types/jasmine/index.d.ts"/>
 import {Article} from './article';
 
 describe('Test Article Model', () => {

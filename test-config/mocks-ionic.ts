@@ -1,11 +1,13 @@
-import {Events, Platform} from "@ionic/angular";
+import {Events, NavController, Platform} from "@ionic/angular";
 import {EventHandler} from "@ionic/angular/dist/providers/events";
+import {NavigationExtras, UrlTree} from "@angular/router";
+import {NgZone} from '@angular/core';
 
 export class PlatformMock extends Platform {
-  currentPlatform: string = 'ios';
+  currentPlatform : string = 'ios';
 
   constructor() {
-    super(window.document);
+    super(window.document, new NgZone({}));
   }
 
   public ready(): Promise<string> {
