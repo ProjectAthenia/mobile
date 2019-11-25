@@ -1,0 +1,17 @@
+.last-message {
+  white-space: nowrap;
+  .content {
+    overflow: hidden;
+    max-width: 75%;
+    float: left;
+    text-overflow: ellipsis;
+  }
+  .message-date {
+    float: right;
+  }
+
+  color: black;
+  &.seen {
+    color: var(--ion-color-medium-shade);
+  }
+}

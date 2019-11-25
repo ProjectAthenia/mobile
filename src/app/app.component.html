@@ -30,6 +30,12 @@
                 Contacts
               </ion-label>
             </ion-item>
+            <ion-item (click)="goTo('threads')">
+              <ion-icon slot="start" name="mail"></ion-icon>
+              <ion-label>
+                Messages
+              </ion-label>
+            </ion-item>
             <ion-item (click)="goTo('subscription')" *ngIf="hasSubscriptions()">
               <ion-icon slot="start" name="pricetags"></ion-icon>
               <ion-label>

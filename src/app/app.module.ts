@@ -8,6 +8,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Stripe } from '@ionic-native/stripe/ngx';
+import {FirebaseX} from '@ionic-native/firebase-x/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,7 @@ import { RequestsProvider } from './providers/requests/requests';
         HTTP,
         NativeStorage,
         Stripe,
+        FirebaseX,
 
         // App providers
         RequestHandlerProvider,

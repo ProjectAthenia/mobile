@@ -1,0 +1,56 @@
+ion-content {
+  overflow: hidden;
+}
+#wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  flex: 1 1 auto;
+  #messages {
+    overflow: scroll;
+    .message {
+      margin: 0 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      flex-direction: row-reverse;
+      .body {
+        background: #a2a4ab;
+        background: var(--ion-color-medium-tint);
+        border-radius: 10px;
+        color: black;
+        margin: 10px;
+        padding: 5px;
+      }
+      &.mine {
+        flex-direction: row;
+        .body {
+          background: #25167C;
+          background: var(--ion-color-primary);
+          color: white;
+        }
+      }
+
+      .thumbnail {
+        min-width: 25px;
+        height: 25px;
+        margin: 0;
+        border-radius: 50px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url('/assets/profile-image-placeholder.png');
+      }
+    }
+  }
+
+  #message-input {
+    display: flex;
+    background: var(--ion-color-light);
+    ion-textarea {
+      background: white;
+      border-radius: 10px;
+      margin: 0 10px 0 0;
+      min-height: 80px;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<app-full-page-advertisement [user]="this.me"></app-full-page-advertisement>
+
+<app-logged-in-header></app-logged-in-header>
+
+<ion-content padding>
+
+    <ng-container *ngIf="loaded">
+        <ion-searchbar #filterBar *ngIf="threads.length != 0" showCancelButton (ionChange)="filterThreads()"></ion-searchbar>
+        <h2 *ngIf="threads.length == 0">
+            No Messages Yet!
+        </h2>
+        <ion-list>
+            <ion-item *ngFor="let thread of visibleThreads" (click)="goToThread(thread)">
+                <ion-label>
+                    {{getOtherUserName(thread)}}
+                    <br/>
+                    <div [class]="'last-message ' + (isLastMessageMineOrSeen(thread) ? 'seen' : '')">
+                        <span class="content">{{getLastMessageContent(thread)}}</span>
+                        <span class="message-date">{{getLastMessageDate(thread)}}</span>
+                    </div>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+
+    </ng-container>
+
+</ion-content>

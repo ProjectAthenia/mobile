@@ -22,6 +22,7 @@
     "@angular/router": "^8.2.14",
     "@angular/service-worker": "^8.2.14",
     "@ionic-native/core": "^5.17.0",
+    "@ionic-native/firebase-x": "^5.17.0",
     "@ionic-native/http": "^5.17.0",
     "@ionic-native/native-storage": "^5.17.0",
     "@ionic-native/splash-screen": "^5.17.0",
@@ -32,8 +33,11 @@
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.0",
     "cordova-plugin-advanced-http": "^2.2.0",
+    "cordova-plugin-androidx": "^1.0.2",
+    "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
+    "cordova-plugin-firebasex": "^7.0.1",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.1.2",
     "cordova-plugin-nativestorage": "2.3.2",
@@ -86,7 +90,12 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-advanced-http": {},
-      "cordova-plugin-stripe": {}
+      "cordova-plugin-stripe": {},
+      "cordova-plugin-firebasex": {
+        "FIREBASE_ANALYTICS_COLLECTION_ENABLED": "true",
+        "FIREBASE_PERFORMANCE_COLLECTION_ENABLED": "true",
+        "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true"
+      }
     },
     "platforms": [
       "android",
