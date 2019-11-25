@@ -1,0 +1,33 @@
+<app-full-page-advertisement [user]="this.user"></app-full-page-advertisement>
+
+<app-logged-in-header></app-logged-in-header>
+
+<ion-content padding>
+
+    <ng-container *ngIf="pendingRequests">
+
+        <h2 *ngIf="pendingRequests.length > 0">
+            Current Requests
+        </h2>
+        <ion-list *ngIf="pendingRequests.length > 0">
+            <ion-item *ngFor="let pendingRequest of pendingRequests">
+                <ion-label (click)="goToUser(pendingRequest)">{{getContactUserName(pendingRequest)}}</ion-label>
+                <ion-icon name="checkmark-circle" (click)="confirm(pendingRequest)"></ion-icon>
+                <ion-icon name="remove-circle" (click)="deny(pendingRequest)"></ion-icon>
+            </ion-item>
+        </ion-list>
+
+    </ng-container>
+
+    <h2 *ngIf="contacts.length > 0">
+        Your Contacts
+    </h2>
+    <ion-list *ngIf="contacts.length > 0">
+        <ion-item *ngFor="let contact of contacts">
+            <ion-label (click)="goToUser(contact)">{{getContactUserName(contact)}}</ion-label>
+            <ion-icon name="text" (click)="messageUser(contact)"></ion-icon>
+        </ion-item>
+    </ion-list>
+
+
+</ion-content>

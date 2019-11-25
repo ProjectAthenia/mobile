@@ -27,6 +27,10 @@ const routes: Routes = [
         path: 'subscription',
         loadChildren: './pages/subscription/subscription.module#SubscriptionPageModule'
     },
+    {
+        path: 'contacts',
+        loadChildren: './pages/contacts/contacts.module#ContactsPageModule',
+    },
     // Add more pages below
 ];
 

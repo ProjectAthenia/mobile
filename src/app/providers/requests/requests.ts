@@ -2,6 +2,7 @@ import {RequestHandlerProvider} from '../request-handler/request-handler';
 import Auth from './auth/auth';
 import {Injectable} from '@angular/core';
 import Subscriptions from './subscriptions/subscriptions';
+import Social from './social/social';
 
 /**
  * Provider for interacting with all app wide requests
@@ -20,11 +21,17 @@ export class RequestsProvider {
     subscriptions: Subscriptions;
 
     /**
+     * The social media requests available
+     */
+    social: Social;
+
+    /**
      * Default constructor
      * @param requestHandler
      */
     constructor(private requestHandler: RequestHandlerProvider) {
         this.auth = new Auth(requestHandler);
         this.subscriptions = new Subscriptions(this.requestHandler);
+        this.social = new Social(this.requestHandler);
     }
 }
