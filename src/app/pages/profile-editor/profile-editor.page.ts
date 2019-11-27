@@ -49,6 +49,9 @@ export class ProfileEditorPage extends BasePage implements OnInit {
             name: ['', Validators.compose([
                 Validators.maxLength(120),
             ])],
+            about_me: [''],
+            allow_users_to_add_me: [''],
+            receive_push_notifications: [''],
             password: ['',  Validators.compose([
                 Validators.minLength(6),
                 Validators.maxLength(256),
@@ -58,6 +61,9 @@ export class ProfileEditorPage extends BasePage implements OnInit {
         this.requests.auth.loadInitialInformation().then(user => {
             this.user = user;
             this.form.controls['name'].setValue(this.user.name);
+            this.form.controls['about_me'].setValue(this.user.about_me);
+            this.form.controls['allow_users_to_add_me'].setValue(this.user.allow_users_to_add_me);
+            this.form.controls['receive_push_notifications'].setValue(this.user.receive_push_notifications);
         });
     }
 
@@ -75,8 +81,17 @@ export class ProfileEditorPage extends BasePage implements OnInit {
             if (this.form.controls['name'].dirty) {
                 data.name = this.form.controls['name'].value;
             }
+            if (this.form.controls['about_me'].dirty) {
+                data.about_me = this.form.controls['about_me'].value;
+            }
             if (this.form.controls['password'].dirty) {
                 data.password = this.form.controls['password'].value;
+            }
+            if (this.form.controls['allow_users_to_add_me'].dirty) {
+                data.allow_users_to_add_me = this.form.controls['allow_users_to_add_me'].value;
+            }
+            if (this.form.controls['receive_push_notifications'].dirty) {
+                data.receive_push_notifications = this.form.controls['receive_push_notifications'].value;
             }
 
             this.requests.auth.updateUser(this.user, data).then(user => {

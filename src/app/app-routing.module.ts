@@ -32,6 +32,10 @@ const routes: Routes = [
         loadChildren: './pages/threads/threads.module#ThreadsPageModule',
     },
     {
+        path: 'user/:user_id',
+        loadChildren: './pages/user/user.module#UserPageModule',
+    },
+    {
         path: 'contacts',
         loadChildren: './pages/contacts/contacts.module#ContactsPageModule',
     },

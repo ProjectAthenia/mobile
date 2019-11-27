@@ -1,0 +1,27 @@
+#profile-image {
+  width: 80vw;
+  height: 80vw;
+  margin: 0 auto;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('/assets/profile-image-placeholder.png');
+}
+
+.actions {
+  text-align: right;
+  margin: 10px auto;
+  max-width: 85vw;
+  ion-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 0 0 8px;
+  }
+
+  .pending-content {
+    font-size: 1.15em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}

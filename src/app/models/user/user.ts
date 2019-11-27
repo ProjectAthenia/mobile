@@ -19,6 +19,21 @@ export class User extends BaseModel {
     email: string;
 
     /**
+     * Information the user has entered about them self
+     */
+    about_me: string;
+
+    /**
+     * Whether or not this user allows other users to add them
+     */
+    allow_users_to_add_me: boolean;
+
+    /**
+     * Whether or not this user wants to receive push notifications
+     */
+    receive_push_notifications: boolean;
+
+    /**
      * All payment methods on this user
      */
     payment_methods: PaymentMethod[];

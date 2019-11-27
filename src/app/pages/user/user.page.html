@@ -1,0 +1,29 @@
+<app-full-page-advertisement [user]="this.me"></app-full-page-advertisement>
+
+<app-logged-in-header></app-logged-in-header>
+
+<ion-content padding>
+
+    <div id="profile-image" [ngStyle]="profileImageStyle()"></div>
+
+    <h2>
+        {{user?.name}}
+    </h2>
+
+    <div class="actions" *ngIf="!isMe()">
+        <ion-icon *ngIf="isConnected()" name="text" [routerLink]="'/user/' + user?.id + '/message'"></ion-icon>
+        <ion-icon *ngIf="isConnected()" (click)="exportContact()" name="open"></ion-icon>
+        <ion-icon *ngIf="canConnect()" (click)="connect()" name="person-add"></ion-icon>
+        <ion-button *ngIf="contactIsPendingOtherUser()" (click)="deny()">Cancel Pending Request</ion-button>
+        <div class="pending-content" *ngIf="contactIsPendingMyAction()">
+            Pending Contact Request
+            <ion-icon name="checkmark-circle" (click)="confirm()" slot="end"></ion-icon>
+            <ion-icon name="remove-circle" (click)="deny()" slot="end"></ion-icon>
+        </div>
+    </div>
+
+    <p *ngFor="let line of userAboutLines">
+        {{line}}
+    </p>
+
+</ion-content>
