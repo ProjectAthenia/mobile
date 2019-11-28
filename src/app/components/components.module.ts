@@ -5,6 +5,8 @@ import {LoggedOutHeaderComponent} from './logged-out-header/logged-out-header.co
 import {LoggedInHeaderComponent} from './logged-in-header/logged-in-header.component';
 import {RouterModule} from '@angular/router';
 import {RatingBarComponent} from './rating-bar/rating-bar.component';
+import {ArticleEditorComponent} from './article-editor/article-editor.component';
+import {ArticleViewerComponent} from './article-viewer/article-viewer.component';
 
 @NgModule({
     imports: [
@@ -13,11 +15,15 @@ import {RatingBarComponent} from './rating-bar/rating-bar.component';
         RouterModule,
     ],
     declarations: [
+        ArticleEditorComponent,
+        ArticleViewerComponent,
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
         RatingBarComponent,
     ],
     exports: [
+        ArticleEditorComponent,
+        ArticleViewerComponent,
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
         RatingBarComponent,
