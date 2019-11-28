@@ -5,6 +5,7 @@
 export const environment = {
     production: false,
     api_url: 'http://dev-api.projectathenia.com/v1/',
+    websocket_url: 'ws://dev-socket.projectathenia.com/',
     app_name: 'Project Athenia',
     stripe_publishable_key: 'pk_test_xHnP657roth55lBchLpLg6Af00vfCLYpDk',
     branding_image_url: null,
