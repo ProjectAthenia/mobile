@@ -70,8 +70,9 @@ export class ArticleEditorComponent implements OnChanges {
             this.snapshotInterval = setInterval(() => this.captureContent(), 1000);
 
             this.webSocket = new WebSocket(environment.websocket_url + 'articles/' + this.article.id + '/iterations?token=' + this.token);
-            this.webSocket.onmessage = function(message) {
-                // Handle message
+            this.webSocket.onmessage = (message) => {
+                this.editor.innerHtml = this.mergeContent(message.data);
+                this.lastContentSnapshot = message.data;
             };
 
             this.webSocket.onclose = console.error;
@@ -80,56 +81,110 @@ export class ArticleEditorComponent implements OnChanges {
     }
 
     /**
-     * Captures the current
+     * Merges the content together properly
+     * @param remoteContent
+     */
+    mergeContent(remoteContent): String {
+        let localContent = this.editor.innerText;
+        if (this.lastContentSnapshot == localContent) {
+            return remoteContent;
+        } else {
+            let remoteAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
+            let localAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
+
+            if (remoteAction && localAction) {
+
+                if (remoteAction.start_position >= localAction.start_position) {
+                    return this.applyAction(localAction, this.applyAction(remoteAction, this.lastContentSnapshot));
+                } else {
+                    return this.applyAction(remoteAction, this.applyAction(localAction, this.lastContentSnapshot));
+                }
+
+            } else if (remoteAction && !localAction) {
+                return remoteContent;
+            } else if (!remoteAction && localAction) {
+                return localContent;
+            } else {
+                return this.lastContentSnapshot;
+            }
+        }
+    }
+
+    /**
+     * Captures the current content
      */
     captureContent(): void {
-        let newContent = this.editor.innerText;
+        let action = this.getContentActionType(this.lastContentSnapshot, this.editor.innerText);
 
-        let firstDifferentPosition = this.findFirstNonMatchingStringPosition(this.lastContentSnapshot, newContent);
-        let lastDifferentPosition = this.findFirstNonMatchingStringPosition(this.lastContentSnapshot, newContent);
+        if (action) {
+            this.webSocket.send(JSON.stringify(action));
+        }
+
+        this.lastContentSnapshot = this.editor.innerText;
+    }
+
+    /**
+     * Gets the content action if there is one
+     */
+    getContentActionType(previousContent, newContent): any {
+
+        let firstDifferentPosition = this.findFirstNonMatchingStringPosition(previousContent, newContent);
+        let lastDifferentPosition = this.findFirstNonMatchingStringPosition(previousContent, newContent);
 
         if (firstDifferentPosition !== null && lastDifferentPosition !== null) {
-            let previousContentLastDifferentPosition = this.lastContentSnapshot.length - lastDifferentPosition;
+            let previousContentLastDifferentPosition = previousContent.length - lastDifferentPosition;
             let newContentLastDifferentPosition = newContent.length - lastDifferentPosition;
 
-            if (newContent.length >= this.lastContentSnapshot.length) {
-                if (firstDifferentPosition == this.lastContentSnapshot.length || firstDifferentPosition >= previousContentLastDifferentPosition) {
-                    this.sendUpdateMessage("add", {
+            if (newContent.length >= previousContent.length) {
+                if (firstDifferentPosition == previousContent.length || firstDifferentPosition >= previousContentLastDifferentPosition) {
+                    return {
+                        action: "add",
                         start_position: firstDifferentPosition,
-                        content: newContent.substr(firstDifferentPosition, (firstDifferentPosition + newContent.length - this.lastContentSnapshot.length)),
-                    });
+                        content: newContent.substr(firstDifferentPosition, (firstDifferentPosition + newContent.length - previousContent.length)),
+                    };
                 } else {
-                    this.sendUpdateMessage("replace", {
+                    return {
+                        action: "replace",
                         start_position: firstDifferentPosition,
                         content: newContent.substr(firstDifferentPosition, newContentLastDifferentPosition),
                         length: previousContentLastDifferentPosition - firstDifferentPosition,
-                    });
+                    };
                 }
             } else {
                 if (firstDifferentPosition >= newContentLastDifferentPosition) {
-                    this.sendUpdateMessage("remove", {
+                    return {
+                        action: "remove",
                         start_position: firstDifferentPosition,
-                        length: this.lastContentSnapshot.length - newContent.length,
-                    });
+                        length: previousContent.length - newContent.length,
+                    };
                 } else {
-                    this.sendUpdateMessage("replace", {
+                    return {
+                        action: "replace",
                         start_position: firstDifferentPosition,
                         content: newContent.substr(firstDifferentPosition, newContentLastDifferentPosition),
                         length: previousContentLastDifferentPosition - firstDifferentPosition,
-                    });
+                    };
                 }
             }
         }
     }
 
     /**
-     * Sends an update message to the server
+     * Applies the action to the passed in content
      * @param action
-     * @param data
+     * @param inputString
      */
-    sendUpdateMessage(action, data) {
-        data.action = action;
-        this.webSocket.send(JSON.stringify(data));
+    applyAction(action, inputString): string {
+        switch (action.action) {
+            case "add":
+                return inputString.substr(0, action.start_position) + action.content + inputString.substr(action.start_position, inputString.length);
+
+            case "remove":
+                return inputString.substr(0, action.start_position) + inputString.substr(action.start_position + action.length, inputString.length);
+
+            case "replace":
+                return inputString.substr(0, action.start_position) + action.content + inputString.substr(action.start_position + action.length, inputString.length);
+        }
     }
 
     /**
