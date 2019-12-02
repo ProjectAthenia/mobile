@@ -94,18 +94,42 @@ export class ArticleEditorComponent implements OnChanges {
 
             if (newContent.length >= this.lastContentSnapshot.length) {
                 if (firstDifferentPosition == this.lastContentSnapshot.length || firstDifferentPosition >= previousContentLastDifferentPosition) {
-                    // Add action
+                    this.sendUpdateMessage("add", {
+                        start_position: firstDifferentPosition,
+                        content: newContent.substr(firstDifferentPosition, (firstDifferentPosition + newContent.length - this.lastContentSnapshot.length)),
+                    });
                 } else {
-                    // replace action
+                    this.sendUpdateMessage("replace", {
+                        start_position: firstDifferentPosition,
+                        content: newContent.substr(firstDifferentPosition, newContentLastDifferentPosition),
+                        length: previousContentLastDifferentPosition - firstDifferentPosition,
+                    });
                 }
             } else {
                 if (firstDifferentPosition >= newContentLastDifferentPosition) {
-                    // remove action
+                    this.sendUpdateMessage("remove", {
+                        start_position: firstDifferentPosition,
+                        length: this.lastContentSnapshot.length - newContent.length,
+                    });
                 } else {
-                    // replace action
+                    this.sendUpdateMessage("replace", {
+                        start_position: firstDifferentPosition,
+                        content: newContent.substr(firstDifferentPosition, newContentLastDifferentPosition),
+                        length: previousContentLastDifferentPosition - firstDifferentPosition,
+                    });
                 }
             }
         }
+    }
+
+    /**
+     * Sends an update message to the server
+     * @param action
+     * @param data
+     */
+    sendUpdateMessage(action, data) {
+        data.action = action;
+        this.webSocket.send(JSON.stringify(data));
     }
 
     /**
