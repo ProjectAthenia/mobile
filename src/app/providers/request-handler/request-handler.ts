@@ -257,9 +257,10 @@ export class RequestHandlerProvider {
      * @param filter
      * @param search
      * @param limit
+     * @param page
      */
     async get(route: string, requiresAuth: boolean, showLoading: boolean, expands: any, customErrorHandlers: any = null,
-              filter: any = null, search: any = null, limit: number = null): Promise<any> {
+              filter: any = null, search: any = null, limit: number = null, page: number = null): Promise<any> {
 
         if (showLoading) {
             await this.incrementLoading();
@@ -296,6 +297,10 @@ export class RequestHandlerProvider {
 
         if (limit) {
             data['limit'] = limit.toString();
+        }
+
+        if (page) {
+            data['page'] = page.toString();
         }
 
         const path = await this.buildUrl(route);
