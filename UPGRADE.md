@@ -2,6 +2,14 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.5.0
+
+This version fixes a pretty major issue with the article editor component, and adds some functionality to the request handler. To make this changes simply copy over the following files.
+
+* src/app/components/article-editor/article-editor.component.html
+* src/app/components/article-editor/article-editor.component.ts
+* src/app/providers/request-handler/request-handler.ts
+
 ## 0.4.0
 
 This version adds a number of new pages as well as a new component that allows the user to edit content. This also follows a major upgrade to the core dependencies. To start off simply review the packages json, and update all dependencies to the most recent version. There are also a number of new dependencies that need to be added for cordova plugins. Then we can start with the social media features.

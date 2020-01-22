@@ -4,7 +4,7 @@ import {Article} from '../../models/wiki/article';
 import {environment} from '../../../environments/environment';
 
 @Component({
-    selector: 'app-article-editor',
+    selector: 'article-editor',
     templateUrl: './article-editor.component.html',
     styleUrls: ['./article-editor.component.scss']
 })
@@ -25,7 +25,7 @@ export class ArticleEditorComponent implements OnChanges {
     /**
      * The content that we last set to the editor
      */
-    lastContentSnapshot: string = null;
+    lastContentSnapshot = '';
 
     /**
      * The snapshot interval
@@ -57,21 +57,21 @@ export class ArticleEditorComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (this.article && this.token) {
 
-            this.lastContentSnapshot = this.article.content;
-            this.editor.innerHtml = this.lastContentSnapshot;
+            this.lastContentSnapshot = this.article.content ? this.article.content : '';
+            this.editor.value = this.lastContentSnapshot;
 
-            if (this.webSocket) {
-                this.webSocket.close();
-            }
             if (this.snapshotInterval) {
                 clearInterval(this.snapshotInterval);
+            }
+            if (this.webSocket) {
+                this.webSocket.close();
             }
 
             this.snapshotInterval = setInterval(() => this.captureContent(), 1000);
 
             this.webSocket = new WebSocket(environment.websocket_url + 'articles/' + this.article.id + '/iterations?token=' + this.token);
             this.webSocket.onmessage = (message) => {
-                this.editor.innerHtml = this.mergeContent(message.data);
+                this.editor.value = this.mergeContent(message.data);
                 this.lastContentSnapshot = message.data;
             };
 
@@ -85,12 +85,12 @@ export class ArticleEditorComponent implements OnChanges {
      * @param remoteContent
      */
     mergeContent(remoteContent): String {
-        let localContent = this.editor.innerText;
+        const localContent = this.editor.value;
         if (this.lastContentSnapshot == localContent) {
             return remoteContent;
         } else {
-            let remoteAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
-            let localAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
+            const remoteAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
+            const localAction = this.getContentActionType(this.lastContentSnapshot, remoteContent);
 
             if (remoteAction && localAction) {
 
@@ -114,13 +114,14 @@ export class ArticleEditorComponent implements OnChanges {
      * Captures the current content
      */
     captureContent(): void {
-        let action = this.getContentActionType(this.lastContentSnapshot, this.editor.innerText);
+        const currentContent = this.editor.value;
+        const action = this.getContentActionType(this.lastContentSnapshot, currentContent);
 
         if (action) {
             this.webSocket.send(JSON.stringify(action));
         }
 
-        this.lastContentSnapshot = this.editor.innerText;
+        this.lastContentSnapshot = currentContent;
     }
 
     /**
@@ -128,23 +129,26 @@ export class ArticleEditorComponent implements OnChanges {
      */
     getContentActionType(previousContent, newContent): any {
 
-        let firstDifferentPosition = this.findFirstNonMatchingStringPosition(previousContent, newContent);
-        let lastDifferentPosition = this.findFirstNonMatchingStringPosition(previousContent, newContent);
+        const firstDifferentPosition = this.findFirstNonMatchingStringPosition(previousContent, newContent);
+        const lastDifferentPosition = this.findLastNonMatchingStringPosition(previousContent, newContent);
 
         if (firstDifferentPosition !== null && lastDifferentPosition !== null) {
-            let previousContentLastDifferentPosition = previousContent.length - lastDifferentPosition;
-            let newContentLastDifferentPosition = newContent.length - lastDifferentPosition;
+            const previousContentLastDifferentPosition = previousContent.length - lastDifferentPosition;
+            const newContentLastDifferentPosition = newContent.length - lastDifferentPosition;
 
             if (newContent.length >= previousContent.length) {
-                if (firstDifferentPosition == previousContent.length || firstDifferentPosition >= previousContentLastDifferentPosition) {
+                if (firstDifferentPosition === previousContent.length || firstDifferentPosition >= previousContentLastDifferentPosition) {
                     return {
-                        action: "add",
+                        action: 'add',
                         start_position: firstDifferentPosition,
-                        content: newContent.substr(firstDifferentPosition, (firstDifferentPosition + newContent.length - previousContent.length)),
+                        content: newContent.substr(
+                            firstDifferentPosition,
+                            (firstDifferentPosition + newContent.length - previousContent.length)
+                        ),
                     };
                 } else {
                     return {
-                        action: "replace",
+                        action: 'replace',
                         start_position: firstDifferentPosition,
                         content: newContent.substr(firstDifferentPosition, newContentLastDifferentPosition),
                         length: previousContentLastDifferentPosition - firstDifferentPosition,
@@ -220,7 +224,7 @@ export class ArticleEditorComponent implements OnChanges {
      */
     findFirstNonMatchingStringPosition(stringA, stringB) {
         return (stringA.length == 0 || stringB.length == 0) ? 0 :
-            this.findFirstNonMatchingCharacterArrayPositions(this.convertStringsToCharArray(stringA, stringB));
+            this.findFirstNonMatchingCharacterArrayPositions(this.convertStringsToCharArray(stringA + '\n', stringB + '\n'));
     }
 
     /**
@@ -229,8 +233,11 @@ export class ArticleEditorComponent implements OnChanges {
      * @param stringB
      */
     findLastNonMatchingStringPosition(stringA, stringB) {
-        return (stringA.length == 0 || stringB.length == 0) ? 0 :
-            this.findFirstNonMatchingCharacterArrayPositions(this.convertStringsToCharArray(stringA, stringB));
+        const charArrays = this.convertStringsToCharArray(stringA + '\n', stringB + '\n');
+        charArrays[0] = charArrays[0].reverse();
+        charArrays[1] = charArrays[1].reverse();
+        return (stringA.length === 0 || stringB.length === 0) ? 0 :
+            this.findFirstNonMatchingCharacterArrayPositions(charArrays);
     }
 
     /**
