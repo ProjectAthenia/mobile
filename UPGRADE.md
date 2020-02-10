@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.5.1
+
+This version fixes a very annoying bug in the sign in process. To apply this fix then simply copy over the line of the sign up html, and sign html page that allows someone to toggle between the two pages. Then add `span.link,` before the `a` selector in the scss for both of those pages.
+
 ## 0.5.0
 
 This version fixes a pretty major issue with the article editor component, and adds some functionality to the request handler. To make this changes simply copy over the following files.
