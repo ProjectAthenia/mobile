@@ -100,6 +100,7 @@ export class ProfileEditorPage extends BasePage implements OnInit {
                 this.form.controls['password'].setValue('');
                 this.toastController.create({
                     message: 'Saved Successfully',
+                    duration: 1000,
                 }).then(toast => {
                     toast.present();
                 })
