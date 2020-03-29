@@ -2,6 +2,17 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.6.0 
+
+This version fixes one bug, and simply adds a few new models to make use of. The bug fix is in the file `src/app/pages/profile-editor/profile-editor.page.ts`. The line `duration: 1000,` was added after line #102. The new models are as follows.
+
+* src/app/models/asset.spec.ts
+* src/app/models/asset.ts
+* src/app/models/page.spec.ts
+* src/app/models/page.ts
+* src/app/models/user/role.spec.ts
+* src/app/models/user/role.ts
+
 ## 0.5.1
 
 This version fixes a very annoying bug in the sign in process. To apply this fix then simply copy over the line of the sign up html, and sign html page that allows someone to toggle between the two pages. Then add `span.link,` before the `a` selector in the scss for both of those pages.
