@@ -1,5 +1,5 @@
 import {Page} from './page';
-import {Resource} from './resource';
+import {Asset} from './asset';
 
 describe('Test Page Model', () => {
 
@@ -16,9 +16,9 @@ describe('Test Page Model', () => {
                     },
                 }
             ]
-        }, Resource);
+        }, Asset);
 
         expect(model).toBeTruthy();
-        expect(model.data[0].constructor).toBe(Resource);
+        expect(model.data[0].constructor).toBe(Asset);
     });
 });
