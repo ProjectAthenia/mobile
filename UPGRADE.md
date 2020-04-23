@@ -2,6 +2,37 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.7.0
+
+Big update time! This update brings us up to date with ionic 5, and also adds profile image capture functionality to the profile editor. To start off make sure to update the dependencies in package.json, and also add the camera native plugin. Then update the following paths.
+
+* src/app/app.component.html - Lots of little updates needed for ionic 5 changes
+* src/app/app.component.spec.ts - Lots of updates for the removal of the events ionic module.
+* src/app/app.component.ts - The events provider has been replaced with our auth service.
+* src/app/app.module.ts - The camera plugin has been registered, and the auth manager was removed from this class.
+* src/app/models/page.spec.ts - Fixed class type.
+* src/app/models/user/user.ts - Added profile_image_url variable
+* src/app/pages/contacts/contacts.page.html - Fixed some ionic 5 changes
+* src/app/pages/home/home.page.html - Fixed ionic 5 padding
+* src/app/pages/profile-editor/profile-editor.page.html - Fixed ionic 5 padding, and added a profile image ui component.
+* src/app/pages/profile-editor/profile-editor.page.scss - Added style for profile image editor.
+* src/app/pages/profile-editor/profile-editor.page.spec.ts - Updated test for profile image.
+* src/app/pages/profile-editor/profile-editor.page.ts - Added image upload functions.
+* src/app/pages/sign-in/sign-in.page.html - Fixed ionic 5 padding
+* src/app/pages/sign-up/sign-up.page.html - Fixed ionic 5 padding
+* src/app/pages/subscription/subscription.page.html - Fixed ionic 5 padding
+* src/app/pages/thread/thread.page.html - Removed ad, and fixed padding class
+* src/app/pages/threads/threads.page.html - Removed ad, and fixed padding class.
+* src/app/pages/user/user.page.html - Removed ad, fixed padding class, and updated icon for ionic 5
+* src/app/providers/auth-manager/ - Removed in favor of service
+* src/app/providers/request-handler/request-handler.mock.ts - Update for new parameters to constructor
+* src/app/providers/request-handler/request-handler.spec.ts - Updated for new structure
+* src/app/providers/request-handler/request-handler.ts - Replaced the old auth manager with the new one, and 
+* src/app/providers/requests/auth/auth.spec.ts - Added a new test for uploading a profile image
+* src/app/providers/requests/auth/auth.ts - Added a new request for uploading a profile image
+* src/app/services/auth-manager/ - Moved from providers, and improved greatly
+* test-config/mocks-ionic.ts - Removed the events mock
+
 ## 0.6.0 
 
 This version fixes one bug, and simply adds a few new models to make use of. The bug fix is in the file `src/app/pages/profile-editor/profile-editor.page.ts`. The line `duration: 1000,` was added after line #102. The new models are as follows.
