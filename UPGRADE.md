@@ -15,7 +15,7 @@ This version fixes one bug, and simply adds a few new models to make use of. The
 
 ## 0.5.1
 
-This version fixes a very annoying bug in the sign in process. To apply this fix then simply copy over the line of the sign up html, and sign html page that allows someone to toggle between the two pages. Then add `span.link,` before the `a` selector in the scss for both of those pages.
+This version fixes a very annoying bug in the sign in process. To apply this fix then simply copy over the line of the sign up html, and sign in html page that allows someone to toggle between the two pages. Then add `span.link,` before the `a` selector in the scss for both of those pages.
 
 ## 0.5.0
 

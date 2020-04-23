@@ -69,10 +69,13 @@ export class RequestHandlerProvider {
             const token = JSON.parse(response.data).token;
             this.authToken = token;
             await this.storageProvider.saveAuthToken(token);
+            this.events.publish('auth_refreshed', token);
             this.refreshRequest = null;
             return Promise.resolve();
-        } catch(error) {
-            this.events.publish('logout');
+        } catch (error) {
+            if (!RequestHandlerProvider.isErrorTimeout(error)) {
+                this.events.publish('logout');
+            }
             return Promise.reject();
         }
     }
@@ -165,6 +168,7 @@ export class RequestHandlerProvider {
                     let message = null;
                     switch (error.status) {
                         case -1:
+                        case -6:
                         case 0:
                         case 1:
                         case 3:
@@ -402,5 +406,13 @@ export class RequestHandlerProvider {
         const request = this.http.put(path, data, this.headers());
 
         return this.runRequest(request, showLoading, customErrorHandlers);
+    }
+
+    /**
+     * Whether or not the error is some type of timeout
+     * @param error
+     */
+    static isErrorTimeout(error): boolean {
+        return [-1, -6, 0, 1, 3].indexOf(error.status) !== -1;
     }
 }
