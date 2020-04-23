@@ -1,6 +1,6 @@
 <app-logged-out-header></app-logged-out-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
     <div id="sign-up-content">
 
@@ -8,7 +8,7 @@
 
         <img *ngIf="getBrandingImageUrl()" id="logo" [src]="getBrandingImageUrl()">
 
-        <form [formGroup]="form" padding>
+        <form [formGroup]="form" class="ion-padding">
             <ion-item>
                 <ion-label position="stacked">Name</ion-label>
                 <ion-input type="text" ngDefaultControl formControlName="name" [formControl]="form.controls.name"></ion-input>

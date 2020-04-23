@@ -1,11 +1,11 @@
 <app-logged-in-header></app-logged-in-header>
 
 <div id="wrapper">
-    <div id="message-input" padding>
+    <div id="message-input" class="ion-padding">
         <ion-textarea #messageInput (ionChange)="setEnteredMessage()"></ion-textarea>
         <ion-button [disabled]="enteredMessage.length == 0" (click)="sendMessage()">Send</ion-button>
     </div>
-    <ion-content id="messages" padding *ngIf="loaded">
+    <ion-content id="messages" class="ion-padding" *ngIf="loaded">
         <div *ngFor="let message of messages" [class]="'message ' + (me.id == message.from_id ? 'mine' : '')">
             <div class="body"> {{message.data.body}}</div>
             <div class="thumbnail" [ngStyle]="thumbnailStyle(message)"></div>

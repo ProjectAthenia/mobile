@@ -2,7 +2,7 @@
 
 <app-logged-in-header></app-logged-in-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
     <ng-container *ngIf="loaded">
         <ion-searchbar #filterBar *ngIf="threads.length != 0" showCancelButton (ionChange)="filterThreads()"></ion-searchbar>

@@ -1,12 +1,12 @@
 <app-logged-out-header></app-logged-out-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
     <div id="sign-in-content">
 
         <img *ngIf="getBrandingImageUrl()" id="logo" [src]="getBrandingImageUrl()">
 
-        <form [formGroup]="form" padding>
+        <form [formGroup]="form" class="ion-padding">
             <ion-item>
                 <ion-label position="stacked">Email Address</ion-label>
                 <ion-input type="email" ngDefaultControl formControlName="email" [formControl]="form.controls.email"></ion-input>
