@@ -3,6 +3,7 @@ import {RequestHandlerProvider} from "../../request-handler/request-handler";
 import RequestHandlerProviderMock from "../../request-handler/request-handler.mock";
 import {User} from "../../../models/user/user";
 import {PaymentMethod} from '../../../models/payment/payment-method';
+import {Asset} from '../../../models/asset';
 
 describe('Test the auth requests', () => {
     let requestHandler : RequestHandlerProvider;
@@ -87,5 +88,17 @@ describe('Test the auth requests', () => {
         const result = await auth.createPaymentMethod(user, 'token');
         expect(result.id).toBe(324);
         expect(result.constructor).toBe(PaymentMethod);
+    });
+
+    it('Creates a request for uploading a profile image properly', async () => {
+
+        spyOn(requestHandler, 'post').and.returnValue(Promise.resolve({
+            id: 324,
+            url: 'http://something.com/something.jpg',
+        }));
+        const user = new User({id: 324435});
+        const result = await auth.uploadProfileImage(user, 'some content');
+        expect(result.constructor).toBe(Asset);
+        expect(result.id).toBe(324);
     });
 });

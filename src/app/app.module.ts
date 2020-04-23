@@ -16,8 +16,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RequestHandlerProvider } from './providers/request-handler/request-handler';
 import { StorageProvider } from './providers/storage/storage';
-import { AuthManagerProvider } from './providers/auth-manager/auth-manager';
 import { RequestsProvider } from './providers/requests/requests';
+import {Camera} from '@ionic-native/camera/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -39,11 +39,11 @@ import { RequestsProvider } from './providers/requests/requests';
         File,
         FileOpener,
         FirebaseX,
+        Camera,
 
         // App providers
         RequestHandlerProvider,
         StorageProvider,
-        AuthManagerProvider,
         RequestsProvider,
     ],
     bootstrap: [AppComponent]

@@ -2,6 +2,8 @@
 
 <ion-content class="ion-padding">
 
+    <div id="profile-image" [ngStyle]="profileImageStyle()" (click)="promptCaptureMethod()"></div>
+
     <form [formGroup]="form">
         <ion-item>
             <ion-label position="stacked">Name</ion-label>

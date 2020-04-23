@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ToastController} from '@ionic/angular';
+import {AlertController, ToastController} from '@ionic/angular';
 import {User} from '../../models/user/user';
 import {RequestsProvider} from '../../providers/requests/requests';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasePage} from '../base.page';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
     selector: 'app-profile-editor',
@@ -32,10 +33,14 @@ export class ProfileEditorPage extends BasePage implements OnInit {
      * @param formBuilder
      * @param requests
      * @param toastController
+     * @param alertController
+     * @param camera
      */
     constructor(private formBuilder: FormBuilder,
                 private requests: RequestsProvider,
                 private toastController: ToastController,
+                private alertController: AlertController,
+                private camera: Camera,
     ) {
         super();
     }
@@ -64,6 +69,58 @@ export class ProfileEditorPage extends BasePage implements OnInit {
             this.form.controls['about_me'].setValue(this.user.about_me);
             this.form.controls['allow_users_to_add_me'].setValue(this.user.allow_users_to_add_me);
             this.form.controls['receive_push_notifications'].setValue(this.user.receive_push_notifications);
+        });
+    }
+
+    /**
+     * Returns the profile image style object for the associated user
+     */
+    profileImageStyle() {
+        return this.user && this.user.profile_image_url ? {
+            backgroundImage: 'url(' + this.user.profile_image_url + ')',
+        } : {};
+    }
+
+    /**
+     * Asks the user how they want to capture their profile image
+     */
+    promptCaptureMethod() {
+        this.alertController.create({
+            header: 'Do you want to take a picture, or select one from your library?',
+            buttons: [
+                {
+                    text: 'Take',
+                    handler: () => {
+                        this.captureProfileImage(this.camera.PictureSourceType.CAMERA);
+                    },
+                }, {
+                    text: 'Library',
+                    handler: () => {
+                        this.captureProfileImage(this.camera.PictureSourceType.PHOTOLIBRARY);
+                    },
+                }
+            ]
+        }).then(alert => {
+            alert.present();
+        });
+    }
+
+    /**
+     * Inits the image capture
+     */
+    captureProfileImage(sourceType) {
+        const options: CameraOptions = {
+            quality: 70,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE,
+            sourceType: sourceType,
+            correctOrientation: true
+        };
+        this.camera.getPicture(options).then((imageData) => {
+            this.requests.auth.uploadProfileImage(this.user, imageData).then(asset => {
+                this.user.profile_image_url = asset.url;
+            });
         });
     }
 

@@ -24,6 +24,11 @@ export class User extends BaseModel {
     about_me: string;
 
     /**
+     * The url to this users profile image
+     */
+    profile_image_url: string;
+
+    /**
      * Whether or not this user allows other users to add them
      */
     allow_users_to_add_me: boolean;
