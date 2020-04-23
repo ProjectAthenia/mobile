@@ -1,12 +1,11 @@
-import {Events, LoadingController, ToastController} from "@ionic/angular";
+import {LoadingController, ToastController} from "@ionic/angular";
 import {HTTP} from '@ionic-native/http/ngx';
 import {NativeStorage} from "@ionic-native/native-storage/ngx";
 import {HTTPMock, NativeStorageMock} from "../../../../test-config/mocks/plugins";
-import {EventsMock} from '../../../../test-config/mocks-ionic';
 import {StorageProvider} from '../storage/storage';
 import {RequestHandlerProvider} from "./request-handler";
-import {AuthManagerProvider} from '../auth-manager/auth-manager';
 import {environment} from '../../../environments/environment';
+import {AuthManagerService} from '../../services/auth-manager/auth-manager.service';
 
 describe('Test Request Handler provider', () => {
 
@@ -14,8 +13,7 @@ describe('Test Request Handler provider', () => {
     let storageProvider : StorageProvider;
     let toast : ToastController;
     let loadingController: LoadingController;
-    let events : Events;
-    let authManager: AuthManagerProvider;
+    let authManager: AuthManagerService;
     let requestHandlerProvider : RequestHandlerProvider;
 
     beforeEach(() => {
@@ -23,10 +21,9 @@ describe('Test Request Handler provider', () => {
         storageProvider = new StorageProvider(new NativeStorage());
         toast = new ToastController();
         loadingController = new LoadingController();
-        events = new EventsMock();
-        authManager = new AuthManagerProvider(new StorageProvider(new NativeStorageMock()));
+        authManager = new AuthManagerService(new StorageProvider(new NativeStorageMock()));
 
-        requestHandlerProvider = new RequestHandlerProvider(http, storageProvider, authManager,  toast, loadingController, events);
+        requestHandlerProvider = new RequestHandlerProvider(http, storageProvider, authManager,  toast, loadingController);
     });
 
 
@@ -61,12 +58,12 @@ describe('Test Request Handler provider', () => {
         spyOn(authManager, 'needsRefresh').and.returnValue(new Promise((resolve, reject) => {
             reject();
         }));
-        spyOn(events, 'publish');
+        spyOn(authManager, 'logOut');
 
         await requestHandlerProvider.requiresAuth();
 
         expect(authManager.needsRefresh).toHaveBeenCalled();
-        expect(events.publish).toHaveBeenCalledWith('logout');
+        expect(authManager.logOut).toHaveBeenCalled();
     });
 
     it('Make sure that requires auth loads the auth token when it does not need to be refreshed', async () => {
@@ -92,13 +89,13 @@ describe('Test Request Handler provider', () => {
         spyOn(storageProvider, 'loadAuthToken').and.returnValue(new Promise((resolve, reject)=> {
             reject();
         }));
-        spyOn(events, 'publish');
+        spyOn(authManager, 'logOut');
 
         await requestHandlerProvider.requiresAuth();
 
         expect(authManager.needsRefresh).toHaveBeenCalled();
         expect(storageProvider.loadAuthToken).toHaveBeenCalled();
-        expect(events.publish).toHaveBeenCalledWith('logout');
+        expect(authManager.logOut).toHaveBeenCalled();
     });
 
     it('Make sure that requires auth attempts to refresh the token when the token is expired', async () => {

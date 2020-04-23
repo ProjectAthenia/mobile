@@ -1,6 +1,4 @@
-import {Events, NavController, Platform} from "@ionic/angular";
-import {EventHandler} from "@ionic/angular/dist/providers/events";
-import {NavigationExtras, UrlTree} from "@angular/router";
+import {Platform} from "@ionic/angular";
 import {NgZone} from '@angular/core';
 
 export class PlatformMock extends Platform {
@@ -68,12 +66,6 @@ export class PlatformMock extends Platform {
 
 export class FileMock extends File{
   cacheDirectory = '';
-}
-
-export class EventsMock extends Events {
-  public subscribe(event: string, ...handlers: EventHandler[]) : void {
-    return;
-  }
 }
 
 export class DeepLinkerMock {

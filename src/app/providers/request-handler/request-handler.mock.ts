@@ -1,7 +1,7 @@
 import {RequestHandlerProvider} from "./request-handler";
 import {HTTPMock, NativeStorageMock} from "../../../../test-config/mocks/plugins";
-import {AuthManagerProvider} from "../auth-manager/auth-manager";
 import {StorageProvider} from "../storage/storage";
+import {AuthManagerService} from '../../services/auth-manager/auth-manager.service';
 
 /**
  * Class for mocking the request handler provider
@@ -12,10 +12,9 @@ export default class RequestHandlerProviderMock extends RequestHandlerProvider {
         super(
             new HTTPMock(),
             null,
-            new AuthManagerProvider(new StorageProvider(new NativeStorageMock())),
+            new AuthManagerService(new StorageProvider(new NativeStorageMock())),
             null,
             null,
-            null
         );
     }
 

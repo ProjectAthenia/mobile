@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-
-import {Events, MenuController, NavController, Platform} from '@ionic/angular';
+import {MenuController, NavController, Platform} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {StorageProvider} from './providers/storage/storage';
 import {environment} from '../environments/environment';
+import {AuthManagerService} from './services/auth-manager/auth-manager.service';
 
 /**
  * Main entry of the app
@@ -25,7 +25,7 @@ export class AppComponent {
      * @param platform
      * @param splashScreen
      * @param statusBar
-     * @param events
+     * @param authManagerService
      * @param navCtl
      * @param menuCtl
      * @param storage
@@ -34,7 +34,7 @@ export class AppComponent {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private events: Events,
+        private authManagerService: AuthManagerService,
         private navCtl: NavController,
         private menuCtl: MenuController,
         private storage: StorageProvider,
@@ -49,7 +49,7 @@ export class AppComponent {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            this.events.subscribe('logout', this.handleLogout.bind(this));
+            this.authManagerService.getLogoutObservable().subscribe(() => this.handleLogout());
             this.storage.loadAuthToken()
             .then(token => {
                 this.navCtl.navigateRoot('/home').catch(console.error);
@@ -70,7 +70,11 @@ export class AppComponent {
      */
     goTo(page: string) {
         this.menuCtl.close('side-menu').catch(console.error);
-        this.navCtl.navigateBack(page).catch(console.error);
+        if (page === 'home') {
+            this.navCtl.navigateRoot(page).catch(console.error);
+        } else {
+            this.navCtl.navigateForward(page).catch(console.error);
+        }
     }
 
     /**
