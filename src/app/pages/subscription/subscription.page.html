@@ -11,9 +11,9 @@
                     <ion-label>Select Your Membership Plan</ion-label>
                 </ion-list-header>
 
-                <ion-item *ngFor="let membershipPlan of membershipPlans" (click)="setSelectedMembershipPlan(membershipPlan)">
+                <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
                     <ion-label>{{membershipPlan.name}} ${{membershipPlan.current_cost}}</ion-label>
-                    <ion-radio slot="start">
+                    <ion-radio slot="start" value="{{membershipPlan.id}}">
                     </ion-radio>
                 </ion-item>
             </ion-radio-group>
@@ -34,7 +34,7 @@
 
         <div [ngStyle]="getCardSelectorDisplay()">
 
-            <ion-radio-group id="payment-options" *ngIf="user && user.payment_methods.length > 0">
+            <ion-radio-group id="payment-options" *ngIf="user && user.payment_methods.length > 0" value="{{selectedPaymentMethod?.id}}">
                 <ion-list-header>
                     <ion-label>Select Your Payment Method</ion-label>
                 </ion-list-header>
@@ -43,7 +43,7 @@
                         *ngFor="let paymentMethod of user.payment_methods"
                         (click)="setSelectedPaymentMethod(paymentMethod)">
                     <ion-label>Card Ending In {{paymentMethod.identifier}}</ion-label>
-                    <ion-radio slot="start" [checked]="isPaymentMethodSelected(paymentMethod)"></ion-radio>
+                    <ion-radio slot="start" value="{{paymentMethod.id}}"></ion-radio>
                 </ion-item>
 
                 <ion-item (click)="setSelectedPaymentMethod(null)">
@@ -69,7 +69,7 @@
             </div>
 
             <div class="submit-wrapper">
-                <ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</ion-button>
+                <button ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</button>
             </div>
         </div>
 

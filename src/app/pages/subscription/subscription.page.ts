@@ -10,6 +10,7 @@ import {MembershipPlan} from '../../models/subscription/membership-plan';
 import {PaymentMethod} from '../../models/payment/payment-method';
 import {Subscription} from '../../models/subscription/subscription';
 import DateHelpers from '../../providers/date-helpers/date-helpers';
+import {UserService} from '../../services/user.service';
 
 declare function require(name:string);
 require('card');
@@ -85,12 +86,14 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * Default Constructor
      * @param requests
      * @param alertController
+     * @param userService
      * @param route
      * @param toastController
      * @param stripe
      */
     constructor(private requests: RequestsProvider,
                 private alertController: AlertController,
+                private userService: UserService,
                 private route: ActivatedRoute,
                 private toastController: ToastController,
                 private stripe: Stripe,
@@ -111,6 +114,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
             }
             this.requests.auth.loadInitialInformation().then(user => {
                 this.user = user;
+                this.userService.storeMe(user);
                 this.currentSubscription = this.user.getCurrentSubscription();
                 if (this.currentSubscription) {
                     this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
@@ -125,13 +129,20 @@ export class SubscriptionPage extends BasePage implements OnInit {
     }
 
     /**
+     * All active membership plans
+     */
+    activeMembershipPlans(): MembershipPlan[] {
+        return this.membershipPlans;
+    }
+
+    /**
      * Gets the display style for the card selector
      */
     getCardSelectorDisplay() {
         return {
             display: !this.currentSubscription ||
-                (this.currentSubscription.expires_at && this.currentSubscription.recurring) ? 'block' : 'none',
-        }
+            (this.currentSubscription.expires_at && this.currentSubscription.recurring) ? 'block' : 'none',
+        };
     }
 
     /**
@@ -152,8 +163,11 @@ export class SubscriptionPage extends BasePage implements OnInit {
         } else {
             const now = new Date();
             let formattedExpiration = DateHelpers.suffixDay(this.currentSubscription.expires_at.getDate());
-            if (this.currentSubscription.expires_at.getMonth() != now.getMonth()) {
+            if (this.currentSubscription.expires_at.getMonth() != now.getMonth() || this.currentSubscription.expires_at.getFullYear() !== now.getFullYear()) {
                 formattedExpiration+= ' of ' + DateHelpers.getMonthName(this.currentSubscription.expires_at);
+            }
+            if (this.currentSubscription.expires_at.getFullYear() !== now.getFullYear()) {
+                formattedExpiration+= ' ' + this.currentSubscription.expires_at.getFullYear();
             }
             if (this.currentSubscription.recurring) {
                 return 'set to be auto-renewed on the ' + formattedExpiration + '.';
@@ -194,17 +208,6 @@ export class SubscriptionPage extends BasePage implements OnInit {
     }
 
     /**
-     * Checks if the payment method is selected
-     * @param paymentMethod
-     */
-    isPaymentMethodSelected(paymentMethod: PaymentMethod) {
-        if (this.selectedPaymentMethod && this.selectedPaymentMethod !== true) {
-            return this.selectedPaymentMethod.id === paymentMethod.id;
-        }
-        return false;
-    }
-
-    /**
      * Validates the save properly
      */
     submit() {
@@ -222,8 +225,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
                             this.setSelectedPaymentMethod(paymentMethod);
                             this.changePaymentMethod(paymentMethod);
                         });
-                    })
-                })
+                    });
+                });
             } else {
                 this.changePaymentMethod(this.selectedPaymentMethod as PaymentMethod);
             }
@@ -256,7 +259,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * Validates the card data properly
      */
-    async validateCard() : Promise<StripeCardTokenParams> {
+    async validateCard(): Promise<StripeCardTokenParams> {
 
         const cardNumber = this.cardNumber.nativeElement.value;
         if (!cardNumber) {
@@ -315,6 +318,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
             ).then(subscription => {
                 this.currentSubscription = subscription;
                 this.user.subscriptions.push(subscription);
+                this.userService.storeMe(this.user);
                 this.toastController.create({
                     message: 'Subscription successfully created!',
                     duration: 2000,
