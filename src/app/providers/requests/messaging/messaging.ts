@@ -24,7 +24,7 @@ export default class Messaging {
         return this.requestHandler.get('users/' + me.id + '/threads', true, showLoading, [
             'users',
         ], {}, {}, {}, 100).then(response => {
-            if (response && response.data && response.data.length > 0) {
+            if (response && response.data) {
                 return Promise.resolve(response.data.map(data => new Thread(data)));
             }
 
