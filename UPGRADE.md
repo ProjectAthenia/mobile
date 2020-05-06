@@ -2,6 +2,14 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.7.1
+
+Bug fixes! A number of bugs were found that have been fixed now. To apply these fixes, copy over the following files.
+
+* src/app/pages/subscription/subscription.page.html
+* src/app/pages/subscription/subscription.page.ts
+* src/app/providers/requests/messaging/messaging.ts
+
 ## 0.7.0
 
 Big update time! This update brings us up to date with ionic 5, and also adds profile image capture functionality to the profile editor. To start off make sure to update the dependencies in package.json, and also add the camera native plugin. Then update the following paths.
