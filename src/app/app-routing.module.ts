@@ -12,6 +12,10 @@ const routes: Routes = [
         loadChildren: './pages/home/home.module#HomePageModule'
     },
     {
+        path: 'organization-creation',
+        loadChildren: './pages/organization-creation/organization-creation.module#OrganizationCreationPageModule'
+    },
+    {
         path: 'profile-editor',
         loadChildren: './pages/profile-editor/profile-editor.module#ProfileEditorPageModule'
     },

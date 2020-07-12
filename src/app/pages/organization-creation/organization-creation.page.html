@@ -1,0 +1,24 @@
+<app-logged-in-header [isHome]=true></app-logged-in-header>
+
+<ion-content>
+
+    <h2>Create An Organization</h2>
+
+    <p>Creating an organization in Jengu allows you to add users to your organization, and create a distribution network for those within your community.</p>
+
+    <form [formGroup]="form" class="ion-padding">
+        <ion-item>
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input type="text" ngDefaultControl formControlName="name" [formControl]="form.controls.name"></ion-input>
+        </ion-item>
+
+        <div color="alert" *ngIf="submitted && !form.controls.name.valid" class="validator-error">
+            Please enter your organization's name.
+        </div>
+
+        <div class="submit-wrapper">
+            <ion-button large (click)="submit()">Create</ion-button>
+        </div>
+    </form>
+
+</ion-content>
