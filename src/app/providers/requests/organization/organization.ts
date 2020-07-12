@@ -23,7 +23,7 @@ export default class OrganizationRequests {
             name: name,
         };
 
-        return this.requestHandler.post('organizations', false, true, data).then(data => {
+        return this.requestHandler.post('organizations', true, true, data).then(data => {
             return Promise.resolve(new Organization(data));
         });
     }

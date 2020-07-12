@@ -4,6 +4,7 @@ import {Injectable} from '@angular/core';
 import Subscriptions from './subscriptions/subscriptions';
 import Social from './social/social';
 import Messaging from './messaging/messaging';
+import OrganizationRequests from './organization/organization';
 
 /**
  * Provider for interacting with all app wide requests
@@ -32,6 +33,11 @@ export class RequestsProvider {
     messaging: Messaging;
 
     /**
+     * The organization requests
+     */
+    organization: OrganizationRequests;
+
+    /**
      * Default constructor
      * @param requestHandler
      */
@@ -40,5 +46,6 @@ export class RequestsProvider {
         this.subscriptions = new Subscriptions(this.requestHandler);
         this.social = new Social(this.requestHandler);
         this.messaging = new Messaging(requestHandler);
+        this.organization = new OrganizationRequests(this.requestHandler);
     }
 }
