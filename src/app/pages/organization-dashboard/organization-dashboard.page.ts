@@ -2,6 +2,9 @@ import {Component, OnInit,} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasePage} from '../base.page';
 import {RequestsProvider} from '../../providers/requests/requests';
+import {OrganizationService} from '../../services/organization.service';
+import {Organization} from '../../models/organization/organization';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-organization-dashboard',
@@ -10,23 +13,15 @@ import {RequestsProvider} from '../../providers/requests/requests';
 })
 export class OrganizationDashboardPage extends BasePage implements OnInit{
 
-    /**
-     * The form object that helps us validate the sign in form
-     */
-    form: FormGroup;
-
-    /**
-     * Boolean switch for whether or not the form has been submitted
-     */
-    submitted = false;
+    private organization: Organization;
 
     /**
      * Default Constructor
-     * @param formBuilder
-     * @param requestsProvider
+     * @param organizationService
+     * @param route
      */
-    constructor(private formBuilder: FormBuilder,
-                private requestsProvider: RequestsProvider) {
+    constructor(private organizationService: OrganizationService,
+                private route: ActivatedRoute) {
         super();
     }
 
@@ -34,29 +29,6 @@ export class OrganizationDashboardPage extends BasePage implements OnInit{
      * setups the initial location
      */
     ngOnInit(): void {
-
-        this.form = this.formBuilder.group({
-
-            name: ['', Validators.compose([
-                Validators.maxLength(120),
-                Validators.required,
-            ])],
-        });
-    }
-
-    /**
-     * Runs the submission to the server
-     */
-    submit () {
-        this.submitted = true;
-
-        if (this.form.valid) {
-
-            const name = this.form.controls['name'].value;
-
-            this.requestsProvider.organization.createOrganization(name).then(organization => {
-                // TODO take user to organization management page
-            });
-        }
+        const organizationId = parseInt(this.route.snapshot.paramMap.get('organization_id'), 0);
     }
 }
