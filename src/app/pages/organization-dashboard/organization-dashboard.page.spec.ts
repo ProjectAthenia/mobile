@@ -4,12 +4,12 @@ import { CommonModule } from "@angular/common";
 import { AlertController, IonicModule, NavController } from "@ionic/angular";
 import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
-import {OrganizationCreationPage} from './organization-creation.page';
+import {OrganizationDashboardPage} from './organization-dashboard.page';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
-describe('OrganizationCreationPage', () => {
-    let component: OrganizationCreationPage;
-    let fixture: ComponentFixture<OrganizationCreationPage>;
+describe('OrganizationDashboardPage', () => {
+    let component: OrganizationDashboardPage;
+    let fixture: ComponentFixture<OrganizationDashboardPage>;
     let navController;
     let alertController;
     const requestsProvider: RequestsProvider = new RequestsProviderMock();
@@ -28,7 +28,7 @@ describe('OrganizationCreationPage', () => {
                 { provide: RequestsProvider, useValue: requestsProvider},
             ],
             declarations: [
-                OrganizationCreationPage,
+                OrganizationDashboardPage,
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         })
@@ -36,7 +36,7 @@ describe('OrganizationCreationPage', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(OrganizationCreationPage);
+        fixture = TestBed.createComponent(OrganizationDashboardPage);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
