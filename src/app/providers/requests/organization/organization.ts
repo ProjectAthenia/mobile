@@ -27,4 +27,15 @@ export default class OrganizationRequests {
             return Promise.resolve(new Organization(data));
         });
     }
+
+    /**
+     * Loads an organization based on the id passed in
+     *
+     * @param id
+     */
+    async loadOrganization(id: any): Promise<Organization> {
+        return this.requestHandler.get('organizations/' + id, true, true, []).then(data => {
+            return Promise.resolve(new Organization(data));
+        })
+    }
 }

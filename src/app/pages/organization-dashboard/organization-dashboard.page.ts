@@ -13,6 +13,9 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class OrganizationDashboardPage extends BasePage implements OnInit{
 
+    /**
+     * The organization
+     */
     private organization: Organization;
 
     /**
@@ -30,5 +33,8 @@ export class OrganizationDashboardPage extends BasePage implements OnInit{
      */
     ngOnInit(): void {
         const organizationId = parseInt(this.route.snapshot.paramMap.get('organization_id'), 0);
+        this.organizationService.getOrganization(organizationId).then(organization => {
+            this.organization = organization;
+        });
     }
 }

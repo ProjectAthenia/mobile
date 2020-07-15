@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Organization} from '../models/organization/organization';
+import {RequestsProvider} from '../providers/requests/requests';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,13 @@ export class OrganizationService {
     organizations: Organization[] = [];
 
     /**
+     * Default Constructor
+     * @param requests
+     */
+    constructor(private requests: RequestsProvider) {
+    }
+
+    /**
      * Sets an organization object into cache
      * @param organization
      */
@@ -28,7 +36,14 @@ export class OrganizationService {
      * Gets an organization by an id
      * @param id
      */
-    getOrganization(id: number): Organization | null {
-        return this.loadedOrganizations[id] ? this.loadedOrganizations[id] : null;
+    getOrganization(id: number): Promise<Organization> {
+        if (this.loadedOrganizations[id]) {
+            return Promise.resolve(this.loadedOrganizations[id]);
+        }
+
+        return this.requests.organization.loadOrganization(id).then(organization => {
+            this.cacheOrganization(organization);
+            return Promise.resolve(organization);
+        })
     }
 }
