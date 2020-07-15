@@ -6,6 +6,7 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {OrganizationCreationPage} from './organization-creation.page';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
 
 describe('OrganizationCreationPage', () => {
     let component: OrganizationCreationPage;
@@ -20,6 +21,7 @@ describe('OrganizationCreationPage', () => {
         TestBed.configureTestingModule({
             imports: [
                 CommonModule,
+                ReactiveFormsModule,
                 IonicModule.forRoot(),
             ],
             providers: [

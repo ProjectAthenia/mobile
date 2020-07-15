@@ -8,12 +8,12 @@ describe('OrganizationService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: OrganizationService = TestBed.get(OrganizationService);
+        const service: OrganizationService = new OrganizationService(new RequestsProviderMock());
         expect(service).toBeTruthy();
     });
 
     it('should cache a user properly', () => {
-        const service: OrganizationService = TestBed.get(OrganizationService);
+        const service: OrganizationService = new OrganizationService(new RequestsProviderMock());
         service.cacheOrganization(new Organization({
             id: 45252,
         }));
@@ -21,7 +21,7 @@ describe('OrganizationService', () => {
     });
 
     it('should get a organization from cache', async () => {
-        const service: OrganizationService = TestBed.get(OrganizationService);
+        const service: OrganizationService = new OrganizationService(new RequestsProviderMock());
 
         const organization = new Organization({
             id: 45252,
