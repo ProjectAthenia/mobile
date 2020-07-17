@@ -1,12 +1,12 @@
 <app-logged-in-header [isHome]=true></app-logged-in-header>
 
-<ion-content>
+<ion-content class="ion-padding">
 
     <h2>Create An Organization</h2>
 
     <p>Creating an organization in Jengu allows you to add users to your organization, and create a distribution network for those within your community.</p>
 
-    <form [formGroup]="form" class="ion-padding">
+    <form [formGroup]="form">
         <ion-item>
             <ion-label position="stacked">Name</ion-label>
             <ion-input type="text" ngDefaultControl formControlName="name" [formControl]="form.controls.name"></ion-input>

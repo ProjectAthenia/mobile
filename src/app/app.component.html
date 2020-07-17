@@ -42,6 +42,18 @@
                 My Subscription
               </ion-label>
             </ion-item>
+            <ion-item (click)="goTo('organization-creation')" *ngIf="organizationsEnabled()">
+              <ion-icon slot="start" name="people-circle-outline"></ion-icon>
+              <ion-label>
+                Create Organization
+              </ion-label>
+            </ion-item>
+            <ion-item *ngIf="hasOrganizations()" (click)="openOrganizationDialogue()">
+              <ion-icon slot="start" name="planet-outline"></ion-icon>
+              <ion-label>
+                Organization Dashboard
+              </ion-label>
+            </ion-item>
             <ion-item (click)="handleLogout()">
               <ion-icon slot="start" name="walk"></ion-icon>
               <ion-label>

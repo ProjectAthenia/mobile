@@ -2,6 +2,7 @@ import {BaseModel} from '../base-model';
 import {Relation} from '../relation';
 import {PaymentMethod} from '../payment/payment-method';
 import {Subscription} from '../subscription/subscription';
+import {OrganizationManager} from '../organization/organization-manager';
 
 /**
  * Used as a data wrapper for our user model
@@ -39,6 +40,11 @@ export class User extends BaseModel {
     receive_push_notifications: boolean;
 
     /**
+     * All organization managers on this user
+     */
+    organization_managers: OrganizationManager[];
+
+    /**
      * All payment methods on this user
      */
     payment_methods: PaymentMethod[];
@@ -54,6 +60,7 @@ export class User extends BaseModel {
      */
     constructor(data) {
         super(data, {
+            organization_managers: new Relation('array', OrganizationManager),
             payment_methods: new Relation('array', PaymentMethod),
             subscriptions: new Relation('array', Subscription),
         });

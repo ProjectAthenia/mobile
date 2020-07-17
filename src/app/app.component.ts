@@ -5,6 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {StorageProvider} from './providers/storage/storage';
 import {environment} from '../environments/environment';
 import {AuthManagerService} from './services/auth-manager/auth-manager.service';
+import {UserService} from './services/user.service';
 
 /**
  * Main entry of the app
@@ -29,6 +30,7 @@ export class AppComponent {
      * @param navCtl
      * @param menuCtl
      * @param storage
+     * @param userService
      */
     constructor(
         private platform: Platform,
@@ -38,6 +40,7 @@ export class AppComponent {
         private navCtl: NavController,
         private menuCtl: MenuController,
         private storage: StorageProvider,
+        private userService: UserService,
     ) {
         this.initializeApp();
     }
@@ -90,6 +93,24 @@ export class AppComponent {
      */
     hasSubscriptions() {
         return environment.subscriptions_enabled;
+    }
+
+    /**
+     * Whether or not this app has organization creation enabled
+     */
+    organizationsEnabled() {
+        return environment.organizations_enabled;
+    }
+
+    /**
+     * Returns true for whether ro not the user can manager an organization
+     */
+    hasOrganizations() {
+        return this.userService.getMe() && this.userService.getMe().organization_managers.length > 0;
+    }
+
+    openOrganizationDialogue() {
+
     }
 
     /**
