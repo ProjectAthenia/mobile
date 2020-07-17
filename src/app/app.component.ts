@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import {MenuController, NavController, Platform} from '@ionic/angular';
+import {AlertController, MenuController, NavController, Platform} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {StorageProvider} from './providers/storage/storage';
 import {environment} from '../environments/environment';
 import {AuthManagerService} from './services/auth-manager/auth-manager.service';
 import {UserService} from './services/user.service';
+import {Organization} from './models/organization/organization';
 
 /**
  * Main entry of the app
@@ -28,6 +29,7 @@ export class AppComponent {
      * @param statusBar
      * @param authManagerService
      * @param navCtl
+     * @param alertController
      * @param menuCtl
      * @param storage
      * @param userService
@@ -38,6 +40,7 @@ export class AppComponent {
         private statusBar: StatusBar,
         private authManagerService: AuthManagerService,
         private navCtl: NavController,
+        private alertController: AlertController,
         private menuCtl: MenuController,
         private storage: StorageProvider,
         private userService: UserService,
@@ -109,8 +112,42 @@ export class AppComponent {
         return this.userService.getMe() && this.userService.getMe().organization_managers.length > 0;
     }
 
+    /**
+     * Asks the user what organization they want to access
+     */
     openOrganizationDialogue() {
+        const organizationManagers = this.userService.getMe().organization_managers;
 
+        if (organizationManagers.length == 1) {
+            this.goToOrganization(organizationManagers[0].organization);
+        }
+
+        else {
+            let activeAlert;
+            this.alertController.create({
+                header: 'Select Organization',
+                inputs: organizationManagers.map(organizationManager => ({
+                    type: 'radio',
+                    label: organizationManager.organization.name,
+                    handler: (input) => {
+                        activeAlert.dismiss();
+                        this.goToOrganization(organizationManager.organization);
+                    }
+                })),
+            }).then(alert => {
+                activeAlert = alert;
+                alert.present();
+            });
+        }
+    }
+
+    /**
+     * Goes to the organization dashboard
+     * @param organization
+     */
+    goToOrganization(organization: Organization) {
+        this.menuCtl.close('side-menu').catch(console.error);
+        this.navCtl.navigateRoot('/organization-dashboard/' + organization.id).catch(console.error);
     }
 
     /**
