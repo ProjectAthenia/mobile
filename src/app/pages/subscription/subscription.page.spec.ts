@@ -10,6 +10,8 @@ import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
 import {CardModule} from 'ngx-card';
 import {Stripe} from '@ionic-native/stripe/ngx';
+import {StorageProvider} from '../../providers/storage/storage';
+import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
 
 describe('SubscriptionPage', () => {
     let component: SubscriptionPage;
@@ -41,6 +43,7 @@ describe('SubscriptionPage', () => {
                 { provide: RequestsProvider, useValue: requestsProvider},
                 { provide: ActivatedRoute, useValue: activatedRoute},
                 { provide: Stripe, useValue: new Stripe() },
+                {provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         })

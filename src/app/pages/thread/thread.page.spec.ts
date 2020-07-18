@@ -9,6 +9,8 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {ActivatedRoute, convertToParamMap, Router} from '@angular/router';
 import {FirebaseX} from '@ionic-native/firebase-x/ngx';
+import {StorageProvider} from '../../providers/storage/storage';
+import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
 
 describe('ThreadPage', () => {
     let component: ThreadPage;
@@ -38,6 +40,7 @@ describe('ThreadPage', () => {
                 { provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
                 {provide: ActivatedRoute, useValue: activatedRoute},
+                {provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
                 { provide: FirebaseX, useValue: fireBase},
                 { provide: Router, useValue: {}},
             ],

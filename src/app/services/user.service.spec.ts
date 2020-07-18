@@ -2,9 +2,20 @@ import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
 import {User} from '../models/user/user';
+import {RequestsProvider} from '../providers/requests/requests';
+import {StorageProvider} from '../providers/storage/storage';
+import {NativeStorageMock} from '../../../test-config/mocks/plugins';
+import RequestsProviderMock from '../providers/requests/requests.mock';
 
 describe('UserService', () => {
-    beforeEach(() => TestBed.configureTestingModule({}));
+    const requestsProvider: RequestsProvider = new RequestsProviderMock();
+    beforeEach(() => TestBed.configureTestingModule({
+
+        providers: [
+            { provide: RequestsProvider, useValue: requestsProvider},
+            { provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
+        ],
+    }));
 
     it('should be created', () => {
         const service: UserService = TestBed.get(UserService);

@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { StorageProvider } from './providers/storage/storage';
 import { NativeStorageMock } from '../../test-config/mocks/plugins';
 import {AuthManagerService} from './services/auth-manager/auth-manager.service';
+import {RequestsProvider} from './providers/requests/requests';
+import RequestsProviderMock from './providers/requests/requests.mock';
 
 describe('AppComponent', () => {
 
@@ -41,6 +43,7 @@ describe('AppComponent', () => {
                 { provide: StorageProvider, useValue: storageProvider},
                 { provide: MenuController, useValue: menuController },
                 { provide: NavController, useValue: navController },
+                { provide: RequestsProvider, useValue: new RequestsProviderMock() },
             ],
             imports: [ RouterTestingModule.withRoutes([])],
         }).compileComponents();
