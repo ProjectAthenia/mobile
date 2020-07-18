@@ -1,8 +1,8 @@
 import {Organization} from './organization';
 
-describe('Test Payment Method Model', () => {
+describe('Test Organization Model', () => {
 
-    it('Make sure that the payment method model is being built properly', () => {
+    it('Make sure that the organization model is being built properly', () => {
         const model = new Organization({
             id: 4,
             name: 'An Organization',

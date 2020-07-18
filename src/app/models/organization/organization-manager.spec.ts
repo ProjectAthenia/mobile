@@ -1,9 +1,9 @@
 import {OrganizationManager} from './organization-manager';
 import {Organization} from './organization';
 
-describe('Test Membership Plan Rate Model', () => {
+describe('Test Organization Manager Model', () => {
 
-    it('Make sure that the membership plan rate model is being built properly', () => {
+    it('Make sure that the organization manager model is being built properly', () => {
         const model = new OrganizationManager({
             role_id: 3,
         });
@@ -11,7 +11,7 @@ describe('Test Membership Plan Rate Model', () => {
         expect(model).toBeTruthy();
     });
 
-    it('Make sure that the membership plan rate model is being built properly with a membership plan connected', () => {
+    it('Make sure that the organization manager model is being built properly with a membership plan connected', () => {
         const model = new OrganizationManager({
             active: false,
             cost: 3.99,
