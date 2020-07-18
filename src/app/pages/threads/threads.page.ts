@@ -64,10 +64,11 @@ export class ThreadsPage implements OnInit, OnDestroy {
      * Takes care of setting up our form properly
      */
     ngOnInit() {
-        this.me = this.userService.getMe();
-
-        // This should never happen, but just in case
-        if (this.me == null) {
+        this.userService.getMe().then(me => {
+            this.me = me;
+            this.loadThreads();
+        }).catch(() => {
+            // This should never happen, but just in case
             this.navController.navigateRoot('/');
             this.toastController.create({
                 message: 'Error Loading User',
@@ -76,11 +77,7 @@ export class ThreadsPage implements OnInit, OnDestroy {
             }).then(toast => {
                 toast.present().catch(console.error);
             });
-
-            return;
-        }
-
-        this.loadThreads();
+        });
     }
 
     /**

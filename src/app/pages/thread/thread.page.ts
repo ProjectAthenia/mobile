@@ -82,12 +82,31 @@ export class ThreadPage implements OnInit, OnDestroy {
      * Takes care of setting up our form properly
      */
     ngOnInit() {
-        const userId = parseInt(this.route.snapshot.paramMap.get('user_id'), 0);
-        this.me = this.userService.getMe();
-        const user = this.userService.getUser(userId);
+        this.userService.getMe().then(me => {
+            this.me = me;
 
-        // This should never happen, but just in case
-        if (this.me == null) {
+            const userId = parseInt(this.route.snapshot.paramMap.get('user_id'), 0);
+            const user = this.userService.getUser(userId);
+
+            if (user == null) {
+                this.requests.social.loadUser(userId).then(loadedUser => {
+                    this.userService.cacheUser(loadedUser);
+                    this.loadThread(loadedUser);
+                }).catch(error => {
+                    this.navController.navigateBack('/');
+                    this.toastController.create({
+                        message: 'Error Loading User',
+                        duration: 4000,
+                        position: 'top'
+                    }).then(toast => {
+                        toast.present().catch(console.error);
+                    });
+                });
+            } else {
+                this.loadThread(user);
+            }
+        }).catch(() => {
+            // This should never happen, but just in case
             this.navController.back();
             this.toastController.create({
                 message: 'Error Loading User',
@@ -96,27 +115,8 @@ export class ThreadPage implements OnInit, OnDestroy {
             }).then(toast => {
                 toast.present().catch(console.error);
             });
+        });
 
-            return;
-        }
-
-        if (user == null) {
-            this.requests.social.loadUser(userId).then(loadedUser => {
-                this.userService.cacheUser(loadedUser);
-                this.loadThread(loadedUser);
-            }).catch(error => {
-                this.navController.navigateBack('/');
-                this.toastController.create({
-                    message: 'Error Loading User',
-                    duration: 4000,
-                    position: 'top'
-                }).then(toast => {
-                    toast.present().catch(console.error);
-                });
-            });
-        } else {
-            this.loadThread(user);
-        }
     }
 
     /**

@@ -7,6 +7,7 @@ import {environment} from '../environments/environment';
 import {AuthManagerService} from './services/auth-manager/auth-manager.service';
 import {UserService} from './services/user.service';
 import {Organization} from './models/organization/organization';
+import {User} from './models/user/user';
 
 /**
  * Main entry of the app
@@ -21,6 +22,11 @@ export class AppComponent {
      * Whether or not the user is currently logged in
      */
     static LOGGED_IN = false;
+
+    /**
+     * The logged in user
+     */
+    me: User;
 
     /**
      * Default Constructor
@@ -58,8 +64,11 @@ export class AppComponent {
             this.authManagerService.getLogoutObservable().subscribe(() => this.handleLogout());
             this.storage.loadAuthToken()
             .then(token => {
-                this.navCtl.navigateRoot('/home').catch(console.error);
-                AppComponent.LOGGED_IN = true;
+                this.userService.getMe().then(user => {
+                    this.me = user;
+                    this.navCtl.navigateRoot('/home').catch(console.error);
+                    AppComponent.LOGGED_IN = true;
+                });
             }).catch(error => {
                 if (environment.sign_up_enabled) {
                     this.navCtl.navigateRoot('/sign-up').catch(console.error);
@@ -109,14 +118,14 @@ export class AppComponent {
      * Returns true for whether ro not the user can manager an organization
      */
     hasOrganizations() {
-        return this.userService.getMe() && this.userService.getMe().organization_managers.length > 0;
+        return this.me && this.me.organization_managers.length > 0;
     }
 
     /**
      * Asks the user what organization they want to access
      */
     openOrganizationDialogue() {
-        const organizationManagers = this.userService.getMe().organization_managers;
+        const organizationManagers = this.me.organization_managers;
 
         if (organizationManagers.length == 1) {
             this.goToOrganization(organizationManagers[0].organization);

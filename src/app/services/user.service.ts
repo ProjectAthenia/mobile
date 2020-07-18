@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {User} from '../models/user/user';
 import {Contact} from '../models/user/contact';
+import {RequestsProvider} from '../providers/requests/requests';
+import {StorageProvider} from '../providers/storage/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +25,15 @@ export class UserService {
     contacts: Contact[] = [];
 
     /**
+     * Default Constructor
+     * @param requests
+     * @param storageProvider
+     */
+    constructor(private requests: RequestsProvider,
+                private storageProvider: StorageProvider) {
+    }
+
+    /**
      * Stores the logged in user for us
      * @param user
      */
@@ -33,8 +44,21 @@ export class UserService {
     /**
      * Gets the current logged in user
      */
-    getMe(): User | null {
-        return this.me;
+    getMe(): Promise<User> {
+        if (this.me) {
+            return Promise.resolve(this.me);
+        }
+
+        return this.storageProvider.loadAuthToken().then(maybeToken => {
+            if (maybeToken) {
+                return this.requests.auth.loadInitialInformation().then(user => {
+                    this.storeMe(user);
+                    return Promise.resolve(user);
+                });
+            }
+
+            return Promise.reject();
+        });
     }
 
     /**

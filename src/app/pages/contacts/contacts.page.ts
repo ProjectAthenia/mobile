@@ -45,10 +45,21 @@ export class ContactsPage implements OnInit {
      */
     ngOnInit() {
 
-        this.user = this.userService.getMe();
+        this.userService.getMe().then(user => {
+            this.user = user;
 
-        // This should never happen, but just in case
-        if (this.user == null) {
+            this.requests.social.loadContacts(this.user, true).then(contacts => {
+                this.pendingRequests = contacts.filter(request => {
+                    return request.confirmed_at == null && request.denied_at == null &&
+                        request.requested_id === this.user.id;
+                });
+                this.contacts = contacts.filter(contact => {
+                    return contact.confirmed_at && !contact.denied_at;
+                });
+                this.userService.storeContacts(contacts);
+            });
+        }).catch(() => {
+            // This should never happen, but just in case
             this.navController.navigateBack('/');
             this.toastController.create({
                 message: 'Error Loading Event',
@@ -57,20 +68,7 @@ export class ContactsPage implements OnInit {
             }).then(toast => {
                 toast.present().catch(console.error);
             });
-
-            return;
-        }
-
-        this.requests.social.loadContacts(this.user, true).then(contacts => {
-            this.pendingRequests = contacts.filter(request => {
-                return request.confirmed_at == null && request.denied_at == null &&
-                    request.requested_id === this.user.id;
-            });
-            this.contacts = contacts.filter(contact => {
-                return contact.confirmed_at && !contact.denied_at;
-            });
-            this.userService.storeContacts(contacts);
-        });
+        })
     }
 
     /**
