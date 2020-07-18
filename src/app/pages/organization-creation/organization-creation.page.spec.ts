@@ -7,6 +7,8 @@ import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {OrganizationCreationPage} from './organization-creation.page';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
+import {StorageProvider} from '../../providers/storage/storage';
+import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
 
 describe('OrganizationCreationPage', () => {
     let component: OrganizationCreationPage;
@@ -28,6 +30,7 @@ describe('OrganizationCreationPage', () => {
                 {provide: AlertController, useValue: alertController},
                 {provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
+                {provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
             ],
             declarations: [
                 OrganizationCreationPage,
