@@ -62,6 +62,9 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             this.authManagerService.getLogoutObservable().subscribe(() => this.handleLogout());
+            this.userService.getMeObserver().subscribe({next: user => {
+                this.me = user;
+            }});
             this.storage.loadAuthToken()
             .then(token => {
                 this.userService.getMe().then(user => {

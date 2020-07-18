@@ -3,6 +3,7 @@ import {User} from '../models/user/user';
 import {Contact} from '../models/user/contact';
 import {RequestsProvider} from '../providers/requests/requests';
 import {StorageProvider} from '../providers/storage/storage';
+import {Observable, Subscriber} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -25,12 +26,25 @@ export class UserService {
     contacts: Contact[] = [];
 
     /**
+     * The logout observer
+     */
+    readonly meObserver: Observable<User>;
+
+    /**
+     * The subscriber for the logout
+     */
+    private meSubscribers: Subscriber<User>[] = [];
+
+    /**
      * Default Constructor
      * @param requests
      * @param storageProvider
      */
     constructor(private requests: RequestsProvider,
                 private storageProvider: StorageProvider) {
+        this.meObserver = new Observable((subscriber) => {
+            this.meSubscribers.push(subscriber);
+        });
     }
 
     /**
@@ -39,6 +53,16 @@ export class UserService {
      */
     storeMe(user: User) {
         this.me = user;
+        this.meSubscribers.forEach(subscriber => {
+            subscriber.next(user);
+        });
+    }
+
+    /**
+     * Gets the observer for the auth refreshed events
+     */
+    getMeObserver(): Observable<User> {
+        return this.meObserver;
     }
 
     /**
