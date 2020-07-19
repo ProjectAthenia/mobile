@@ -2,6 +2,50 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.8.0
+
+Another big one! This version adds the organization creation process, and it also fixes a big design flaw with loading the logged in user that has existed in the code base since the beginning. To apply this update complete the following steps.
+
+### User Load Change
+
+The user service is now automatically loading the user off the server in situations where the service does not already have the user cached. This means that the getMe function now returns a promise instead of user|null, which will have a rippling affect through every application. To complete the core update make sure to update the following paths.
+
+* src/app/pages/contacts/contacts.page.ts - The ngOnInit function has been updated for the new me loading.
+* src/app/pages/subscription/subscription.page.spec.ts - The storage provider needs to be added to the providers array
+* src/app/pages/thread/thread.page.spec.ts - The storage provider needs to be added to the providers array
+* src/app/pages/thread/thread.page.ts - The ngOnInit function has been updated for the new me loading.
+* src/app/pages/threads/threads.page.ts - The ngOnInit function has been updated for the new me loading.
+* src/app/pages/user/user.page.ts - The ngOnInit function has been updated for the new me loading.
+* src/app/services/user.service.ts - Added a new meObserver, and rewrote getMe request.
+* src/app/services/user.service.spec.ts - Added default provides for now injected services.
+* src/environments/environment.ts - Added new organization setting
+* src/environments/environment.prod.ts - Updated for proper environment settings
+
+### Organization Management Feature
+
+Two pages have been added that allow for someone to create organization, as well as a new blank page that can behave as an organization dashboard.
+
+* src/app/app-routing.module.ts - Registered new routes for the newly created pages
+* src/app/models/organization/ - New path
+* src/app/models/user/role.ts - New roles declared
+* src/app/models/user/user.ts - Organization manager relation added
+* src/app/pages/organization-creation/ - New Path
+* src/app/pages/organization-dashboard/ - New Path
+* src/app/providers/requests/auth/auth.ts - The organization me data is now being expanded in the initial information request.
+* src/app/providers/requests/organization/ - New Path
+* src/app/providers/requests/requests.ts - Organization requests registered
+* src/app/providers/requests/requests.spec.ts - Organization requests now tested
+* src/app/services/organization.service.spec.ts - New Path
+* src/app/services/organization.service.ts - New Path
+
+### Mixed Updates
+
+These files contain changes that require that both of the previous updates to have been completed
+
+* src/app/app.component.html - Links have been added to the organization management areas
+* src/app/app.component.spec.ts - The RequestsProvider needs to be added to the provides array
+* src/app/app.component.ts - The logged in user is now loaded before we go to the home page, the new me subscriber is now connected, and a number of new organization related functions have been added.
+
 ## 0.7.1
 
 Bug fixes! A number of bugs were found that have been fixed now. To apply these fixes, copy over the following files.
