@@ -71,7 +71,6 @@ export class User extends BaseModel {
      */
     getActiveSubscriptions(): Subscription[] {
         return this.subscriptions.filter(subscription => {
-            console.log(subscription);
             return subscription.expires_at == null || subscription.expires_at > new Date();
         });
     }

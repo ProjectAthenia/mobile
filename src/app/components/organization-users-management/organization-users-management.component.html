@@ -1,0 +1,5 @@
+<ion-list *ngIf="organization">
+    <ion-item *ngFor="let organizationManager in organization.organization_managers">
+        {{organizationManager.user.name}}
+    </ion-item>
+</ion-list>
