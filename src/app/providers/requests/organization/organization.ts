@@ -1,6 +1,7 @@
 import {RequestHandlerProvider} from '../../request-handler/request-handler';
 import {Organization} from '../../../models/organization/organization';
 import {OrganizationManager} from '../../../models/organization/organization-manager';
+import {Page} from '../../../models/page';
 
 /**
  * All requests needed for handling authentication within the app
@@ -58,6 +59,19 @@ export default class OrganizationRequests {
      * @param organizationManager
      */
     async deleteOrganizationManager(organizationManager: OrganizationManager): Promise<any> {
-        return this.requestHandler.delete('organization/' + organizationManager.organization_id + '/organization-managers/' + organizationManager.id, true, true);
+        return this.requestHandler.delete('organizations/' + organizationManager.organization_id + '/organization-managers/' + organizationManager.id, true, true);
+    }
+
+    /**
+     *
+     * @param organization
+     * @param pageNumber
+     */
+    async loadOrganizationManagers(organization: Organization, pageNumber: number): Promise<Page<OrganizationManager>> {
+        return this.requestHandler.get('organizations/' + organization.id + '/organization-managers', true, true, [
+            'user',
+        ], null, null, null, 100, pageNumber).then(data => {
+            return Promise.resolve(new Page(data, OrganizationManager));
+        });
     }
 }

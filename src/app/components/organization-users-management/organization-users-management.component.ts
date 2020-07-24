@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { RequestsProvider } from '../../providers/requests/requests';
 import {Organization} from '../../models/organization/organization';
 import {OrganizationManager} from '../../models/organization/organization-manager';
@@ -9,10 +9,15 @@ import {AlertController} from '@ionic/angular';
     templateUrl: './organization-users-management.component.html',
     styleUrls: ['./organization-users-management.component.scss']
 })
-export class OrganizationUsersManagementComponent {
+export class OrganizationUsersManagementComponent implements OnChanges {
 
     @Input()
     organization: Organization;
+
+    /**
+     * Whether or not the managers load has been kicked off
+     */
+    managersLoaded = false;
 
     /**
      * The organization managers for this organization
@@ -26,6 +31,30 @@ export class OrganizationUsersManagementComponent {
      */
     constructor(private requests: RequestsProvider,
                 private alertController: AlertController) {
+    }
+
+    /**
+     * loads the managers when we are all set
+     * @param changes
+     */
+    ngOnChanges(changes: SimpleChanges): void {
+        if (!this.managersLoaded && this.organization) {
+            this.managersLoaded = true;
+            this.loadManagerPage(1);
+        }
+    }
+
+    /**
+     * Loads a page of managers off of the server
+     * @param pageNumber
+     */
+    loadManagerPage(pageNumber) {
+        this.requests.organization.loadOrganizationManagers(this.organization, pageNumber).then(page => {
+            this.organizationManagers.concat(page.data);
+            if (page.last_page > pageNumber) {
+                this.loadManagerPage(pageNumber + 1);
+            }
+        });
     }
 
     /**
