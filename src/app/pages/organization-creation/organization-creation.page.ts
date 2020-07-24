@@ -75,9 +75,10 @@ export class OrganizationCreationPage extends BasePage implements OnInit{
             const name = this.form.controls['name'].value;
 
             this.requestsProvider.organization.createOrganization(name).then(organization => {
-                this.organizationService.cacheOrganization(organization);
                 const organizationManager = new OrganizationManager({role_id: Role.ADMINISTRATOR});
                 organizationManager.organization = organization;
+                organization.organization_managers.push(organizationManager);
+                this.organizationService.cacheOrganization(organization);
                 this.me.organization_managers.push(organizationManager);
                 this.userService.storeMe(this.me);
                 this.navController.navigateRoot('/organization-dashboard/' + organization.id).catch(console.error);

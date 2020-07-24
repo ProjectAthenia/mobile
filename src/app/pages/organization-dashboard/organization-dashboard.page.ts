@@ -1,7 +1,5 @@
 import {Component, OnInit,} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasePage} from '../base.page';
-import {RequestsProvider} from '../../providers/requests/requests';
 import {OrganizationService} from '../../services/organization.service';
 import {Organization} from '../../models/organization/organization';
 import {ActivatedRoute} from '@angular/router';
@@ -16,7 +14,7 @@ export class OrganizationDashboardPage extends BasePage implements OnInit{
     /**
      * The organization
      */
-    private organization: Organization;
+    organization: Organization;
 
     /**
      * Default Constructor

@@ -15,6 +15,11 @@ export class OrganizationUsersManagementComponent {
     organization: Organization;
 
     /**
+     * The organization managers for this organization
+     */
+    organizationManagers: OrganizationManager[];
+
+    /**
      * Default Constructor
      * @param requests
      * @param alertController
@@ -69,8 +74,9 @@ export class OrganizationUsersManagementComponent {
                 {
                     text: 'Submit',
                     handler: (value) => {
-                        console.log(value);
-
+                        this.requests.organization.createOrganizationManager(this.organization.id, value[0]).then((organizationManager) => {
+                            this.organizationManagers.push(organizationManager);
+                        });
                     }
                 }
             ],
