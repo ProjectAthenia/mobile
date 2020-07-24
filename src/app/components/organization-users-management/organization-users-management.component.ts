@@ -39,7 +39,11 @@ export class OrganizationUsersManagementComponent {
                 {
                     text: 'Yes',
                     handler: () => {
-                        alert.dismiss();
+                        this.requests.organization.deleteOrganizationManager(organizationManager).then(() => {
+                            alert.dismiss();
+                            this.organization.organization_managers =
+                                this.organization.organization_managers.filter(i => i.id != organizationManager.id);
+                        });
                     }
                 }
             ]
@@ -70,6 +74,8 @@ export class OrganizationUsersManagementComponent {
                     }
                 }
             ],
-        })
+        }).then(alert => {
+            alert.present();
+        });
     }
 }
