@@ -14,6 +14,11 @@ export class OrganizationManager extends BaseModel {
     role_id: number;
 
     /**
+     * The id of the organization this manager is apart of
+     */
+    organization_id: number;
+
+    /**
      * The organization model
      */
     organization: Organization;
