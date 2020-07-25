@@ -1,7 +1,7 @@
-<ion-button (click)="addMember()">Add Member</ion-button>
+<ion-button (click)="showManagerDialogue()">Add Member</ion-button>
 
 <ion-list *ngIf="organization">
     <ion-item *ngFor="let organizationManager of organization.organization_managers">
-        {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="editOrganizationManager(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
+        {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="showManagerDialogue(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
     </ion-item>
 </ion-list>

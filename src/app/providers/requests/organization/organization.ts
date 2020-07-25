@@ -65,6 +65,19 @@ export default class OrganizationRequests {
     }
 
     /**
+     * Delete the organization manager properly
+     * @param organizationManager
+     * @param roleId
+     */
+    async updateOrganizationManager(organizationManager: OrganizationManager, roleId: number): Promise<any> {
+        return this.requestHandler.patch('organizations/' + organizationManager.organization_id + '/organization-managers/' + organizationManager.id, true, true, {
+            role_id: roleId,
+        }).then(data => {
+            return Promise.resolve(new OrganizationManager(data));
+        });
+    }
+
+    /**
      *
      * @param organization
      * @param pageNumber

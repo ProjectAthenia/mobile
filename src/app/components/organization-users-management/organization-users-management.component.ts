@@ -88,14 +88,10 @@ export class OrganizationUsersManagementComponent implements OnChanges {
         });
     }
 
-    editOrganizationManager(organizationManager: OrganizationManager) {
-
-    }
-
     /**
      * Opens the add member prompt
      */
-    addMember() {
+    showManagerDialogue(organizationManager: OrganizationManager = null) {
         this.alertController.create({
             header: 'Add Member',
             message: 'Enter the email address of the user that you want to add to your organization.',
@@ -103,27 +99,37 @@ export class OrganizationUsersManagementComponent implements OnChanges {
                 {
                     type: 'email',
                     name: 'email',
+                    value: organizationManager ? organizationManager.user.email : null,
+                    disabled: organizationManager != null,
                 },
                 {
                     type: 'radio',
                     name: 'role_id',
                     value: Role.ADMINISTRATOR,
-                    label: 'Administrator'
+                    label: 'Administrator',
+                    checked: organizationManager ? organizationManager.role_id == Role.ADMINISTRATOR : false,
                 },
                 {
                     type: 'radio',
                     name: 'role_id',
                     value: Role.MANAGER,
-                    label: 'Manager'
+                    label: 'Manager',
+                    checked: organizationManager ? organizationManager.role_id == Role.MANAGER : false,
                 }
             ],
             buttons: [
                 {
                     text: 'Submit',
                     handler: (value) => {
-                        this.requests.organization.createOrganizationManager(this.organization.id, value['email'], value['role_id']).then((organizationManager) => {
-                            this.organizationManagers.push(organizationManager);
-                        });
+                        if (organizationManager) {
+                            this.requests.organization.updateOrganizationManager(organizationManager, value['role_id']).then(updated => {
+                                this.organizationManagers
+                            });
+                        } else {
+                            this.requests.organization.createOrganizationManager(this.organization.id, value['email'], value['role_id']).then((organizationManager) => {
+                                this.organizationManagers.push(organizationManager);
+                            });
+                        }
                     }
                 }
             ],
