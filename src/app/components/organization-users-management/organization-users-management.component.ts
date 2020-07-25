@@ -3,6 +3,7 @@ import { RequestsProvider } from '../../providers/requests/requests';
 import {Organization} from '../../models/organization/organization';
 import {OrganizationManager} from '../../models/organization/organization-manager';
 import {AlertController} from '@ionic/angular';
+import Role from '../../models/user/role';
 
 @Component({
     selector: 'app-organization-users-management',
@@ -87,6 +88,10 @@ export class OrganizationUsersManagementComponent implements OnChanges {
         });
     }
 
+    editOrganizationManager(organizationManager: OrganizationManager) {
+
+    }
+
     /**
      * Opens the add member prompt
      */
@@ -97,13 +102,26 @@ export class OrganizationUsersManagementComponent implements OnChanges {
             inputs: [
                 {
                     type: 'email',
+                    name: 'email',
+                },
+                {
+                    type: 'radio',
+                    name: 'role_id',
+                    value: Role.ADMINISTRATOR,
+                    label: 'Administrator'
+                },
+                {
+                    type: 'radio',
+                    name: 'role_id',
+                    value: Role.MANAGER,
+                    label: 'Manager'
                 }
             ],
             buttons: [
                 {
                     text: 'Submit',
                     handler: (value) => {
-                        this.requests.organization.createOrganizationManager(this.organization.id, value[0]).then((organizationManager) => {
+                        this.requests.organization.createOrganizationManager(this.organization.id, value['email'], value['role_id']).then((organizationManager) => {
                             this.organizationManagers.push(organizationManager);
                         });
                     }

@@ -45,10 +45,12 @@ export default class OrganizationRequests {
      * Creates an organization manager related to the email passed in
      * @param organizationId
      * @param email
+     * @param roleId
      */
-    async createOrganizationManager(organizationId: any, email: string): Promise<OrganizationManager> {
+    async createOrganizationManager(organizationId: any, email: string, roleId: number): Promise<OrganizationManager> {
         return this.requestHandler.post('organizations/' + organizationId + '/organization-managers', true, true, {
             email: email,
+            role_id: roleId,
         }).then(data => {
             return Promise.resolve(new OrganizationManager(data));
         });

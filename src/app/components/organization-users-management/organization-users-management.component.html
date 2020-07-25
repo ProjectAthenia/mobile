@@ -2,6 +2,6 @@
 
 <ion-list *ngIf="organization">
     <ion-item *ngFor="let organizationManager of organization.organization_managers">
-        {{organizationManager.user.name}} <ion-button slot="end" (click)="promptDeletion(organizationManager)">-</ion-button>
+        {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="editOrganizationManager(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
     </ion-item>
 </ion-list>

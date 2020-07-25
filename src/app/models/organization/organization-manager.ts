@@ -2,6 +2,7 @@ import {Organization} from './organization';
 import {BaseModel} from '../base-model';
 import {Relation} from '../relation';
 import {User} from '../user/user';
+import Role from '../user/role';
 
 /**
  * Used as a data wrapper for our organization manager model
@@ -37,5 +38,18 @@ export class OrganizationManager extends BaseModel {
             organization: new Relation('model', Organization),
             user: new Relation('model', User),
         });
+    }
+
+    roleName(): string {
+        switch (this.role_id) {
+            case Role.MANAGER:
+                return 'Manager';
+
+            case Role.ADMINISTRATOR:
+                return 'Administrator';
+
+            default:
+                return 'Unknown';
+        }
     }
 }
