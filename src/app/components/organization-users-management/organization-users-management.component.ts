@@ -123,7 +123,9 @@ export class OrganizationUsersManagementComponent implements OnChanges {
                     handler: (value) => {
                         if (organizationManager) {
                             this.requests.organization.updateOrganizationManager(organizationManager, value['role_id']).then(updated => {
-                                this.organizationManagers
+                                this.organizationManagers = this.organizationManagers.map(i => {
+                                    return i.id == updated.id ? updated : i;
+                                });
                             });
                         } else {
                             this.requests.organization.createOrganizationManager(this.organization.id, value['email'], value['role_id']).then((organizationManager) => {
