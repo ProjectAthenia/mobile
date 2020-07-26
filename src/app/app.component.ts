@@ -8,6 +8,7 @@ import {AuthManagerService} from './services/auth-manager/auth-manager.service';
 import {UserService} from './services/user.service';
 import {Organization} from './models/organization/organization';
 import {User} from './models/user/user';
+import {OrganizationService} from './services/organization.service';
 
 /**
  * Main entry of the app
@@ -39,6 +40,7 @@ export class AppComponent {
      * @param menuCtl
      * @param storage
      * @param userService
+     * @param organizationService
      */
     constructor(
         private platform: Platform,
@@ -50,6 +52,7 @@ export class AppComponent {
         private menuCtl: MenuController,
         private storage: StorageProvider,
         private userService: UserService,
+        private organizationService: OrganizationService,
     ) {
         this.initializeApp();
     }
@@ -158,6 +161,7 @@ export class AppComponent {
      * @param organization
      */
     goToOrganization(organization: Organization) {
+        this.organizationService.cacheOrganization(organization);
         this.menuCtl.close('side-menu').catch(console.error);
         this.navCtl.navigateRoot('/organization-dashboard/' + organization.id).catch(console.error);
     }

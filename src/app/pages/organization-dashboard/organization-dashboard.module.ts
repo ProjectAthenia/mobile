@@ -12,6 +12,17 @@ const routes: Routes = [
   {
     path: '',
     component: OrganizationDashboardPage,
+    children: [
+      {
+        path: 'user-management',
+        children: [
+          {
+            path: '',
+            loadChildren: './user-management/user-management.module#UserManagementPageModule'
+          }
+        ]
+      },
+    ]
   }
 ];
 
