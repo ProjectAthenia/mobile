@@ -15,6 +15,11 @@ export class OrganizationManager extends BaseModel {
     role_id: number;
 
     /**
+     * The id of the logged in user
+     */
+    user_id: number;
+
+    /**
      * The id of the organization this manager is apart of
      */
     organization_id: number;
@@ -40,6 +45,16 @@ export class OrganizationManager extends BaseModel {
         });
     }
 
+    /**
+     * The name of this user that we want to display
+     */
+    name(): string {
+        return this.user.name ? this.user.name : this.user.email;
+    }
+
+    /**
+     * The descriptive role name for this organization manager
+     */
     roleName(): string {
         switch (this.role_id) {
             case Role.MANAGER:

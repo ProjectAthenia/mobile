@@ -1,9 +1,15 @@
-<ion-content>
-    <ion-icon name="add-outline" (click)="showManagerDialogue()"></ion-icon>
+<ion-content class="ion-padding">
+    <div (click)="showManagerDialogue()" id="add-btn">
+        Add Member <ion-icon name="add-outline" ></ion-icon>
+    </div>
 
     <ion-list *ngIf="organization">
         <ion-item *ngFor="let organizationManager of organizationManagers">
-            {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="showManagerDialogue(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
+            {{organizationManager.name()}} - {{organizationManager.roleName()}}
+            <span slot="end" *ngIf="notMe(organizationManager)">
+                <ion-icon name="create-outline" (click)="showManagerDialogue(organizationManager)"></ion-icon>
+                <ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)"></ion-icon>
+            </span>
         </ion-item>
     </ion-list>
 

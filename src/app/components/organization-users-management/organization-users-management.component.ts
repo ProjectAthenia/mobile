@@ -1,16 +1,18 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { RequestsProvider } from '../../providers/requests/requests';
 import {Organization} from '../../models/organization/organization';
 import {OrganizationManager} from '../../models/organization/organization-manager';
 import {AlertController} from '@ionic/angular';
 import Role from '../../models/user/role';
+import {UserService} from '../../services/user.service';
+import {User} from '../../models/user/user';
 
 @Component({
     selector: 'app-organization-users-management',
     templateUrl: './organization-users-management.component.html',
     styleUrls: ['./organization-users-management.component.scss']
 })
-export class OrganizationUsersManagementComponent implements OnChanges {
+export class OrganizationUsersManagementComponent implements OnChanges, OnInit {
 
     /**
      * The organization we are managing
@@ -53,12 +55,28 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     editingOrganizationManager: OrganizationManager = null;
 
     /**
+     * The logged in user
+     */
+    me: User;
+
+    /**
      * Default Constructor
      * @param requests
      * @param alertController
+     * @param userService
      */
     constructor(private requests: RequestsProvider,
-                private alertController: AlertController) {
+                private alertController: AlertController,
+                private userService: UserService) {
+    }
+
+    /**
+     * Loads the logged in user
+     */
+    ngOnInit(): void {
+        this.userService.getMe().then(me => {
+            this.me = me;
+        });
     }
 
     /**
@@ -86,6 +104,14 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     }
 
     /**
+     * Tells us whether or not the user related to the organization manager is the logged in user
+     * @param organizationManager
+     */
+    notMe(organizationManager: OrganizationManager): boolean {
+        return organizationManager.user_id !== this.me.id;
+    }
+
+    /**
      * Makes sure the user wants to delete the organization manager
      * @param organizationManager
      */
@@ -103,8 +129,8 @@ export class OrganizationUsersManagementComponent implements OnChanges {
                     handler: () => {
                         this.requests.organization.deleteOrganizationManager(organizationManager).then(() => {
                             alert.dismiss();
-                            this.organization.organization_managers =
-                                this.organization.organization_managers.filter(i => i.id != organizationManager.id);
+                            this.organizationManagers =
+                                this.organizationManagers.filter(i => i.id != organizationManager.id);
                         });
                     }
                 }
@@ -116,7 +142,7 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     }
 
     /**
-     *
+     * Stops the closure of our background for us
      * @param event
      */
     preventPropagation(event) {
@@ -139,6 +165,7 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     saveOrganizationManager(email: string, roleId: number) {
         if (this.editingOrganizationManager) {
             this.requests.organization.updateOrganizationManager(this.editingOrganizationManager, roleId).then(updated => {
+                updated.user = this.editingOrganizationManager.user;
                 this.organizationManagers = this.organizationManagers.map(i => {
                     return i.id == updated.id ? updated : i;
                 });

@@ -1,6 +1,12 @@
 ion-content {
   position: relative;
+
+  #add-btn {
+    text-align: right;
+  }
+
   #manager-form-wrapper {
+    z-index: 1;
     background: rgba(0,0,0, .2);
     position: absolute;
     top: 0;
