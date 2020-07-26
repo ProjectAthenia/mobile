@@ -2,13 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommonModule } from "@angular/common";
 import { AlertController, IonicModule, NavController } from "@ionic/angular";
-import {RequestsProvider} from '../../providers/requests/requests';
-import RequestsProviderMock from '../../providers/requests/requests.mock';
-import {UserManagementPage} from './organization-dashboard.page';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
+import {UserManagementPage} from './user-management.page';
+import {RequestsProvider} from '../../../providers/requests/requests';
+import RequestsProviderMock from '../../../providers/requests/requests.mock';
 
-describe('OrganizationDashboardPage', () => {
+describe('UserManagementPage', () => {
     let component: UserManagementPage;
     let fixture: ComponentFixture<UserManagementPage>;
     let navController;
