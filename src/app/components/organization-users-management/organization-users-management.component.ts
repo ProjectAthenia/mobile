@@ -26,7 +26,7 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     /**
      * The organization managers for this organization
      */
-    organizationManagers: OrganizationManager[];
+    organizationManagers: OrganizationManager[] = [];
 
     /**
      * Whether or not the editing form is currently visible
@@ -78,7 +78,7 @@ export class OrganizationUsersManagementComponent implements OnChanges {
      */
     loadManagerPage(pageNumber) {
         this.requests.organization.loadOrganizationManagers(this.organization, pageNumber).then(page => {
-            this.organizationManagers.concat(page.data);
+            this.organizationManagers = this.organizationManagers.concat(page.data);
             if (page.last_page > pageNumber) {
                 this.loadManagerPage(pageNumber + 1);
             }
@@ -116,46 +116,19 @@ export class OrganizationUsersManagementComponent implements OnChanges {
     }
 
     /**
+     *
+     * @param event
+     */
+    preventPropagation(event) {
+        event.stopPropagation();
+    }
+
+    /**
      * Opens the add member prompt
      */
     showManagerDialogue(organizationManager: OrganizationManager = null) {
         this.formVisible = true;
         this.editingOrganizationManager = organizationManager;
-        this.alertController.create({
-            header: 'Add Member',
-            message: 'Enter the email address of the user that you want to add to your organization.',
-            inputs: [
-                {
-                    type: 'email',
-                    name: 'email',
-                    value: organizationManager ? organizationManager.user.email : null,
-                    disabled: organizationManager != null,
-                },
-                {
-                    type: 'radio',
-                    name: 'role_id',
-                    value: Role.ADMINISTRATOR,
-                    label: 'Administrator',
-                    checked: organizationManager ? organizationManager.role_id == Role.ADMINISTRATOR : false,
-                },
-                {
-                    type: 'radio',
-                    name: 'role_id',
-                    value: Role.MANAGER,
-                    label: 'Manager',
-                    checked: organizationManager ? organizationManager.role_id == Role.MANAGER : false,
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Submit',
-                    handler: (value) => {
-                    }
-                }
-            ],
-        }).then(alert => {
-            alert.present();
-        });
     }
 
     /**

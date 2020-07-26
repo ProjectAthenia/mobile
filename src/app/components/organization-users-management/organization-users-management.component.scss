@@ -12,14 +12,23 @@ ion-content {
       top: 50px;
       left: 40px;
       right: 40px;
-      padding: 5px 10px;
+      padding: 10px 20px;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       background: white;
 
-      .email-item {
+      > ion-item {
         margin: 0 0 10px;
+      }
+
+      ion-item {
+        --padding-start: 0;
+      }
+
+      ion-radio-group {
+        margin: 10px 0;
+        width: 100%;
       }
     }
   }
