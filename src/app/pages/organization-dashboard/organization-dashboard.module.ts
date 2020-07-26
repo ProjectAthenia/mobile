@@ -14,7 +14,7 @@ const routes: Routes = [
     component: OrganizationDashboardPage,
     children: [
       {
-        path: 'user-management',
+        path: 'user-management/:organization_id',
         children: [
           {
             path: '',
