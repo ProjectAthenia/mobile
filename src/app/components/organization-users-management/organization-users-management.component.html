@@ -1,7 +1,33 @@
-<ion-button (click)="showManagerDialogue()">Add Member</ion-button>
+<ion-content>
+    <ion-icon name="add-outline" (click)="showManagerDialogue()"></ion-icon>
 
-<ion-list *ngIf="organization">
-    <ion-item *ngFor="let organizationManager of organization.organization_managers">
-        {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="showManagerDialogue(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
-    </ion-item>
-</ion-list>
+    <ion-list *ngIf="organization">
+        <ion-item *ngFor="let organizationManager of organization.organization_managers">
+            {{organizationManager.user.name}} - {{organizationManager.roleName()}} <span slot="end"><ion-icon name="create-outline" (click)="showManagerDialogue(organizationManager)">-</ion-icon><ion-icon name="close-circle-outline" (click)="promptDeletion(organizationManager)">-</ion-icon></span>
+        </ion-item>
+    </ion-list>
+
+    <div id="manager-form-wrapper" *ngIf="formVisible">
+        <div id="manager-form">
+            <ion-item class="email-item">
+                <ion-label position="stacked">Email Address</ion-label>
+                <ion-input type="email" #emailInput [disabled]="editingOrganizationManager != null" [value]="editingOrganizationManager ? editingOrganizationManager.user.email : null"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-radio-group #roleRadioGroup [value]="editingOrganizationManager ? editingOrganizationManager.role_id : null">
+                    <ion-label position="stacked">Role</ion-label>
+                    <ion-list>
+                        <ion-item *ngFor="let role of organizationRoles">
+                            <ion-label>{{role.label}}</ion-label>
+                            <ion-radio slot="start" [value]="role.value"></ion-radio>
+                        </ion-item>
+                    </ion-list>
+                </ion-radio-group>
+            </ion-item>
+
+            <ion-button (click)="saveOrganizationManager(emailInput.value, roleRadioGroup.value)">Submit</ion-button>
+        </div>
+    </div>
+
+</ion-content>

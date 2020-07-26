@@ -12,6 +12,9 @@ import Role from '../../models/user/role';
 })
 export class OrganizationUsersManagementComponent implements OnChanges {
 
+    /**
+     * The organization we are managing
+     */
     @Input()
     organization: Organization;
 
@@ -24,6 +27,30 @@ export class OrganizationUsersManagementComponent implements OnChanges {
      * The organization managers for this organization
      */
     organizationManagers: OrganizationManager[];
+
+    /**
+     * Whether or not the editing form is currently visible
+     */
+    formVisible = false;
+
+    /**
+     * All available roles
+     */
+    organizationRoles = [
+        {
+            value: Role.MANAGER,
+            label: 'Manager'
+        },
+        {
+            value: Role.ADMINISTRATOR,
+            label: 'Administrator'
+        },
+    ]
+
+    /**
+     * The organization manager that is being edited if there is one
+     */
+    editingOrganizationManager: OrganizationManager = null;
 
     /**
      * Default Constructor
@@ -92,6 +119,8 @@ export class OrganizationUsersManagementComponent implements OnChanges {
      * Opens the add member prompt
      */
     showManagerDialogue(organizationManager: OrganizationManager = null) {
+        this.formVisible = true;
+        this.editingOrganizationManager = organizationManager;
         this.alertController.create({
             header: 'Add Member',
             message: 'Enter the email address of the user that you want to add to your organization.',
@@ -121,22 +150,40 @@ export class OrganizationUsersManagementComponent implements OnChanges {
                 {
                     text: 'Submit',
                     handler: (value) => {
-                        if (organizationManager) {
-                            this.requests.organization.updateOrganizationManager(organizationManager, value['role_id']).then(updated => {
-                                this.organizationManagers = this.organizationManagers.map(i => {
-                                    return i.id == updated.id ? updated : i;
-                                });
-                            });
-                        } else {
-                            this.requests.organization.createOrganizationManager(this.organization.id, value['email'], value['role_id']).then((organizationManager) => {
-                                this.organizationManagers.push(organizationManager);
-                            });
-                        }
                     }
                 }
             ],
         }).then(alert => {
             alert.present();
         });
+    }
+
+    /**
+     * Saves the organization manager
+     * @param email
+     * @param roleId
+     */
+    saveOrganizationManager(email: string, roleId: number) {
+        if (this.editingOrganizationManager) {
+            this.requests.organization.updateOrganizationManager(this.editingOrganizationManager, roleId).then(updated => {
+                this.organizationManagers = this.organizationManagers.map(i => {
+                    return i.id == updated.id ? updated : i;
+                });
+                this.closeOrganizationManagerForm();
+            });
+        } else {
+            this.requests.organization.createOrganizationManager(this.organization.id, email, roleId).then((organizationManager) => {
+                this.organizationManagers.push(organizationManager);
+            });
+            this.closeOrganizationManagerForm();
+        }
+    }
+
+    /**
+     * Closes the organization manager form
+     */
+    closeOrganizationManagerForm() {
+        this.formVisible = false;
+        this.editingOrganizationManager = null;
     }
 }
