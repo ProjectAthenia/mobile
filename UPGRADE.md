@@ -2,6 +2,26 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.9.0
+
+Another sizable update! This adds a new ability to allow someone to manage people within the organization. It also adds a number of improvements.
+
+* src/app/app.component.ts - Cached the organization service
+* src/app/components/organization-users-management/ - New Component!
+* src/app/components/components.module.ts - Registered new organization users management component
+* src/app/models/organization/organization-manager.ts - Added new fields, and helper functions
+* src/app/models/organization/organization.ts - Added relations
+* src/app/models/user/user.ts - Removed log point
+* src/app/pages/organization-creation/organization-creation.page.ts - Cached organization properly
+* src/app/pages/organization-dashboard/user-management/ - New Page
+* src/app/pages/organization-dashboard/organization-dashboard.module.ts - Registered route for tabs
+* src/app/pages/organization-dashboard/organization-dashboard.page.html - Added tabs and removed old ion content
+* src/app/pages/organization-dashboard/organization-dashboard.page.scss - Added style for ion-tabs
+* src/app/pages/organization-dashboard/organization-dashboard.page.spec.ts - Fixed test
+* src/app/pages/organization-dashboard/organization-dashboard.page.ts - Completely rebuild for tabs
+* src/app/providers/requests/organization/organization.ts - Added functions for dealing with organization managers
+* src/app/providers/requests/social/social.ts - Fixed potential bug
+
 ## 0.8.0
 
 Another big one! This version adds the organization creation process, and it also fixes a big design flaw with loading the logged in user that has existed in the code base since the beginning. To apply this update complete the following steps.
