@@ -17,6 +17,10 @@ export class Organization extends BaseModel {
      */
     organization_managers: OrganizationManager[];
 
+    /**
+     * Default Constructor
+     * @param data
+     */
     constructor(data) {
         super(data, {
             organization_managers: new Relation('array', OrganizationManager),
