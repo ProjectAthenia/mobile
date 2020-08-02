@@ -118,7 +118,7 @@ export class ProfileEditorPage extends BasePage implements OnInit {
             correctOrientation: true
         };
         this.camera.getPicture(options).then((imageData) => {
-            this.requests.auth.uploadProfileImage(this.user, imageData).then(asset => {
+            this.requests.entityRequests.uploadProfileImage(this.user, imageData).then(asset => {
                 this.user.profile_image_url = asset.url;
             });
         });

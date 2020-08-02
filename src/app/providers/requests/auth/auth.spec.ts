@@ -75,30 +75,4 @@ describe('Test the auth requests', () => {
         const result = await auth.updateUser(user, {});
         expect(result.id).toBe(324);
     });
-
-    it('Creates a request for creating a payment method properly', async () => {
-
-        spyOn(requestHandler, 'post').and.returnValue(Promise.resolve({
-            id: 324,
-            identifier: '4242',
-        }));
-        const user = new User({
-            id: 4531,
-        });
-        const result = await auth.createPaymentMethod(user, 'token');
-        expect(result.id).toBe(324);
-        expect(result.constructor).toBe(PaymentMethod);
-    });
-
-    it('Creates a request for uploading a profile image properly', async () => {
-
-        spyOn(requestHandler, 'post').and.returnValue(Promise.resolve({
-            id: 324,
-            url: 'http://something.com/something.jpg',
-        }));
-        const user = new User({id: 324435});
-        const result = await auth.uploadProfileImage(user, 'some content');
-        expect(result.constructor).toBe(Asset);
-        expect(result.id).toBe(324);
-    });
 });

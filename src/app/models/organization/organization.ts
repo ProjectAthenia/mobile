@@ -1,11 +1,12 @@
 import {BaseModel} from '../base-model';
 import {OrganizationManager} from './organization-manager';
 import {Relation} from '../relation';
+import IsEntity from '../contracts/is-entity';
 
 /**
  * Used as a data wrapper for our organization model
  */
-export class Organization extends BaseModel {
+export class Organization extends BaseModel implements IsEntity {
 
     /**
      * The name of the organization
@@ -25,5 +26,12 @@ export class Organization extends BaseModel {
         super(data, {
             organization_managers: new Relation('array', OrganizationManager),
         });
+    }
+
+    /**
+     * The base route for all entity routes
+     */
+    baseRoute(): string {
+        return 'organizations';
     }
 }

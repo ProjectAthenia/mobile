@@ -3,11 +3,12 @@ import {Relation} from '../relation';
 import {PaymentMethod} from '../payment/payment-method';
 import {Subscription} from '../subscription/subscription';
 import {OrganizationManager} from '../organization/organization-manager';
+import IsEntity from '../contracts/is-entity';
 
 /**
  * Used as a data wrapper for our user model
  */
-export class User extends BaseModel {
+export class User extends BaseModel implements IsEntity {
 
     /**
      * The name the user entered upon sign up
@@ -64,6 +65,13 @@ export class User extends BaseModel {
             payment_methods: new Relation('array', PaymentMethod),
             subscriptions: new Relation('array', Subscription),
         });
+    }
+
+    /**
+     * The base api route
+     */
+    baseRoute(): string {
+        return 'users';
     }
 
     /**

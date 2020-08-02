@@ -2,6 +2,20 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.10.0
+
+Some entity stuff! This update adds some initial functions that make managing entity pieces of data simple. To finish the update complete the following steps.
+
+* src/app/models/contracts/ - New Path
+* src/app/models/organization/organization.ts - This model now implements the new entity contract created in the last step.
+* src/app/models/user/user.ts - This model now implements the new entity contract created in the last step.
+* src/app/providers/requests/entity/ - New request group
+* src/app/providers/requests/requests.ts - The entity requests have now been registered
+* src/app/providers/requests/auth/auth.ts - A couple requests were moved to the new entity group.
+* src/app/providers/requests/auth/auth.spec.ts - Some tests have been removed.
+* src/app/pages/profile-editor/profile-editor.page.ts - This now uses the new entity requests for a couple calls.
+* src/app/pages/subscription/subscription.page.ts - This now uses the new entity requests for a couple calls.
+
 ## 0.9.0
 
 Another sizable update! This adds a new ability to allow someone to manage people within the organization. It also adds a number of improvements.

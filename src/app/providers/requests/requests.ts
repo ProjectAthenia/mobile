@@ -5,6 +5,7 @@ import Subscriptions from './subscriptions/subscriptions';
 import Social from './social/social';
 import Messaging from './messaging/messaging';
 import OrganizationRequests from './organization/organization';
+import EntityRequests from './entity/entity';
 
 /**
  * Provider for interacting with all app wide requests
@@ -38,6 +39,11 @@ export class RequestsProvider {
     organization: OrganizationRequests;
 
     /**
+     * All requests related to the entity
+     */
+    entityRequests: EntityRequests;
+
+    /**
      * Default constructor
      * @param requestHandler
      */
@@ -47,5 +53,6 @@ export class RequestsProvider {
         this.social = new Social(this.requestHandler);
         this.messaging = new Messaging(requestHandler);
         this.organization = new OrganizationRequests(this.requestHandler);
+        this.entityRequests = new EntityRequests(this.requestHandler);
     }
 }

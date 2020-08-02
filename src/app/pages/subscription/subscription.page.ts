@@ -220,7 +220,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
             if (this.selectedPaymentMethod === null) {
                 this.validateCard().then(card => {
                     this.stripe.createCardToken(card).then(token => {
-                        this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
+                        this.requests.entityRequests.createPaymentMethod(this.user, token.id).then(paymentMethod => {
                             this.user.payment_methods.push(paymentMethod);
                             this.setSelectedPaymentMethod(paymentMethod);
                             this.changePaymentMethod(paymentMethod);
@@ -239,7 +239,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
                 this.validateCard().then(card => {
 
                     this.stripe.createCardToken(card).then(token => {
-                        this.requests.auth.createPaymentMethod(this.user, token.id).then(paymentMethod => {
+                        this.requests.entityRequests.createPaymentMethod(this.user, token.id).then(paymentMethod => {
                             this.selectedPaymentMethod = paymentMethod;
                             this.user.payment_methods.push(paymentMethod);
                             this.createSubscription();
