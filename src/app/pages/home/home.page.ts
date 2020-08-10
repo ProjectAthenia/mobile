@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BasePage} from '../base.page';
+import CanBeHomePage from '../can-be-home.page';
 
 /**
  * Main home page of the app
@@ -9,6 +9,7 @@ import {BasePage} from '../base.page';
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePage extends BasePage {
+export class HomePage extends CanBeHomePage
+{
 
 }
