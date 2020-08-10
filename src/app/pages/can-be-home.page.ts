@@ -30,7 +30,7 @@ export default abstract class CanBeHomePage extends BasePage implements OnInit
     {
         this.platform.ready().then(() => {
             const route = this.route.toString();
-            console.log(route);
+            this.storage.saveDefaultHomePage(route).catch(console.error);
         });
     }
 }
