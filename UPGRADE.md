@@ -2,6 +2,16 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.11.0
+
+Nice little one! This updates adds a new base page class that makes it easy to have multiple potential home pages within an application.
+
+* src/app/app.component.ts - The loading of the app has been updated to take the user to the default home page via the storage provider
+* src/app/pages/can-be-home.page.ts - New class!
+* src/app/pages/home/home.page.ts  - This class now extends the new CanBeHomePage class
+* src/app/pages/organization-dashboard/organization-dashboard.page.ts - This class now extends the CanBeHomePage class
+* src/app/providers/storage/storage.ts - This class has been updated quite a bit. A new storage variable has been added, and the formatting of the code has been updated to begin an eventual global format change.
+
 ## 0.10.0
 
 Some entity stuff! This update adds some initial functions that make managing entity pieces of data simple. To finish the update complete the following steps.
