@@ -31,7 +31,7 @@ export class OrganizationDashboardPage extends CanBeHomePage implements OnInit {
     constructor(protected platform: Platform,
                 protected storage: StorageProvider,
                 protected route: ActivatedRoute) {
-        super(platform, storage, route);
+        super(platform, storage);
         this.organizationId = parseInt(this.route.snapshot.paramMap.get('organization_id'), 0);
     }
 

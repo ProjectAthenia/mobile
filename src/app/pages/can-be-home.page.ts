@@ -16,9 +16,8 @@ export default abstract class CanBeHomePage extends BasePage implements OnInit
      * @param storage
      * @param route
      */
-    protected constructor(protected platform: Platform,
-                          protected storage: StorageProvider,
-                          protected route: ActivatedRoute)
+    constructor(protected platform: Platform,
+                protected storage: StorageProvider)
     {
         super();
     }
@@ -29,8 +28,7 @@ export default abstract class CanBeHomePage extends BasePage implements OnInit
     ngOnInit(): void
     {
         this.platform.ready().then(() => {
-            const route = this.route.toString();
-            this.storage.saveDefaultHomePage(route).catch(console.error);
+            this.storage.saveDefaultHomePage(window.location.pathname).catch(console.error);
         });
     }
 }

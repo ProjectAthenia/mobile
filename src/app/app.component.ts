@@ -72,8 +72,12 @@ export class AppComponent {
             .then(token => {
                 this.userService.getMe().then(user => {
                     this.me = user;
-                    this.navCtl.navigateRoot('/home').catch(console.error);
                     AppComponent.LOGGED_IN = true;
+                    this.storage.loadDefaultHomePage().then(page => {
+                        this.navCtl.navigateRoot(page.length ? page : '/home').catch(console.error);
+                    }).catch(() => {
+                        this.navCtl.navigateRoot('/home').catch(console.error);
+                    });
                 });
             }).catch(error => {
                 if (environment.sign_up_enabled) {
