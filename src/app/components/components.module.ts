@@ -8,6 +8,7 @@ import {RatingBarComponent} from './rating-bar/rating-bar.component';
 import {ArticleEditorComponent} from './article-editor/article-editor.component';
 import {ArticleViewerComponent} from './article-viewer/article-viewer.component';
 import {OrganizationUsersManagementComponent} from './organization-users-management/organization-users-management.component';
+import {MenuComponent} from './menu/menu.component';
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import {OrganizationUsersManagementComponent} from './organization-users-managem
         ArticleViewerComponent,
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
+        MenuComponent,
         OrganizationUsersManagementComponent,
         RatingBarComponent,
     ],
@@ -28,6 +30,7 @@ import {OrganizationUsersManagementComponent} from './organization-users-managem
         ArticleViewerComponent,
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
+        MenuComponent,
         OrganizationUsersManagementComponent,
         RatingBarComponent,
     ],
