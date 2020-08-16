@@ -83,4 +83,13 @@ export class AppComponent {
             });
         });
     }
+
+    /**
+     * Whether or not the user is logged in
+     * This is used for component binding
+     */
+    isLoggedIn()
+    {
+        return AppComponent.LOGGED_IN;
+    }
 }
