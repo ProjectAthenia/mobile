@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    api_url: 'http://api.jengu.app/v1/',
+    api_url: 'https://api.projectathenia.org/v1/',
     websocket_url: 'ws://dev-socket.projectathenia.com/',
     app_name: 'Project Athenia',
     stripe_publishable_key: 'pk_test_xHnP657roth55lBchLpLg6Af00vfCLYpDk',
