@@ -62,13 +62,4 @@ describe('AppComponent', () => {
         expect(statusBarSpy.styleDefault).toHaveBeenCalled();
         expect(splashScreenSpy.hide).toHaveBeenCalled();
     });
-
-    it('should have menu labels', async () => {
-        const fixture = await TestBed.createComponent(AppComponent);
-        await fixture.detectChanges();
-        const app = fixture.nativeElement;
-        const menuItems = app.querySelectorAll('ion-label');
-        expect(menuItems[0].textContent).toContain('Home');
-    });
-
 });
