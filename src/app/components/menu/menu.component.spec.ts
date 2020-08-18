@@ -7,7 +7,6 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {StorageProvider} from '../../providers/storage/storage';
 import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
-import {AppComponent} from '../../app.component';
 
 describe('MenuComponent', () => {
     let component: MenuComponent;
