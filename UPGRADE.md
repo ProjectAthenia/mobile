@@ -2,6 +2,24 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.12.0
+
+New menu component! This update is a bit more hands on with a pretty large architectural change to make things easier going forward. To start, copy the following path `src/app/components/menu/`, and then register the new MenuComponent in `src/app/components/components.module.ts`.
+
+Once you have that part done, you now have to integrate the new menu component into the app. To do this complete the following steps.
+
+1. Copy over any customizations you have made to the menu in `src/app/app.component.html` to `src/app/components/menu/menu.component.html`.
+    This should then reveal any functions from `src/app/app.component.ts` that also need to be migrated to `src/app/components/menu/menu.component.ts`.
+2. Register the `ComponentsModule` in `src/app/app.module.ts`
+3. Replace the `ion-list` and it's children in `src/app/app.component.html` with `app-menu`.
+4. Update `src/app/app.component.ts` to current version. In most cases all of the customization here was done for the menu, so it should be able to be copied over directly. It is probably still wise to run a git diff when updating it though.
+5. Remove `should have menu labels` test from `src/app/app.component.spec.ts`
+
+Once that is done then the following tests have been updated to pass properly.
+
+* src/app/pages/home/home.page.spec.ts
+* src/app/pages/organization-dashboard/organization-dashboard.page.spec.ts
+
 ## 0.11.0
 
 Nice little one! This updates adds a new base page class that makes it easy to have multiple potential home pages within an application.
