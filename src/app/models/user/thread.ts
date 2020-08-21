@@ -36,6 +36,6 @@ export class Thread extends BaseModel
      */
     hasUserSeenThread(user: User): boolean
     {
-        return this.last_message ? this.last_message.from_id != user.id && !this.last_message.seen_at : true;
+        return this.last_message && this.last_message.id ? this.last_message.from_id == user.id || this.last_message.seen_at != null : true;
     }
 }

@@ -12,7 +12,7 @@ export class MessagingService
     /**
      * All loaded threads in the system
      */
-    loadedThreads: Thread[];
+    loadedThreads: Thread[] = [];
 
     /**
      * The observer for listening to unseen messages
@@ -53,12 +53,12 @@ export class MessagingService
 
     /**
      * Notifies all unseen notifications subscribers of a change in our unseen notifications
-     * @param amount
+     * @param me
      */
-    notifyUnseenNotificationSubscribers(amount: number)
+    notifyUnseenNotificationSubscribers(me: User)
     {
         this.unseenMessageSubscribers.forEach(subscriber => {
-            subscriber.next(amount);
+            subscriber.next(this.hasUnseenThreadMessages(me));
         });
     }
 
@@ -71,7 +71,7 @@ export class MessagingService
     {
         return this.requestsProvider.messaging.getThreads(me, showLoading).then(page => {
             this.loadedThreads = page.data;
-            this.notifyUnseenNotificationSubscribers(this.hasUnseenThreadMessages(me));
+            this.notifyUnseenNotificationSubscribers(me);
             return Promise.resolve(this.loadedThreads);
         });
     }
@@ -82,7 +82,7 @@ export class MessagingService
      */
     cacheThread(thread: Thread)
     {
-        this.loadedThreads[thread.id] = thread;
+        this.loadedThreads.push(thread);
     }
 
     /**
@@ -91,7 +91,7 @@ export class MessagingService
      */
     getThread(id: number): Thread | null
     {
-        return this.loadedThreads[id] ? this.loadedThreads[id] : null;
+        return this.loadedThreads.find(i => i.id == id);
     }
 
     /**

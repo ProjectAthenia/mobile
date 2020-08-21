@@ -25,7 +25,7 @@ describe('ThreadPage', () => {
         activatedRoute = {};
         activatedRoute.snapshot = {};
         activatedRoute.snapshot.paramMap = convertToParamMap({
-            user_id: 1234
+            thread_id: 1234
         });
         TestBed.configureTestingModule({
             declarations: [

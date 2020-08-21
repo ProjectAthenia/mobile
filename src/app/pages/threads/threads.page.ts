@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {IonSearchbar, NavController, ToastController} from '@ionic/angular';
 import {User} from '../../models/user/user';
 import {UserService} from '../../services/user.service';
-import {RequestsProvider} from '../../providers/requests/requests';
 import {Thread} from '../../models/user/thread';
 import {MessagingService} from '../../services/messaging.service';
 import {Message} from '../../models/user/message';
@@ -49,13 +48,11 @@ export class ThreadsPage implements OnInit, OnDestroy {
      * Default Constructor
      * @param navController
      * @param toastController
-     * @param requests
      * @param messagingService
      * @param userService
      */
     constructor(private navController: NavController,
                 private toastController: ToastController,
-                private requests: RequestsProvider,
                 private messagingService: MessagingService,
                 private userService: UserService) {
     }
@@ -94,7 +91,7 @@ export class ThreadsPage implements OnInit, OnDestroy {
         if (this.refreshTimeout) {
             clearTimeout(this.refreshTimeout);
         }
-        this.requests.messaging.getThreads(this.me, !this.loaded).then(threads => {
+        this.messagingService.refreshThreads(this.me, !this.loaded).then(threads => {
             this.threads = threads.sort((threadA, threadB) => {
                 if (threadA.last_message && threadB.last_message) {
                     if (threadA.last_message.created_at < threadB.last_message.created_at) {

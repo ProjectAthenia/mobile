@@ -131,16 +131,15 @@ export class ThreadPage implements OnInit, OnDestroy {
         if (this.thread) {
             this.initMessages();
         } else {
-            this.requests.messaging.getThreads(this.me, true).then(threads => {
-                threads.forEach(thread => this.messagingService.cacheThread(thread));
+            this.messagingService.refreshThreads(this.me, true).then(page => {
                 this.thread = this.messagingService.getThreadBetweenPeople(this.me, this.user);
+
                 if (this.thread == null) {
                     this.requests.messaging.createThread(this.me, this.user).then(thread => {
                         this.messagingService.cacheThread(thread);
                         this.thread = thread;
                         this.initMessages();
                     }).catch(error => {
-                        console.error('create', error);
                         this.navController.back();
                     });
                 } else {
@@ -189,11 +188,12 @@ export class ThreadPage implements OnInit, OnDestroy {
             this.messagingService.cacheThread(this.thread);
 
             this.refreshTimeout = setTimeout(this.loadMessages.bind(this), 5 * 1000);
-            if (this.thread.last_message.seen_at == null && this.thread.last_message.from_id !== this.me.id) {
+            if (!this.thread.hasUserSeenThread(this.me)) {
                 this.requests.messaging.markMessageAsSeen(this.me, this.thread, this.thread.last_message).then(message => {
                     if (this.thread.last_message.id === message.id) {
                         this.thread.last_message = message;
                         this.messagingService.cacheThread(this.thread);
+                        this.messagingService.notifyUnseenNotificationSubscribers(this.me);
                     }
                 });
             }

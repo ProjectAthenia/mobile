@@ -24,11 +24,11 @@ describe('Test the auth requests', () => {
             }]
         }));
         const result = await messaging.getThreads(new User({}), false);
-        expect(result.length).toBe(2);
-        expect(result[0].constructor).toBe(Thread);
-        expect(result[1].constructor).toBe(Thread);
-        expect(result[0].id).toBe(324);
-        expect(result[1].id).toBe(56423);
+        expect(result.data.length).toBe(2);
+        expect(result.data[0].constructor).toBe(Thread);
+        expect(result.data[1].constructor).toBe(Thread);
+        expect(result.data[0].id).toBe(324);
+        expect(result.data[1].id).toBe(56423);
     });
 
     it('Creates a request for creating a new thread', async () => {
