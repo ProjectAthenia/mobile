@@ -15,25 +15,25 @@
                 My Profile
             </ion-label>
         </ion-item>
-        <ion-item (click)="goTo('contacts')">
+        <ion-item *ngIf="socialMediaEnabled()" (click)="goTo('contacts')">
             <ion-icon slot="start" name="people"></ion-icon>
             <ion-label>
                 Contacts
             </ion-label>
         </ion-item>
-        <ion-item (click)="goTo('threads')">
-            <ion-icon slot="start" name="mail"></ion-icon>
+        <ion-item *ngIf="socialMediaEnabled()" (click)="goTo('threads')">
+            <app-menu-button-with-notifications slot="start" name="mail" [hasUnseenNotifications]="hasUnseenMessages"></app-menu-button-with-notifications>
             <ion-label>
                 Messages
             </ion-label>
         </ion-item>
-        <ion-item (click)="goTo('subscription')" *ngIf="hasSubscriptions()">
+        <ion-item *ngIf="hasSubscriptions()" (click)="goTo('subscription')">
             <ion-icon slot="start" name="pricetags"></ion-icon>
             <ion-label>
                 My Subscription
             </ion-label>
         </ion-item>
-        <ion-item (click)="goTo('organization-creation')" *ngIf="organizationsEnabled()">
+        <ion-item *ngIf="organizationsEnabled()" (click)="goTo('organization-creation')">
             <ion-icon slot="start" name="people-circle-outline"></ion-icon>
             <ion-label>
                 Create Organization

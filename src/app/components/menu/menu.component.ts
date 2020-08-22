@@ -8,6 +8,7 @@ import {OrganizationService} from '../../services/organization.service';
 import {StorageProvider} from '../../providers/storage/storage';
 import {AuthManagerService} from '../../services/auth-manager/auth-manager.service';
 import {UserService} from '../../services/user.service';
+import {MessagingService} from '../../services/messaging.service';
 
 @Component({
     selector: 'app-menu',
@@ -22,6 +23,11 @@ export class MenuComponent implements OnInit
     me: User;
 
     /**
+     * Whether or not the user has unseen messages
+     */
+    hasUnseenMessages = false;
+
+    /**
      * Default Constructor
      * @param platform
      * @param alertController
@@ -30,6 +36,7 @@ export class MenuComponent implements OnInit
      * @param userService
      * @param authManagerService
      * @param storage
+     * @param messagingService
      * @param organizationService
      */
     constructor(private platform: Platform,
@@ -39,6 +46,7 @@ export class MenuComponent implements OnInit
                 private userService: UserService,
                 private authManagerService: AuthManagerService,
                 private storage: StorageProvider,
+                private messagingService: MessagingService,
                 private organizationService: OrganizationService)
     {}
 
@@ -51,6 +59,9 @@ export class MenuComponent implements OnInit
             this.authManagerService.getLogoutObservable().subscribe(() => this.handleLogout());
             this.userService.getMeObserver().subscribe({next: user => {
                 this.me = user;
+                if (this.socialMediaEnabled()) {
+                    this.initiateMessageNotificationBubble(user);
+                }
             }});
         });
     }
@@ -75,6 +86,30 @@ export class MenuComponent implements OnInit
         } else {
             this.navCtl.navigateForward(page).catch(console.error);
         }
+    }
+
+    /**
+     * Whether or not this app has subscriptions enabled
+     */
+    socialMediaEnabled()
+    {
+        return environment.social_media_enabled;
+    }
+
+    /**
+     * Initiates our message listener
+     * @param me
+     */
+    initiateMessageNotificationBubble(me: User)
+    {
+        this.messagingService.loadUnseenThreadMessages(me, false).then(unseen => {
+            this.hasUnseenMessages = unseen > 0;
+            this.messagingService.getUnseenMessageObservable().subscribe({
+                next: value => {
+                    this.hasUnseenMessages = value > 0;
+                }
+            });
+        });
     }
 
     /**

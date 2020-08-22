@@ -15,6 +15,11 @@ export class MessagingService
     loadedThreads: Thread[] = [];
 
     /**
+     * Whether or not we have loaded the threads yet
+     */
+    hasLoadedThreads = false;
+
+    /**
      * The observer for listening to unseen messages
      */
     readonly unseenMessageObserver: Observable<number>;
@@ -38,7 +43,7 @@ export class MessagingService
     /**
      * gets the logout observer for our user to link to
      */
-    getUnseenNotificationObservable(): Observable<number>
+    getUnseenMessageObservable(): Observable<number>
     {
         return this.unseenMessageObserver;
     }
@@ -63,6 +68,21 @@ export class MessagingService
     }
 
     /**
+     * Loads the amount of unseen thread messages to allow us to initiate the full data flow
+     * @param me
+     * @param showLoading
+     */
+    loadUnseenThreadMessages(me: User, showLoading: boolean): Promise<number>
+    {
+        if (!this.hasLoadedThreads) {
+            return this.refreshThreads(me, showLoading).then(() => {
+                return Promise.resolve(this.hasUnseenThreadMessages(me));
+            })
+        }
+        return Promise.resolve(this.hasUnseenThreadMessages(me));
+    }
+
+    /**
      * Refreshes the notifications properly, and then returns all that we currently have
      * @param me
      * @param showLoading
@@ -71,6 +91,7 @@ export class MessagingService
     {
         return this.requestsProvider.messaging.getThreads(me, showLoading).then(page => {
             this.loadedThreads = page.data;
+            this.hasLoadedThreads = true;
             this.notifyUnseenNotificationSubscribers(me);
             return Promise.resolve(this.loadedThreads);
         });

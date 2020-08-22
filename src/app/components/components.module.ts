@@ -9,6 +9,7 @@ import {ArticleEditorComponent} from './article-editor/article-editor.component'
 import {ArticleViewerComponent} from './article-viewer/article-viewer.component';
 import {OrganizationUsersManagementComponent} from './organization-users-management/organization-users-management.component';
 import {MenuComponent} from './menu/menu.component';
+import {MenuButtonWithNotificationsComponent} from './menu-button-with-notifications/menu-button-with-notifications.component';
 
 @NgModule({
     imports: [
@@ -24,6 +25,7 @@ import {MenuComponent} from './menu/menu.component';
         MenuComponent,
         OrganizationUsersManagementComponent,
         RatingBarComponent,
+        MenuButtonWithNotificationsComponent,
     ],
     exports: [
         ArticleEditorComponent,

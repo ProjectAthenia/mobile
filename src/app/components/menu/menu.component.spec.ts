@@ -7,6 +7,7 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
 import {StorageProvider} from '../../providers/storage/storage';
 import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
+import {MenuButtonWithNotificationsComponent} from '../menu-button-with-notifications/menu-button-with-notifications.component';
 
 describe('MenuComponent', () => {
     let component: MenuComponent;
@@ -30,6 +31,7 @@ describe('MenuComponent', () => {
                 {provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
             ],
             declarations: [
+                MenuButtonWithNotificationsComponent,
                 MenuComponent,
             ]
         })

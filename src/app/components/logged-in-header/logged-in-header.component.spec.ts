@@ -6,6 +6,9 @@ import {AlertController, IonicModule, NavController, Platform} from '@ionic/angu
 import {RequestsProvider} from "../../providers/requests/requests";
 import RequestsProviderMock from "../../providers/requests/requests.mock";
 import {PlatformMock} from '../../../../test-config/mocks-ionic';
+import {StorageProvider} from '../../providers/storage/storage';
+import {NativeStorageMock} from '../../../../test-config/mocks/plugins';
+import {MenuButtonWithNotificationsComponent} from '../menu-button-with-notifications/menu-button-with-notifications.component';
 
 describe('LoggedInHeaderComponent', () => {
     let component: LoggedInHeaderComponent;
@@ -27,8 +30,10 @@ describe('LoggedInHeaderComponent', () => {
                 {provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
                 { provide: Platform, useValue: new PlatformMock()},
+                {provide: StorageProvider, useValue: new StorageProvider(new NativeStorageMock())},
             ],
             declarations: [
+                MenuButtonWithNotificationsComponent,
                 LoggedInHeaderComponent,
             ]
         })

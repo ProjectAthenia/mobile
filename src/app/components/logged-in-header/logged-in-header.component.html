@@ -1,15 +1,16 @@
 <ion-header #header>
-  <ion-toolbar [className]="(showBranding() ? 'branding ' : ' ') + (isAndroid ? 'android' : '')">
-    <ion-buttons slot="start">
-      <ion-back-button *ngIf="!showBranding()" defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="primary">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>
-      <button *ngIf="showBranding()" id="home" (click)="goHome()"></button>
-      <!-- Add customer header stuff here -->
-
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar [className]="(showBranding() ? 'branding ' : ' ') + (isAndroid ? 'android' : '')">
+        <ion-buttons slot="start">
+            <ion-back-button *ngIf="!showBranding()" defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="primary">
+            <ion-menu-button menu="side-menu">
+                <app-menu-button-with-notifications name="menu" [hasUnseenNotifications]="hasUnseenMessages"></app-menu-button-with-notifications>
+            </ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            <button *ngIf="showBranding()" id="home" (click)="goHome()"></button>
+            <!-- Add custom header stuff here -->
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
