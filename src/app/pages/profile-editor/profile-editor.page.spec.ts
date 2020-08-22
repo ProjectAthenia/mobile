@@ -8,6 +8,8 @@ import {ComponentsModule} from '../../components/components.module';
 import {NavController, ToastController} from '@ionic/angular';
 import {RequestsProvider} from '../../providers/requests/requests';
 import RequestsProviderMock from '../../providers/requests/requests.mock';
+import {StorageProvider} from '../../providers/storage/storage';
+import {NativeStorage} from '@ionic-native/native-storage/ngx';
 
 describe('ProfileEditorPage', () => {
     let component: ProfileEditorPage;
@@ -27,6 +29,7 @@ describe('ProfileEditorPage', () => {
             ],
             providers: [
                 { provide: ToastController, useValue: new ToastController()},
+                { provide: StorageProvider, useValue: new StorageProvider(new NativeStorage()) },
                 { provide: NavController, useValue: navController},
                 { provide: RequestsProvider, useValue: requestsProvider},
                 { provide: Camera, useValue: camera },
