@@ -63,6 +63,11 @@ export class ThreadsPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.userService.getMe().then(me => {
             this.me = me;
+            this.messagingService.getUnseenMessageObservable().subscribe({
+                next: () => {
+                    this.parseThreads(this.messagingService.loadedThreads);
+                },
+            });
             this.loadThreads();
         }).catch(() => {
             // This should never happen, but just in case
@@ -88,32 +93,38 @@ export class ThreadsPage implements OnInit, OnDestroy {
      * Loads all threads freshly from the server
      */
     loadThreads() {
+        this.messagingService.refreshThreads(this.me, !this.loaded).then(threads => {
+            this.parseThreads(threads);
+        });
+    }
+
+    /**
+     * Parses a list of threads into the visible threads
+     * @param threads
+     */
+    parseThreads(threads: Thread[])
+    {
         if (this.refreshTimeout) {
             clearTimeout(this.refreshTimeout);
         }
-        this.messagingService.refreshThreads(this.me, !this.loaded).then(threads => {
-            this.threads = threads.sort((threadA, threadB) => {
-                if (threadA.last_message && threadB.last_message) {
-                    if (threadA.last_message.created_at < threadB.last_message.created_at) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
+        this.threads = threads.sort((threadA, threadB) => {
+            if (threadA.last_message && threadB.last_message) {
+                if (threadA.last_message.created_at < threadB.last_message.created_at) {
+                    return 1;
+                } else {
+                    return -1;
                 }
-                return 0;
-            });
-            if (this.filterBar) {
-                this.filterThreads();
-            } else {
-                this.visibleThreads = this.threads;
             }
-            this.loaded = true;
-            this.threads.forEach(thread => {
-                this.messagingService.cacheThread(thread);
-            });
-
-            this.refreshTimeout = setTimeout(this.loadThreads.bind(this), 30 * 1000);
+            return 0;
         });
+        if (this.filterBar) {
+            this.filterThreads();
+        } else {
+            this.visibleThreads = this.threads;
+        }
+        this.loaded = true;
+
+        this.refreshTimeout = setTimeout(this.loadThreads.bind(this), 30 * 1000);
     }
 
     /**

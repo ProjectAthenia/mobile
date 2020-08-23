@@ -53,7 +53,7 @@ export class MessagingService
      */
     hasUnseenThreadMessages(me: User): number
     {
-        return this.loadedThreads.map(thread => !thread.hasUserSeenThread(me)).length;
+        return this.loadedThreads.filter(thread => !thread.hasUserSeenThread(me)).length;
     }
 
     /**
@@ -103,7 +103,12 @@ export class MessagingService
      */
     cacheThread(thread: Thread)
     {
-        this.loadedThreads.push(thread);
+        const index = this.loadedThreads.findIndex(i => i.id == thread.id);
+        if (index) {
+            this.loadedThreads[index] = thread;
+        } else {
+            this.loadedThreads.push(thread);
+        }
     }
 
     /**
