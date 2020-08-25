@@ -2,6 +2,33 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.13.0
+
+This update adds a new component that can insert a notification bubble based on a boolean parameter. This also adds a feature that will inform the user if they have new messages based on a notification bubble on both the hamburger button and the threads button with the menu. Finally, there is also a new environment variable that will toggle all of the social features similar to the organization toggle.
+
+* src/app/components/menu-button-with-notifications/ - New component.
+* src/app/components/components.module.ts - New Menu button with notifications component has been registered.
+* src/app/components/logged-in-header/logged-in-header.component.html - The ion-menu-button now has the new component within it. The format has also been updated for the current code styles.
+* src/app/components/logged-in-header/logged-in-header.component.scss - General code cleanup, as well as the removal of the ion-input special styles, which do not exist in the current version of the template.
+* src/app/components/logged-in-header/logged-in-header.component.spec.ts - Updated the test for the new required providers and the additional component in the template
+* src/app/components/logged-in-header/logged-in-header.component.ts - Updated for new format, and added functionality to check for unread messages.
+* src/app/components/menu/menu.component.html - Added if checks to make sure that social media is enabled on certain navigation items, and updated the messages icon to be the menu button component. 
+* src/app/components/menu/menu.component.scss - Added some styling for the new component
+* src/app/components/menu/menu.component.spec.ts - Add menu button component to declarations.
+* src/app/components/menu/menu.component.ts - Added some logic to determine if the user has unread messages.
+* src/app/models/user/thread.ts - Updated for new format, and added function for determining if a user has seen the thread.
+* src/app/models/user/thread.spec.ts - Added some tests for the new function
+* src/app/pages/profile-editor/profile-editor.page.spec.ts - Added storage provider
+* src/app/pages/thread/thread.page.spec.ts - Fixed route snapshot
+* src/app/pages/thread/thread.page.ts - Updated page for some new functionality added to the message service, the new thread model function, and removed log point.
+* src/app/pages/threads/threads.page.ts - Updated to make sure it deals with the unseen messages observer properly.
+* src/app/providers/requests/messaging/messaging.ts - Changed get return type from array to page
+* src/app/providers/requests/messaging/messaging.spec.ts - Updated test for return type change
+* src/app/services/messaging.service.ts - Added a new observer that can notify the total amount of unseen messages, improved the loadedThreads handling
+* src/app/services/messaging.service.spec.ts - Updated nearly all tests for new observables.
+* src/environments/environment.prod.ts - Added `social_media_enabled` variable.
+* src/environments/environment.ts - Added `social_media_enabled` variable.
+
 ## 0.12.0
 
 New menu component! This update is a bit more hands on with a pretty large architectural change to make things easier going forward. To start, copy the following path `src/app/components/menu/`, and then register the new MenuComponent in `src/app/components/components.module.ts`.
