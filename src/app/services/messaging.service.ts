@@ -104,7 +104,7 @@ export class MessagingService
     cacheThread(thread: Thread)
     {
         const index = this.loadedThreads.findIndex(i => i.id == thread.id);
-        if (index) {
+        if (index != -1) {
             this.loadedThreads[index] = thread;
         } else {
             this.loadedThreads.push(thread);

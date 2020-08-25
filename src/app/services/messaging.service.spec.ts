@@ -22,7 +22,7 @@ describe('MessageService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should cache a user properly', () => {
+    it('should cache a thread properly', () => {
         const service: MessagingService = TestBed.get(MessagingService);
         expect(service.loadedThreads.length).toBe(0);
         service.cacheThread(new Thread({
@@ -31,14 +31,14 @@ describe('MessageService', () => {
         expect(service.loadedThreads.length).toBe(1);
     });
 
-    it('should return null when a user is not found', () => {
+    it('should return null when a thread is not found', () => {
         const service: MessagingService = TestBed.get(MessagingService);
 
         const result = service.getThread(45252);
         expect(result).toBeUndefined();
     });
 
-    it('should get a user properly', () => {
+    it('should get a thread properly', () => {
         const service: MessagingService = TestBed.get(MessagingService);
 
         const thread = new Thread({
