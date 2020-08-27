@@ -2,6 +2,10 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.13.1
+
+Very simple, but important little bug fix! There was a bug that would cause a blank screen if the me load failed. To fix the bug simply copy over `src/app/app.component.ts`.
+
 ## 0.13.0
 
 This update adds a new component that can insert a notification bubble based on a boolean parameter. This also adds a feature that will inform the user if they have new messages based on a notification bubble on both the hamburger button and the threads button with the menu. Finally, there is also a new environment variable that will toggle all of the social features similar to the organization toggle.

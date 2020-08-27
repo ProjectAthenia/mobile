@@ -73,15 +73,21 @@ export class AppComponent {
                     }).catch(() => {
                         this.navCtl.navigateRoot('/home').catch(console.error);
                     });
-                });
-            }).catch(() => {
-                if (environment.sign_up_enabled) {
-                    this.navCtl.navigateRoot('/sign-up').catch(console.error);
-                } else {
-                    this.navCtl.navigateRoot('/sign-in').catch(console.error);
-                }
-            });
+                }).catch(() => this.takeUserToInitialPage());
+            }).catch(() => this.takeUserToInitialPage());
         });
+    }
+
+    /**
+     * Takes the user to the initial page they land on when opening the app for the first time
+     */
+    takeUserToInitialPage()
+    {
+        if (environment.sign_up_enabled) {
+            this.navCtl.navigateRoot('/sign-up').catch(console.error);
+        } else {
+            this.navCtl.navigateRoot('/sign-in').catch(console.error);
+        }
     }
 
     /**
