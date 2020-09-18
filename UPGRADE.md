@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.14.0
+
+Nice little one! This update adds a little component that will make it really easy to create overlay windows on an existing page. To finish this update complete the following steps.
+
+* src/app/components/overlay-window/ - New Component
+* src/app/components/components.module.ts - The new component has been registered.
+
 ## 0.13.1
 
 Very simple, but important little bug fix! There was a bug that would cause a blank screen if the me load failed. To fix the bug simply copy over `src/app/app.component.ts`.

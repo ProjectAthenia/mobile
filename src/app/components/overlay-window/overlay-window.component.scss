@@ -1,0 +1,36 @@
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .3);
+
+  #info {
+    position: relative;
+    margin: 30vw auto;
+    max-width: 65vw;
+    border-radius: 10px;
+    padding: 15px;
+    background: white;
+    #close-btn {
+      border-radius: 50px;
+      background: white;
+      border: 1px solid black;
+      position: absolute;
+      width: 36px;
+      text-align: center;
+      right: -15px;
+      top: -15px;
+      font-size: 24px;
+    }
+  }
+
+  &.full {
+    #info {
+      margin: 5%;
+      max-width: none;
+      height: 90%;
+    }
+  }
+}

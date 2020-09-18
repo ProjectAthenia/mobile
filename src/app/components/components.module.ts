@@ -10,6 +10,7 @@ import {ArticleViewerComponent} from './article-viewer/article-viewer.component'
 import {OrganizationUsersManagementComponent} from './organization-users-management/organization-users-management.component';
 import {MenuComponent} from './menu/menu.component';
 import {MenuButtonWithNotificationsComponent} from './menu-button-with-notifications/menu-button-with-notifications.component';
+import {OverlayWindowComponent} from './overlay-window/overlay-window.component';
 
 @NgModule({
     imports: [
@@ -23,9 +24,10 @@ import {MenuButtonWithNotificationsComponent} from './menu-button-with-notificat
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
         MenuComponent,
-        OrganizationUsersManagementComponent,
-        RatingBarComponent,
         MenuButtonWithNotificationsComponent,
+        OrganizationUsersManagementComponent,
+        OverlayWindowComponent,
+        RatingBarComponent,
     ],
     exports: [
         ArticleEditorComponent,
@@ -33,7 +35,9 @@ import {MenuButtonWithNotificationsComponent} from './menu-button-with-notificat
         LoggedInHeaderComponent,
         LoggedOutHeaderComponent,
         MenuComponent,
+        MenuButtonWithNotificationsComponent,
         OrganizationUsersManagementComponent,
+        OverlayWindowComponent,
         RatingBarComponent,
     ],
 })
