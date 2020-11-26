@@ -21,7 +21,9 @@ export default class Subscriptions {
      */
     async fetchMembershipPlans(): Promise<MembershipPlan[]> {
         return this.requestHandler
-            .get('membership-plans', true, true, [])
+            .get('membership-plans', true, true, [
+                'features',
+            ])
             .then(response => {
                 const data = response.data;
                 const membershipPlans = [];
