@@ -14,6 +14,7 @@ export const environment = {
     social_media_enabled: true,
     subscriptions_enabled: true,
     organizations_enabled: true,
+    has_api_feature_flags: true,
 };
 
 /*
