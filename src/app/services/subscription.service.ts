@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {RequestsProvider} from '../providers/requests/requests';
-import {UserService} from './user.service';
-import {MembershipPlan} from '../models/subscription/membership-plan';
+import {User} from '../models/user/user';
 
 @Injectable({
     providedIn: 'root'
@@ -11,31 +10,28 @@ export class SubscriptionService
     /**
      * Default Constructor
      * @param requests
-     * @param userService
      */
-    constructor(private requests: RequestsProvider,
-                private userService: UserService) {
-    }
+    constructor(private requests: RequestsProvider)
+    {}
 
     /**
      * Tells us whether or not the passed in feature id can be access by the logged in user
      */
-    public hasFeatureAccess(featureId: number): Promise<boolean>
+    public hasFeatureAccess(user: User, featureId: number): Promise<boolean>
     {
-    }
+        const currentSubscription = user.getCurrentSubscription();
 
-    /**
-     * Gets all available membership plans in the system right now
-     */
-    public getAvailableMembershipPlan(): Promise<MembershipPlan[]>
-    {
-    }
+        if (currentSubscription) {
+            const currentMembershipPlan = currentSubscription.membership_plan_rate.membership_plan;
+            return Promise.resolve(currentMembershipPlan.containsFeatureId(featureId))
+        }
 
-    /**
-     * Tells us whether or not the default membership plan contains the passed in feature id
-     * @param featureId
-     */
-    private doesDefaultMembershipPlanContainFeature(featureId: number): Promise<boolean>
-    {
+        return this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
+            const defaultMembershipPlan = membershipPlans.find(membershipPlan => membershipPlan.default);
+
+            return Promise.resolve(
+                defaultMembershipPlan ? defaultMembershipPlan.containsFeatureId(featureId) : false
+            );
+        })
     }
 }

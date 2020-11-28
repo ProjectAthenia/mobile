@@ -28,6 +28,11 @@ export class MembershipPlan extends BaseModel {
     current_rate_id: number;
 
     /**
+     * Whether or not this is the default membership plan in the system
+     */
+    default: boolean;
+
+    /**
      * All features contained in this
      */
     features: Feature[];

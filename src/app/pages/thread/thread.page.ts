@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonTextarea, NavController, ToastController} from '@ionic/angular';
+import {IonTextarea, NavController, Platform, ToastController} from '@ionic/angular';
 import {User} from '../../models/user/user';
 import {UserService} from '../../services/user.service';
 import {RequestsProvider} from '../../providers/requests/requests';
@@ -14,8 +14,8 @@ import {FirebaseX} from '@ionic-native/firebase-x/ngx';
     templateUrl: './thread.page.html',
     styleUrls: ['./thread.page.scss'],
 })
-export class ThreadPage implements OnInit, OnDestroy {
-
+export class ThreadPage implements OnInit, OnDestroy
+{
     /**
      * The message input
      */
@@ -59,6 +59,7 @@ export class ThreadPage implements OnInit, OnDestroy {
 
     /**
      * Default Constructor
+     * @param platform
      * @param router
      * @param navController
      * @param toastController
@@ -68,63 +69,66 @@ export class ThreadPage implements OnInit, OnDestroy {
      * @param route
      * @param userService
      */
-    constructor(private router: Router,
+    constructor(private platform: Platform,
+                private router: Router,
                 private navController: NavController,
                 private toastController: ToastController,
                 private requests: RequestsProvider,
                 private messagingService: MessagingService,
                 private firebase: FirebaseX,
                 private route: ActivatedRoute,
-                private userService: UserService) {
-    }
+                private userService: UserService)
+    {}
 
     /**
      * Takes care of setting up our form properly
      */
-    ngOnInit() {
-        this.userService.getMe().then(me => {
-            this.me = me;
+    ngOnInit()
+    {
+        this.platform.ready().then(() => {
+            this.userService.getMe().then(me => {
+                this.me = me;
 
-            const userId = parseInt(this.route.snapshot.paramMap.get('user_id'), 0);
-            const user = this.userService.getUser(userId);
+                const userId = parseInt(this.route.snapshot.paramMap.get('user_id'), 0);
+                const user = this.userService.getUser(userId);
 
-            if (user == null) {
-                this.requests.social.loadUser(userId).then(loadedUser => {
-                    this.userService.cacheUser(loadedUser);
-                    this.loadThread(loadedUser);
-                }).catch(error => {
-                    this.navController.navigateBack('/');
-                    this.toastController.create({
-                        message: 'Error Loading User',
-                        duration: 4000,
-                        position: 'top'
-                    }).then(toast => {
-                        toast.present().catch(console.error);
+                if (user == null) {
+                    this.requests.social.loadUser(userId).then(loadedUser => {
+                        this.userService.cacheUser(loadedUser);
+                        this.loadThread(loadedUser);
+                    }).catch(error => {
+                        this.navController.navigateBack('/');
+                        this.toastController.create({
+                            message: 'Error Loading User',
+                            duration: 4000,
+                            position: 'top'
+                        }).then(toast => {
+                            toast.present().catch(console.error);
+                        });
                     });
+                } else {
+                    this.loadThread(user);
+                }
+            }).catch(() => {
+                // This should never happen, but just in case
+                this.navController.back();
+                this.toastController.create({
+                    message: 'Error Loading User',
+                    duration: 4000,
+                    position: 'top'
+                }).then(toast => {
+                    toast.present().catch(console.error);
                 });
-            } else {
-                this.loadThread(user);
-            }
-        }).catch(() => {
-            // This should never happen, but just in case
-            this.navController.back();
-            this.toastController.create({
-                message: 'Error Loading User',
-                duration: 4000,
-                position: 'top'
-            }).then(toast => {
-                toast.present().catch(console.error);
             });
         });
-
     }
 
     /**
      * Loads the thread data from cache or the server
      * @param user
      */
-    loadThread(user: User) {
-
+    loadThread(user: User)
+    {
         this.user = user;
         this.thread = this.messagingService.getThreadBetweenPeople(this.me, this.user);
 
@@ -154,14 +158,16 @@ export class ThreadPage implements OnInit, OnDestroy {
     /**
      * Clears out the refresh timeout
      */
-    ngOnDestroy() {
+    ngOnDestroy()
+    {
         clearTimeout(this.refreshTimeout);
     }
 
     /**
      * Initializes the messages load properly
      */
-    initMessages() {
+    initMessages()
+    {
         this.firebase.onMessageReceived().subscribe(notification => {
             if (notification.action === this.router.url) {
                 this.loadMessages();
@@ -173,7 +179,8 @@ export class ThreadPage implements OnInit, OnDestroy {
     /**
      * Loads all threads freshly from the server
      */
-    loadMessages() {
+    loadMessages()
+    {
         if (this.refreshTimeout) {
             clearTimeout(this.refreshTimeout);
         }
@@ -203,7 +210,8 @@ export class ThreadPage implements OnInit, OnDestroy {
     /**
      * Resets the scroll to be on the bottom
      */
-    resetScroll() {
+    resetScroll()
+    {
         setTimeout(() => {
             const messagesWrapper = document.getElementById('messages');
             if (messagesWrapper) {
@@ -216,7 +224,8 @@ export class ThreadPage implements OnInit, OnDestroy {
      * Gets the thumbnail style for a message
      * @param message
      */
-    thumbnailStyle(message: Message) {
+    thumbnailStyle(message: Message)
+    {
         const fromUser = this.thread.users.find(user => {
             return user.id === message.from_id;
         });
@@ -227,14 +236,16 @@ export class ThreadPage implements OnInit, OnDestroy {
     /**
      * Sets the content of the currently entered message
      */
-    setEnteredMessage() {
+    setEnteredMessage()
+    {
         this.enteredMessage = this.messageInput.value;
     }
 
     /**
      * Sends the message to the server
      */
-    sendMessage() {
+    sendMessage()
+    {
         this.requests.messaging.createMessage(this.me, this.thread, this.enteredMessage).then(message => {
             this.thread.last_message = message;
             this.enteredMessage = '';

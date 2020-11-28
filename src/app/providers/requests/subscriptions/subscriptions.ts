@@ -7,7 +7,12 @@ import {Subscription} from '../../../models/subscription/subscription';
 /**
  * All requests needed for handling subscriptions within the app
  */
-export default class Subscriptions {
+export default class Subscriptions
+{
+    /**
+     * The membership plans that have been loaded
+     */
+    private membershipPlans: MembershipPlan[];
 
     /**
      * Default constructor
@@ -20,16 +25,22 @@ export default class Subscriptions {
      * Fetches all membership plans
      */
     async fetchMembershipPlans(): Promise<MembershipPlan[]> {
+
+        if (this.membershipPlans) {
+            return Promise.resolve(this.membershipPlans);
+        }
+
         return this.requestHandler
             .get('membership-plans', true, true, [
                 'features',
             ])
             .then(response => {
-                const data = response.data;
+                const data = response && response.data ? response.data : [];
                 const membershipPlans = [];
                 data.forEach(entry => {
                     membershipPlans.push(new MembershipPlan(entry));
                 });
+                this.membershipPlans = membershipPlans;
                 return Promise.resolve(membershipPlans);
             }
         );
