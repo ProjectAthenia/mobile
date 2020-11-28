@@ -11,6 +11,7 @@ import {OrganizationUsersManagementComponent} from './organization-users-managem
 import {MenuComponent} from './menu/menu.component';
 import {MenuButtonWithNotificationsComponent} from './menu-button-with-notifications/menu-button-with-notifications.component';
 import {OverlayWindowComponent} from './overlay-window/overlay-window.component';
+import {SubscriptionUpgradeRequiredWindowComponent} from './subscription-upgrade-required-window/subscription-upgrade-required-window.component';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {OverlayWindowComponent} from './overlay-window/overlay-window.component'
         OrganizationUsersManagementComponent,
         OverlayWindowComponent,
         RatingBarComponent,
+        SubscriptionUpgradeRequiredWindowComponent,
     ],
     exports: [
         ArticleEditorComponent,
@@ -39,6 +41,7 @@ import {OverlayWindowComponent} from './overlay-window/overlay-window.component'
         OrganizationUsersManagementComponent,
         OverlayWindowComponent,
         RatingBarComponent,
+        SubscriptionUpgradeRequiredWindowComponent,
     ],
 })
 export class ComponentsModule {}

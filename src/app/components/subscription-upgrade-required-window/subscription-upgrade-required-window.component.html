@@ -1,0 +1,10 @@
+<app-overlay-window (close)="cancel.emit()">
+  <h2>You need to upgrade your {{subscriptionBrandName}}!</h2>
+  <ng-content></ng-content>
+  <div class="side-by-side">
+    <ion-button (click)="cancel.emit()">
+      Cancel
+    </ion-button>
+    <ion-button href="/subscription/{{featureId}}"></ion-button>
+  </div>
+</app-overlay-window>
