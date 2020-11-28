@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AlertController, ToastController} from '@ionic/angular';
+import {AlertController, Platform, ToastController} from '@ionic/angular';
 import {User} from '../../models/user/user';
 import {ActivatedRoute} from '@angular/router';
 import {RequestsProvider} from '../../providers/requests/requests';
@@ -20,8 +20,8 @@ require('card');
     templateUrl: './subscription.page.html',
     styleUrls: ['./subscription.page.scss'],
 })
-export class SubscriptionPage extends BasePage implements OnInit {
-
+export class SubscriptionPage extends BasePage implements OnInit
+{
     /**
      * The available membership plans
      */
@@ -84,6 +84,7 @@ export class SubscriptionPage extends BasePage implements OnInit {
 
     /**
      * Default Constructor
+     * @param platform
      * @param requests
      * @param alertController
      * @param userService
@@ -91,54 +92,60 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * @param toastController
      * @param stripe
      */
-    constructor(private requests: RequestsProvider,
+    constructor(private platform: Platform,
+                private requests: RequestsProvider,
                 private alertController: AlertController,
                 private userService: UserService,
                 private route: ActivatedRoute,
                 private toastController: ToastController,
-                private stripe: Stripe,
-    ) {
+                private stripe: Stripe)
+    {
         super();
     }
 
     /**
      * Takes care of setting up our form properly
      */
-    ngOnInit() {
-        this.stripe.setPublishableKey(environment.stripe_publishable_key).catch(console.error);
+    ngOnInit()
+    {
+        this.platform.ready().then(() => {
+            this.stripe.setPublishableKey(environment.stripe_publishable_key).catch(console.error);
 
-        this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
-            this.membershipPlans = membershipPlans;
-            if (this.membershipPlans.length == 1) {
-                this.setSelectedMembershipPlan(this.membershipPlans[0]);
-            }
-            this.requests.auth.loadInitialInformation().then(user => {
-                this.user = user;
-                this.userService.storeMe(user);
-                this.currentSubscription = this.user.getCurrentSubscription();
-                if (this.currentSubscription) {
-                    this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
-                        return paymentMethod.id == this.currentSubscription.payment_method_id;
-                    });
+            this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
+                this.membershipPlans = membershipPlans;
+                if (this.membershipPlans.length == 1) {
+                    this.setSelectedMembershipPlan(this.membershipPlans[0]);
                 }
-                if (this.user.payment_methods.length == 0) {
-                    this.selectedPaymentMethod = null;
-                }
+                this.requests.auth.loadInitialInformation().then(user => {
+                    this.user = user;
+                    this.userService.storeMe(user);
+                    this.currentSubscription = this.user.getCurrentSubscription();
+                    if (this.currentSubscription) {
+                        this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
+                            return paymentMethod.id == this.currentSubscription.payment_method_id;
+                        });
+                    }
+                    if (this.user.payment_methods.length == 0) {
+                        this.selectedPaymentMethod = null;
+                    }
+                }).catch(console.error);
             }).catch(console.error);
-        }).catch(console.error);
+        });
     }
 
     /**
      * All active membership plans
      */
-    activeMembershipPlans(): MembershipPlan[] {
+    activeMembershipPlans(): MembershipPlan[]
+    {
         return this.membershipPlans;
     }
 
     /**
      * Gets the display style for the card selector
      */
-    getCardSelectorDisplay() {
+    getCardSelectorDisplay()
+    {
         return {
             display: !this.currentSubscription ||
             (this.currentSubscription.expires_at && this.currentSubscription.recurring) ? 'block' : 'none',
@@ -148,7 +155,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * Gets the new card input display
      */
-    getCardDisplay() {
+    getCardDisplay()
+    {
         return {
             display: this.selectedPaymentMethod === null ? 'flex' : 'none',
         };
@@ -157,7 +165,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * Gets the user's current subscription status
      */
-    getCurrentSubscriptionStatus(): string {
+    getCurrentSubscriptionStatus(): string
+    {
         if (!this.currentSubscription.expires_at) {
             return 'good for a lifetime!';
         } else {
@@ -181,7 +190,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * Sets the subscription to be recurring
      * @param recurring
      */
-    setRecurring(recurring: boolean) {
+    setRecurring(recurring: boolean)
+    {
         this.requests.subscriptions.updateSubscription(
             this.user,
             this.currentSubscription,
@@ -195,7 +205,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * Sets the current payment method the user has selected
      * @param paymentMethod
      */
-    setSelectedPaymentMethod(paymentMethod: PaymentMethod) {
+    setSelectedPaymentMethod(paymentMethod: PaymentMethod)
+    {
         this.selectedPaymentMethod = paymentMethod;
     }
 
@@ -210,8 +221,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * Validates the save properly
      */
-    submit() {
-
+    submit()
+    {
         this.submitted = true;
         this.error = null;
         this.cardError = null;
@@ -259,8 +270,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * Validates the card data properly
      */
-    async validateCard(): Promise<StripeCardTokenParams> {
-
+    async validateCard(): Promise<StripeCardTokenParams>
+    {
         const cardNumber = this.cardNumber.nativeElement.value;
         if (!cardNumber) {
             throw new Error('Please enter your credit card number.');
@@ -308,7 +319,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
     /**
      * creates a subscription properly
      */
-    createSubscription() {
+    createSubscription()
+    {
         const paymentMethod = this.selectedPaymentMethod;
         if (paymentMethod) {
 
@@ -335,7 +347,8 @@ export class SubscriptionPage extends BasePage implements OnInit {
      * Changes the payment method properly
      * @param paymentMethod
      */
-    changePaymentMethod(paymentMethod: PaymentMethod) {
+    changePaymentMethod(paymentMethod: PaymentMethod)
+    {
         this.requests.subscriptions.updateSubscription(
             this.user,
             this.currentSubscription,

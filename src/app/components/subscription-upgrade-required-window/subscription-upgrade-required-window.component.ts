@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-subscription-upgrade-required-window',
@@ -24,4 +25,20 @@ export class SubscriptionUpgradeRequiredWindowComponent {
      */
     @Input()
     featureId: number;
+
+    /**
+     * Default constructor
+     * @param router
+     */
+    constructor(private router: Router)
+    {}
+
+    /**
+     * Takes the user to the upgrade process
+     */
+    upgradePlan()
+    {
+        this.cancel.emit();
+        this.router.navigateByUrl('/subscriptions/' + this.featureId).catch(console.error);
+    }
 }

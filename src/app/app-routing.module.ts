@@ -36,6 +36,10 @@ const routes: Routes = [
         loadChildren: './pages/subscription/subscription.module#SubscriptionPageModule'
     },
     {
+        path: 'subscription/:feature_id',
+        loadChildren: './pages/subscription/subscription.module#SubscriptionPageModule'
+    },
+    {
         path: 'threads',
         loadChildren: './pages/threads/threads.module#ThreadsPageModule',
     },
