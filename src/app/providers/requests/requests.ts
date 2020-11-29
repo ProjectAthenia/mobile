@@ -6,17 +6,20 @@ import Social from './social/social';
 import Messaging from './messaging/messaging';
 import OrganizationRequests from './organization/organization';
 import EntityRequests from './entity/entity';
+import Features from './features/features';
 
 /**
  * Provider for interacting with all app wide requests
  */
 @Injectable()
-export class RequestsProvider {
-
+export class RequestsProvider
+{
     /**
      * The auth requests available
      */
     auth: Auth;
+
+    features: Features;
 
     /**
      * The requests related to our subscriptions
@@ -47,8 +50,10 @@ export class RequestsProvider {
      * Default constructor
      * @param requestHandler
      */
-    constructor(private requestHandler: RequestHandlerProvider) {
+    constructor(private requestHandler: RequestHandlerProvider)
+    {
         this.auth = new Auth(requestHandler);
+        this.features = new Features(requestHandler);
         this.subscriptions = new Subscriptions(this.requestHandler);
         this.social = new Social(this.requestHandler);
         this.messaging = new Messaging(requestHandler);
