@@ -63,6 +63,11 @@ export class SubscriptionPage extends BasePage implements OnInit
     selectedMembershipPlan: MembershipPlan = null;
 
     /**
+     * The feature id the user is trying to get access to
+     */
+    featureId: number = null;
+
+    /**
      * The card number input
      */
     @ViewChild('cardNumber', {static: false}) cardNumber: ElementRef;
@@ -109,6 +114,11 @@ export class SubscriptionPage extends BasePage implements OnInit
     ngOnInit()
     {
         this.platform.ready().then(() => {
+            const maybeFeatureId = this.route.snapshot.paramMap.get('feature_id');
+            if (maybeFeatureId) {
+                this.featureId = parseInt(maybeFeatureId);
+            }
+
             this.stripe.setPublishableKey(environment.stripe_publishable_key).catch(console.error);
 
             this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
