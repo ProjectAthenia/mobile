@@ -11,6 +11,8 @@ import {PaymentMethod} from '../../models/payment/payment-method';
 import {Subscription} from '../../models/subscription/subscription';
 import DateHelpers from '../../providers/date-helpers/date-helpers';
 import {UserService} from '../../services/user.service';
+import {SubscriptionService} from '../../services/subscription.service';
+import {Feature} from '../../models/feature';
 
 declare function require(name:string);
 require('card');
@@ -65,7 +67,7 @@ export class SubscriptionPage extends BasePage implements OnInit
     /**
      * The feature id the user is trying to get access to
      */
-    featureId: number = null;
+    feature: Feature = null;
 
     /**
      * The card number input
@@ -96,6 +98,7 @@ export class SubscriptionPage extends BasePage implements OnInit
      * @param route
      * @param toastController
      * @param stripe
+     * @param subscriptionService
      */
     constructor(private platform: Platform,
                 private requests: RequestsProvider,
@@ -103,7 +106,8 @@ export class SubscriptionPage extends BasePage implements OnInit
                 private userService: UserService,
                 private route: ActivatedRoute,
                 private toastController: ToastController,
-                private stripe: Stripe)
+                private stripe: Stripe,
+                private subscriptionService: SubscriptionService)
     {
         super();
     }
@@ -114,33 +118,74 @@ export class SubscriptionPage extends BasePage implements OnInit
     ngOnInit()
     {
         this.platform.ready().then(() => {
-            const maybeFeatureId = this.route.snapshot.paramMap.get('feature_id');
-            if (maybeFeatureId) {
-                this.featureId = parseInt(maybeFeatureId);
-            }
-
             this.stripe.setPublishableKey(environment.stripe_publishable_key).catch(console.error);
-
-            this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
-                this.membershipPlans = membershipPlans;
-                if (this.membershipPlans.length == 1) {
-                    this.setSelectedMembershipPlan(this.membershipPlans[0]);
-                }
-                this.requests.auth.loadInitialInformation().then(user => {
-                    this.user = user;
-                    this.userService.storeMe(user);
-                    this.currentSubscription = this.user.getCurrentSubscription();
-                    if (this.currentSubscription) {
-                        this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
-                            return paymentMethod.id == this.currentSubscription.payment_method_id;
-                        });
-                    }
-                    if (this.user.payment_methods.length == 0) {
-                        this.selectedPaymentMethod = null;
-                    }
-                }).catch(console.error);
-            }).catch(console.error);
+            this.getUserDataReady();
         });
+    }
+
+    /**
+     * Loads our user fresh from the server, and then figures out their current subscription status
+     */
+    private getUserDataReady()
+    {
+        this.requests.auth.loadInitialInformation().then(user => {
+            this.user = user;
+            this.userService.storeMe(user);
+            this.currentSubscription = this.user.getCurrentSubscription();
+            if (this.currentSubscription) {
+                this.selectedPaymentMethod = this.user.payment_methods.find(paymentMethod => {
+                    return paymentMethod.id == this.currentSubscription.payment_method_id;
+                });
+            }
+            if (this.user.payment_methods.length == 0) {
+                this.selectedPaymentMethod = null;
+            }
+            this.getSubscriptionDataReady();
+        }).catch(console.error);
+    }
+
+    /**
+     * Gets everything ready after we have the user loaded
+     */
+    private getSubscriptionDataReady()
+    {
+        this.requests.subscriptions.fetchMembershipPlans().then(membershipPlans => {
+
+            const maybeFeatureId = this.route.snapshot.paramMap.get('feature_id');
+
+            if (maybeFeatureId) {
+                this.findFeature(parseInt(maybeFeatureId), membershipPlans);
+            } else {
+                this.setAvailableMembershipMembershipPlans(membershipPlans);
+            }
+        }).catch(console.error);
+    }
+
+    /**
+     * gets everything ready for when the user wants to access a feature
+     */
+    findFeature(featureId: number, membershipPlans: MembershipPlan[])
+    {
+        this.subscriptionService.getFeature(featureId).then(feature => {
+            this.feature = feature;
+            this.setAvailableMembershipMembershipPlans(
+                membershipPlans.filter(membershipPlan => membershipPlan.containsFeatureId(featureId))
+            );
+        }).catch(() => {
+            // TODO handle feature not available error
+        });
+    }
+
+    /**
+     * Sets all membership plans that are currently available based on the current page state
+     * @param membershipPlans
+     */
+    setAvailableMembershipMembershipPlans(membershipPlans: MembershipPlan[])
+    {
+        this.membershipPlans = membershipPlans;
+        if (this.membershipPlans.length == 1) {
+            this.setSelectedMembershipPlan(this.membershipPlans[0]);
+        }
     }
 
     /**
