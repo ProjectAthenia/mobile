@@ -1,6 +1,7 @@
 import {BaseModel} from '../base-model';
 import {Feature} from '../feature';
 import {Relation} from '../relation';
+import {Subscription} from './subscription';
 
 /**
  * Used as a data wrapper for our membership plan model
@@ -55,5 +56,17 @@ export class MembershipPlan extends BaseModel {
     containsFeatureId(featureId: number): boolean
     {
         return this.features.find(feature => feature.id == featureId) != null;
+    }
+
+    /**
+     * Calculates how much a subscription to this wil lcost
+     * @param currentSubscription
+     */
+    calculateProratedCost(currentSubscription: Subscription): number
+    {
+        if (this.duration == 'lifetime') {
+            return this.current_cost;
+        }
+        return !currentSubscription ? this.current_cost : this.calculateProratingCost(currentSubscription);
     }
 }

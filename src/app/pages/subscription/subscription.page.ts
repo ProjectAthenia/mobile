@@ -182,7 +182,9 @@ export class SubscriptionPage extends BasePage implements OnInit
      */
     setAvailableMembershipMembershipPlans(membershipPlans: MembershipPlan[])
     {
-        this.membershipPlans = membershipPlans;
+        this.membershipPlans = this.currentSubscription ? membershipPlans.filter(membershipPlan => {
+            return membershipPlan.current_cost > this.currentSubscription.membership_plan_rate.cost;
+        }) : membershipPlans;
         if (this.membershipPlans.length == 1) {
             this.setSelectedMembershipPlan(this.membershipPlans[0]);
         }

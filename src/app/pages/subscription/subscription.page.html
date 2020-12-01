@@ -5,23 +5,11 @@
     <form card container=".card-container" *ngIf="user && membershipPlans">
         <div class="validator-error" *ngIf="error">{{error}}</div>
 
-        <ng-container *ngIf="!currentSubscription">
-            <ion-radio-group id="membership-options" *ngIf="membershipPlans && membershipPlans.length > 1">
-                <ion-list-header>
-                    <ion-label>Select Your Membership Plan</ion-label>
-                </ion-list-header>
-
-                <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
-                    <ion-label>{{membershipPlan.name}} ${{membershipPlan.current_cost}}</ion-label>
-                    <ion-radio slot="start" value="{{membershipPlan.id}}">
-                    </ion-radio>
-                </ion-item>
-            </ion-radio-group>
-
-            <h3 *ngIf="membershipPlans.length == 1">
-                Subscribe to the {{membershipPlans[0].name}} for ${{membershipPlans[0].current_cost}}
-            </h3>
-        </ng-container>
+        <div *ngIf="feature">
+            <h3>You need to upgrade your account to get access to this feature.</h3>
+            <p>{{feature.description}}</p>
+            <p>Member plans, which will give you access to this feature are listed below. Your cost is prorated to the end of your current subscription, at which point you will be charged the full amount for another year. Lifetime subscriptions are not prorated.</p>
+        </div>
 
         <ng-container *ngIf="currentSubscription">
             Your {{currentSubscription.membership_plan_rate.membership_plan.name}} subscription is {{getCurrentSubscriptionStatus()}}
@@ -30,6 +18,54 @@
                 <ion-button *ngIf="currentSubscription.recurring" (click)="setRecurring(false)">Cancel Auto Renewal</ion-button>
                 <ion-button *ngIf="!currentSubscription.recurring" (click)="setRecurring(true)">Turn On Auto Renewal</ion-button>
             </div>
+        </ng-container>
+
+        <ng-container *ngIf="membershipPlans.length > 0">
+            <ng-container *ngIf="!currentSubscription else upgrading">
+                <ion-radio-group class="membership-options">
+
+                    <ion-list-header>
+                        <ion-label>
+                            Select Your Membership Plan
+                        </ion-label>
+                    </ion-list-header>
+
+                    <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
+                        <ion-label>{{membershipPlan.name}} ${{membershipPlan.current_cost}}</ion-label>
+                        <ion-radio slot="start" value="{{membershipPlan.id}}">
+                        </ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+
+                <h3 *ngIf="membershipPlans.length == 1">
+                    Subscribe to the {{membershipPlans[0].name}} for ${{membershipPlans[0].current_cost}}
+                </h3>
+            </ng-container>
+
+            <ng-template #upgrading>
+                <ion-radio-group class="membership-options">
+
+                    <ion-list-header>
+                        <ion-label>
+                            <span *ngIf="currentSubscription">Upgrade</span><span *ngIf="currentSubscription">Select</span> Your Membership Plan
+                        </ion-label>
+                    </ion-list-header>
+
+                    <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
+                        <ion-label>
+                            {{membershipPlan.name}} ${{membershipPlan.calculateProratedCost(currentSubscription)}}
+                            <span *ngIf="membershipPlans[0].duration !== 'lifetime'"> , the cost will be ${{membershipPlans[0].current_cost}} per {{membershipPlans[0].duration}} after your current subscription expires.</span>
+                        </ion-label>
+                        <ion-radio slot="start" value="{{membershipPlan.id}}">
+                        </ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+
+                <h3 *ngIf="membershipPlans.length == 1">
+                    Upgrade to the {{membershipPlans[0].name}} for ${{membershipPlans[0].calculateProratedCost(currentSubscription)}}
+                    <span *ngIf="membershipPlans[0].duration !== 'lifetime'"> after your current subscription expires, the cost will be ${{membershipPlans[0].current_cost}} per {{membershipPlans[0].duration}}.</span>
+                </h3>
+            </ng-template>
         </ng-container>
 
         <div [ngStyle]="getCardSelectorDisplay()">
@@ -69,7 +105,7 @@
             </div>
 
             <div class="submit-wrapper">
-                <button ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</button>
+                <ion-button large (click)="submit()" class="btn">{{currentSubscription ? 'Change Payment Method' : 'Submit'}}</ion-button>
             </div>
         </div>
 
