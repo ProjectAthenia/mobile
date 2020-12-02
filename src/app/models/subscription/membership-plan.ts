@@ -2,6 +2,7 @@ import {BaseModel} from '../base-model';
 import {Feature} from '../feature';
 import {Relation} from '../relation';
 import {Subscription} from './subscription';
+import {subscribeOn} from 'rxjs/operators';
 
 /**
  * Used as a data wrapper for our membership plan model
@@ -64,9 +65,17 @@ export class MembershipPlan extends BaseModel {
      */
     calculateProratedCost(currentSubscription: Subscription): number
     {
+        const amountPaid = currentSubscription.membership_plan_rate.cost;
         if (this.duration == 'lifetime') {
-            return this.current_cost;
+            const date3MonthsAgo = new Date();
+            date3MonthsAgo.setMonth(date3MonthsAgo.getMonth() - 3);
+            return currentSubscription.subscribed_at < date3MonthsAgo ?
+                this.current_cost : this.current_cost - amountPaid;
         }
-        return !currentSubscription ? this.current_cost : this.calculateProratingCost(currentSubscription);
+        const oneDay = 24 * 60 * 60 * 1000;
+        const today = new Date();
+        const daysRemaining = Math.round((today as any - (currentSubscription.expires_at as any)) / oneDay);
+        const dailyCostDiff = (this.current_cost - amountPaid) / 365;
+        return daysRemaining > 0 && dailyCostDiff > 0 ? Math.round(daysRemaining * dailyCostDiff) : 0;
     }
 }
