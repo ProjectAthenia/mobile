@@ -2,6 +2,30 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.15.0
+
+Subscriptions upgrades! This also adds some components that let you lock off features by a user's subscription.
+
+* src/app/app-routing.module.ts
+* src/app/components/components.module.ts
+* src/app/components/subscription-upgrade-required-window/
+* src/app/models/feature.spec.ts
+* src/app/models/feature.ts
+* src/app/models/subscription/membership-plan.spec.ts
+* src/app/models/subscription/membership-plan.ts
+* src/app/pages/subscription/subscription.page.html
+* src/app/pages/subscription/subscription.page.ts
+* src/app/pages/thread/thread.page.ts
+* src/app/providers/requests/auth/auth.ts
+* src/app/providers/requests/features/
+* src/app/providers/requests/requests.spec.ts
+* src/app/providers/requests/requests.ts
+* src/app/providers/requests/subscriptions/subscriptions.ts
+* src/app/services/subscription.service.spec.ts
+* src/app/services/subscription.service.ts
+* src/environments/environment.prod.ts
+* src/environments/environment.ts
+
 ## 0.14.0
 
 Nice little one! This update adds a little component that will make it really easy to create overlay windows on an existing page. To finish this update complete the following steps.
