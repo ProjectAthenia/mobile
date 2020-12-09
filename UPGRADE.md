@@ -6,25 +6,25 @@ To upgrade from previous version of Athenia please check each version number lis
 
 Subscriptions upgrades! This also adds some components that let you lock off features by a user's subscription.
 
-* src/app/app-routing.module.ts
-* src/app/components/components.module.ts
-* src/app/components/subscription-upgrade-required-window/
-* src/app/models/feature.spec.ts
-* src/app/models/feature.ts
-* src/app/models/subscription/membership-plan.spec.ts
-* src/app/models/subscription/membership-plan.ts
-* src/app/pages/subscription/subscription.page.html
-* src/app/pages/subscription/subscription.page.ts
-* src/app/pages/thread/thread.page.ts
-* src/app/providers/requests/auth/auth.ts
-* src/app/providers/requests/features/
-* src/app/providers/requests/requests.spec.ts
-* src/app/providers/requests/requests.ts
-* src/app/providers/requests/subscriptions/subscriptions.ts
-* src/app/services/subscription.service.spec.ts
-* src/app/services/subscription.service.ts
-* src/environments/environment.prod.ts
-* src/environments/environment.ts
+* src/app/app-routing.module.ts - Added registration of subscription with feature id
+* src/app/components/subscription-upgrade-required-window/ - New Component!
+* src/app/components/components.module.ts - Registered new component
+* src/app/models/feature.spec.ts - New Test
+* src/app/models/feature.ts - New Model
+* src/app/models/subscription/membership-plan.spec.ts - Added new test for containsFeatureId
+* src/app/models/subscription/membership-plan.ts - Added function for checking if subscription contains a feature, and for prorating subscription.
+* src/app/pages/subscription/subscription.page.html - Reworked entire page to allow for upgrades of subscriptions as well as feature specific upgrades.
+* src/app/pages/subscription/subscription.page.ts - Updated code styling, and allowed for the injection of a feature via the URL
+* src/app/pages/thread/thread.page.ts - Updated styling, and fixed ngInit for user get me return
+* src/app/providers/requests/auth/auth.ts - Added features expand
+* src/app/providers/requests/features/ - New Request module
+* src/app/providers/requests/requests.spec.ts - Registered features request
+* src/app/providers/requests/requests.ts - Registered features request
+* src/app/providers/requests/subscriptions/subscriptions.ts - Cached membership plans
+* src/app/services/subscription.service.spec.ts - New Test
+* src/app/services/subscription.service.ts - New Service!
+* src/environments/environment.prod.ts - Added has_api_feature_flags variable
+* src/environments/environment.ts - Added has_api_feature_flags variable
 
 ## 0.14.0
 
