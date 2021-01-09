@@ -19,6 +19,9 @@ export class RequestsProvider
      */
     auth: Auth;
 
+    /**
+     * All features requests
+     */
     features: Features;
 
     /**
