@@ -1,5 +1,15 @@
 import {Platform} from "@ionic/angular";
-import {NgZone} from '@angular/core';
+import {NgZone, SecurityContext} from '@angular/core';
+import {File} from '@ionic-native/file/ngx'
+import {
+  DomSanitizer,
+  SafeHtml,
+  SafeResourceUrl,
+  SafeScript,
+  SafeStyle,
+  SafeUrl,
+  SafeValue
+} from '@angular/platform-browser';
 
 export class PlatformMock extends Platform {
   currentPlatform : string = 'ios';
@@ -70,4 +80,32 @@ export class FileMock extends File{
 
 export class DeepLinkerMock {
 
+}
+
+export class DomSanitizerMock extends DomSanitizer {
+  bypassSecurityTrustHtml(value: string): SafeHtml {
+    return value;
+  }
+
+  bypassSecurityTrustResourceUrl(value: string): SafeResourceUrl {
+    return value;
+  }
+
+  bypassSecurityTrustScript(value: string): SafeScript {
+    return value;
+  }
+
+  bypassSecurityTrustStyle(value: string): SafeStyle {
+    return value;
+  }
+
+  bypassSecurityTrustUrl(value: string): SafeUrl {
+    return value;
+  }
+
+  sanitize(context: SecurityContext, value: SafeValue | string | null): string | null;
+  sanitize(context: SecurityContext, value: {} | string | null): string | null;
+  sanitize(context: SecurityContext, value: SafeValue | string | null | {}): string | null {
+    return null;
+  }
 }
