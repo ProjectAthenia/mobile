@@ -5,14 +5,15 @@ import {RequestsProvider} from '../../providers/requests/requests';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasePage} from '../base.page';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-profile-editor',
     templateUrl: './profile-editor.page.html',
     styleUrls: ['./profile-editor.page.scss'],
 })
-export class ProfileEditorPage extends BasePage implements OnInit {
-
+export class ProfileEditorPage extends BasePage implements OnInit
+{
     /**
      * The form object that helps us validate the sign in form
      */
@@ -48,7 +49,8 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     /**
      * Takes care of setting up our form properly
      */
-    ngOnInit() {
+    ngOnInit()
+    {
         this.form = this.formBuilder.group({
 
             name: ['', Validators.compose([
@@ -73,9 +75,26 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     }
 
     /**
+     * Tells us whether or not this app is using the social media aspects
+     */
+    isSocialMediaEnabled()
+    {
+        return environment.social_media_enabled;
+    }
+
+    /**
+     * Tells us whether or not this app is using push notifications for anything
+     */
+    hasPushNotifications()
+    {
+        return environment.has_push_notifications;
+    }
+
+    /**
      * Returns the profile image style object for the associated user
      */
-    profileImageStyle() {
+    profileImageStyle()
+    {
         return this.user && this.user.profile_image_url ? {
             backgroundImage: 'url(' + this.user.profile_image_url + ')',
         } : {};
@@ -84,7 +103,8 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     /**
      * Asks the user how they want to capture their profile image
      */
-    promptCaptureMethod() {
+    promptCaptureMethod()
+    {
         this.alertController.create({
             header: 'Do you want to take a picture, or select one from your library?',
             buttons: [
@@ -108,7 +128,8 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     /**
      * Inits the image capture
      */
-    captureProfileImage(sourceType) {
+    captureProfileImage(sourceType)
+    {
         const options: CameraOptions = {
             quality: 70,
             destinationType: this.camera.DestinationType.DATA_URL,
@@ -127,8 +148,8 @@ export class ProfileEditorPage extends BasePage implements OnInit {
     /**
      * Validates the save properly
      */
-    save() {
-
+    save()
+    {
         this.submitted = true;
 
         if (this.form.valid) {

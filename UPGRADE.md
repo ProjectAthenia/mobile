@@ -2,6 +2,18 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.16.0
+
+Minor one! This update adds all of the vote models, and it also updates the profile page to only show settings based on features enabled inside the apps environment.
+
+* src/app/models/vote/ - New Path
+* src/app/pages/profile-editor/profile-editor.page.html - added feature flag checks for existing fields
+* src/app/pages/profile-editor/profile-editor.page.ts - added function for determining feature status
+* src/app/providers/requests/requests.ts - Added proper content
+* src/environments/environment.prod.ts - Added has_push_notifications feature flag
+* src/environments/environment.ts - Added has_push_notifications feature flag
+* test-config/mocks-ionic.ts - Added dom sanitizer mock
+
 ## 0.15.0
 
 Subscriptions upgrades! This also adds some components that let you lock off features by a user's subscription.

@@ -2,7 +2,7 @@
 
 <ion-content class="ion-padding">
 
-    <div id="profile-image" [ngStyle]="profileImageStyle()" (click)="promptCaptureMethod()"></div>
+    <div *ngIf="isSocialMediaEnabled()" id="profile-image" [ngStyle]="profileImageStyle()" (click)="promptCaptureMethod()"></div>
 
     <form [formGroup]="form">
         <ion-item>
@@ -14,17 +14,17 @@
             Please enter your name.
         </div>
 
-        <ion-item>
+        <ion-item *ngIf="isSocialMediaEnabled()">
             <ion-label position="stacked">About Me</ion-label>
             <ion-textarea type="text" ngDefaultControl formControlName="about_me" [formControl]="form.controls.about_me"></ion-textarea>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="isSocialMediaEnabled()">
             <ion-label>Allow Members to Add Me</ion-label>
             <ion-toggle ngDefaultControl formControlName="allow_users_to_add_me" [formControl]="form.controls.allow_users_to_add_me"></ion-toggle>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="hasPushNotifications()">
             <ion-label>Receive Push Notifications</ion-label>
             <ion-toggle ngDefaultControl formControlName="receive_push_notifications" [formControl]="form.controls.receive_push_notifications"></ion-toggle>
         </ion-item>

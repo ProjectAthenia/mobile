@@ -11,4 +11,5 @@ export const environment = {
     subscriptions_enabled: true,
     organizations_enabled: true,
     has_api_feature_flags: true,
+    has_push_notifications: true,
 };
