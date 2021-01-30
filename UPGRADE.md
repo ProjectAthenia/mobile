@@ -2,6 +2,13 @@
 
 To upgrade from previous version of Athenia please check each version number listed below step by step.
 
+## 0.17.0
+
+Very minor one! This simply fixes a bug with the subscription page that would cause the incorrect membership plan to show after initial purcahse as an upgrade.
+
+* src/app/pages/subscription/subscription.page.html
+* src/app/pages/subscription/subscription.page.ts
+
 ## 0.16.0
 
 Minor one! This update adds all of the vote models, and it also updates the profile page to only show settings based on features enabled inside the apps environment.
@@ -9,7 +16,7 @@ Minor one! This update adds all of the vote models, and it also updates the prof
 * src/app/models/vote/ - New Path
 * src/app/pages/profile-editor/profile-editor.page.html - added feature flag checks for existing fields
 * src/app/pages/profile-editor/profile-editor.page.ts - added function for determining feature status
-* src/app/providers/requests/requests.ts - Added proper content
+* src/app/providers/requests/requests.ts - Added proper comment
 * src/environments/environment.prod.ts - Added has_push_notifications feature flag
 * src/environments/environment.ts - Added has_push_notifications feature flag
 * test-config/mocks-ionic.ts - Added dom sanitizer mock

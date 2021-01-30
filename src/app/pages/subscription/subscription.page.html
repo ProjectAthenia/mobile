@@ -20,7 +20,7 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="membershipPlans.length > 0">
+        <ng-container *ngIf="availableMembershipPlans().length > 0">
             <ng-container *ngIf="!currentSubscription else upgrading">
                 <ion-radio-group class="membership-options">
 
@@ -30,7 +30,7 @@
                         </ion-label>
                     </ion-list-header>
 
-                    <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
+                    <ion-item *ngFor="let membershipPlan of availableMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
                         <ion-label>{{membershipPlan.name}} ${{membershipPlan.current_cost}}</ion-label>
                         <ion-radio slot="start" value="{{membershipPlan.id}}">
                         </ion-radio>
@@ -51,7 +51,7 @@
                         </ion-label>
                     </ion-list-header>
 
-                    <ion-item *ngFor="let membershipPlan of activeMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
+                    <ion-item *ngFor="let membershipPlan of availableMembershipPlans()" (click)="setSelectedMembershipPlan(membershipPlan)">
                         <ion-label>
                             {{membershipPlan.name}} ${{membershipPlan.calculateProratedCost(currentSubscription)}}
                             <span *ngIf="membershipPlans[0].duration !== 'lifetime'"> , the cost will be ${{membershipPlans[0].current_cost}} per {{membershipPlans[0].duration}} after your current subscription expires.</span>

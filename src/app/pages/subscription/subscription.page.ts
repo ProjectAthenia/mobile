@@ -27,7 +27,7 @@ export class SubscriptionPage extends BasePage implements OnInit
     /**
      * The available membership plans
      */
-    membershipPlans: MembershipPlan[];
+    membershipPlans: MembershipPlan[] = [];
 
     /**
      * The form object that helps us validate the sign in form
@@ -182,10 +182,8 @@ export class SubscriptionPage extends BasePage implements OnInit
      */
     setAvailableMembershipMembershipPlans(membershipPlans: MembershipPlan[])
     {
-        this.membershipPlans = this.currentSubscription ? membershipPlans.filter(membershipPlan => {
-            return membershipPlan.current_cost > this.currentSubscription.membership_plan_rate.cost;
-        }) : membershipPlans;
-        if (this.membershipPlans.length == 1) {
+        this.membershipPlans = membershipPlans;
+        if (this.availableMembershipPlans().length == 1) {
             this.setSelectedMembershipPlan(this.membershipPlans[0]);
         }
     }
@@ -193,9 +191,11 @@ export class SubscriptionPage extends BasePage implements OnInit
     /**
      * All active membership plans
      */
-    activeMembershipPlans(): MembershipPlan[]
+    availableMembershipPlans(): MembershipPlan[]
     {
-        return this.membershipPlans;
+        return this.currentSubscription ? this.membershipPlans.filter(membershipPlan => {
+                return membershipPlan.current_cost > this.currentSubscription.membership_plan_rate.cost;
+        }) : this.membershipPlans;
     }
 
     /**
